@@ -3,7 +3,7 @@
 
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom/extend-expect'
-import * as matchers from 'jest-extended';
+import "@testing-library/jest-dom/extend-expect";
+import * as matchers from "jest-extended";
 
 expect.extend(matchers);
