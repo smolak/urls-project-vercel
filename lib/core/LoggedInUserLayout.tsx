@@ -1,7 +1,7 @@
-import { PropsWithChildren, useEffect, useState } from "react";
-import { LogoutButton } from "../auth/logout-button";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { LogoutButton } from "../auth/LogoutButton";
 
-export default function LoggedInUserLayout({ children }: PropsWithChildren) {
+export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   const [isOnClient, setIsOnClient] = useState(false);
 
   useEffect(() => {
@@ -14,4 +14,4 @@ export default function LoggedInUserLayout({ children }: PropsWithChildren) {
       <main>{children}</main>
     </>
   );
-}
+};
