@@ -58,7 +58,7 @@ const Login: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
+    <>
       <Head>
         <title>Login</title>
         <link rel="icon" href="/public/favicon.ico" />
@@ -159,7 +159,7 @@ const Login: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
