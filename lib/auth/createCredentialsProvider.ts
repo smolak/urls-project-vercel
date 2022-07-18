@@ -10,7 +10,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
       email: {},
       password: {},
     },
-    async authorize(credentials, req) {
+    async authorize(credentials) {
       try {
         if (!credentials?.password || !credentials?.email) {
           throw new Error("entry:Invalid credentials.");
@@ -26,6 +26,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
             password: true,
             name: true,
             role: true,
+            image: true,
           },
         });
 
@@ -42,6 +43,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
               password: true,
               name: true,
               role: true,
+              image: true,
             },
           });
         } else {
@@ -57,6 +59,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
           email: maybeUser.email,
           name: maybeUser.name,
           role: maybeUser.role,
+          image: maybeUser.image,
         };
       } catch (error) {
         console.log(error);
