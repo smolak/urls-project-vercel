@@ -2,7 +2,7 @@ import { nextAuthOptions } from "../api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth/next";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { NextPageWithLayout } from "../_app";
-import { AdminLayout } from "./AdminLayout";
+import { AdminLayout } from "../../lib/pages/admin/AdminLayout";
 import { User } from "next-auth";
 
 const AdminPage: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
