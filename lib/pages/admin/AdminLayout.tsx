@@ -1,14 +1,20 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { FC, PropsWithChildren, Fragment } from "react";
+import { FC, PropsWithChildren, Fragment, useEffect } from "react";
 import { BellIcon, MenuIcon, XIcon, UserIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
 
+export enum Page {
+  DASHBOARD,
+  URLS,
+  USERS,
+}
+
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "URLs", href: "#", current: false },
-  { name: "Users", href: "#", current: false },
+  { name: "Dashboard", href: "/admin", page: Page.DASHBOARD },
+  { name: "URLs", href: "/admin/urls", page: Page.URLS },
+  { name: "Users", href: "/admin/users", page: Page.USERS },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },
@@ -19,9 +25,10 @@ const userNavigation = [
 interface AdminLayoutProps extends PropsWithChildren {
   title: string;
   user: User;
+  page: Page;
 }
 
-export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user }) => {
+export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user, page }) => {
   return (
     <>
       <div className="min-h-full">
@@ -45,12 +52,12 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user }) => 
                             key={item.name}
                             href={item.href}
                             className={clsx(
-                              item.current
+                              item.page === page
                                 ? "bg-gray-900 text-white"
                                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
                               "px-3 py-2 rounded-md text-sm font-medium"
                             )}
-                            aria-current={item.current ? "page" : undefined}
+                            aria-current={item.page === page ? "page" : undefined}
                           >
                             {item.name}
                           </a>
@@ -141,10 +148,12 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user }) => 
                       as="a"
                       href={item.href}
                       className={clsx(
-                        item.current ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        item.page === page
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
                         "block px-3 py-2 rounded-md text-base font-medium"
                       )}
-                      aria-current={item.current ? "page" : undefined}
+                      aria-current={item.page === page ? "page" : undefined}
                     >
                       {item.name}
                     </Disclosure.Button>

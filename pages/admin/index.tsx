@@ -1,13 +1,11 @@
-import { nextAuthOptions } from "../api/auth/[...nextauth]";
-import { unstable_getServerSession } from "next-auth/next";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { NextPageWithLayout } from "../_app";
-import { AdminLayout } from "../../lib/pages/admin/AdminLayout";
-import { User } from "next-auth";
+import { AdminLayout, Page } from "../../lib/pages/admin/AdminLayout";
+import { getServerProps } from "../../lib/pages/admin/getServerProps";
 
 const AdminPage: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
   return (
-    <AdminLayout title="Dashboard" user={user}>
+    <AdminLayout title="Dashboard" user={user} page={Page.DASHBOARD}>
       <div>Content here</div>
     </AdminLayout>
   );
@@ -15,28 +13,4 @@ const AdminPage: NextPageWithLayout<InferGetServerSidePropsType<typeof getServer
 
 export default AdminPage;
 
-interface AdminPageProps {
-  user: User;
-}
-
-const normalizeForServerSideProps = (user: User) => {
-  user.image = user.image || null;
-
-  return user;
-};
-
-export const getServerSideProps: GetServerSideProps<AdminPageProps> = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, nextAuthOptions);
-
-  if (!session || session.user.role !== "admin") {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      user: normalizeForServerSideProps(session.user),
-    },
-  };
-};
+export const getServerSideProps = getServerProps;
