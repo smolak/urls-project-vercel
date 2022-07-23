@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { NextPageWithLayout } from "../_app";
 import { AdminLayout, Page } from "../../lib/pages/admin/AdminLayout";
 import { useEffect, useState } from "react";
-import { UserListOptions } from "../../lib/admin/user/user-list-options/UserListOptions";
+import { UserListOptions } from "../../lib/admin/user/ui/UserListOptions";
 import { getServerProps } from "../../lib/pages/admin/getServerProps";
 
 const AdminUsersPage: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
