@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { LogoutButton } from "../auth/LogoutButton";
+import { LogoutButton } from "../../auth/LogoutButton";
 
 export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   const [isOnClient, setIsOnClient] = useState(false);

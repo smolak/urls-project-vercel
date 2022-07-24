@@ -1,9 +1,10 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { FC, PropsWithChildren, Fragment, useEffect } from "react";
+import { FC, PropsWithChildren, Fragment } from "react";
 import { BellIcon, MenuIcon, XIcon, UserIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
+import { UserImage } from "../../admin/user/ui/UserImage";
 
 export enum Page {
   DASHBOARD,
@@ -80,11 +81,7 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user, page 
                         <div>
                           <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">Open user menu</span>
-                            {user.image ? (
-                              <img className="h-8 w-8 rounded-full" src={user.image} alt="" />
-                            ) : (
-                              <UserIcon className="h-6 w-6 rounded-full text-gray-400" />
-                            )}
+                            <UserImage name={user.name || ""} image={user.image} />
                           </Menu.Button>
                         </div>
                         <Transition
