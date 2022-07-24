@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { ReactElement } from "react";
-import { LoggedInUserLayout } from "../lib/core/LoggedInUserLayout";
+import { LoggedInUserLayout } from "../lib/core/ui/LoggedInUserLayout";
 import { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
