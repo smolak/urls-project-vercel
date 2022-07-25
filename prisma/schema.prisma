@@ -41,19 +41,58 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum UrlQueueStatus {
+  NEW
+  ACCEPTED
+  REJECTED
+}
+
+model UrlQueue {
+  id           String         @id
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  // Not unique here to fetch it even if it was potentially added to the Url table
+  // in order to update the data.
+  url          String         @db.VarChar(2000)
+  status       UrlQueueStatus @default(NEW)
+  attemptCount Int            @default(0) @db.UnsignedTinyInt
+  // User will be notified if something went wrong
+  // also it will be used later to populate the UserUrl table
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+}
+
+model Url {
+  id          String   @id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  url         String   @db.VarChar(2000)
+  // Reserved for SHA1 hash - required as 2k long URLs will create too long index keys
+  // ones, that are too long for MySQL engine to even work
+  urlHash     String   @unique @db.Char(40)
+  title       String
+  description String
+  faviconUrl  String   @db.VarChar(2000)
+  imageUrl    String   @db.VarChar(2000)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+}
+
 model User {
-  id            String    @id
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id            String     @id
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   name          String?
-  email         String?   @unique
+  email         String?    @unique
   password      String?
   emailVerified DateTime?
   image         String?
-  role          String?   @default("user")
-  apiKey        String?   @unique
+  role          String?    @default("user")
+  apiKey        String?    @unique
   accounts      Account[]
   sessions      Session[]
+  UrlQueue      UrlQueue[]
+  Url           Url[]
 }
 
 model VerificationToken {
