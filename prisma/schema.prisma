@@ -43,6 +43,7 @@ model Session {
 
 enum UrlQueueStatus {
   NEW
+  PROCESSING
   ACCEPTED
   REJECTED
 }
@@ -53,28 +54,31 @@ model UrlQueue {
   updatedAt    DateTime       @updatedAt
   // Not unique here to fetch it even if it was potentially added to the Url table
   // in order to update the data.
-  url          String         @db.VarChar(2000)
+  rawUrl       String         @db.VarChar(2000)
   status       UrlQueueStatus @default(NEW)
   attemptCount Int            @default(0) @db.UnsignedTinyInt
   // User will be notified if something went wrong
   // also it will be used later to populate the UserUrl table
   user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
+  url          Url            @relation(fields: [urlId], references: [id], onDelete: Cascade)
+  urlId        String
 }
 
 model Url {
-  id          String    @id
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  url         String    @db.VarChar(2000)
+  id          String     @id
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  url         String     @db.VarChar(2000)
   // Reserved for SHA1 hash - required as 2k long URLs will create too long index keys
   // ones, that are too long for MySQL engine to even work
-  urlHash     String    @unique @db.Char(40)
+  urlHash     String     @unique @db.Char(40)
+  // Both (title, description) are left for search capabilities, even though they are a part of metadata
   title       String
   description String
-  faviconUrl  String    @db.VarChar(2000)
-  imageUrl    String    @db.VarChar(2000)
+  metadata    Json
   UserUrl     UserUrl[]
+  UrlQueue    UrlQueue[]
 }
 
 model UserUrl {
