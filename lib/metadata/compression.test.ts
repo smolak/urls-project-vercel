@@ -6,6 +6,7 @@ describe("compressMetadata", () => {
     const metadata: Metadata = {
       audio: "audio",
       author: "author",
+      contentType: "text/html; charset=utf-8",
       copyright: "copyright",
       description: "description",
       email: "email",
@@ -49,6 +50,7 @@ describe("compressMetadata", () => {
       r: "type",
       s: "url",
       t: "video",
+      u: "text/html; charset=utf-8",
     });
   });
 
@@ -94,6 +96,7 @@ describe("decompress", () => {
       r: "type",
       s: "url",
       t: "video",
+      u: "text/html; charset=utf-8",
     };
 
     const metadata = decompressMetadata(compressedMetadata);
@@ -101,6 +104,7 @@ describe("decompress", () => {
     expect(metadata).toEqual({
       audio: "audio",
       author: "author",
+      contentType: "text/html; charset=utf-8",
       copyright: "copyright",
       description: "description",
       email: "email",
