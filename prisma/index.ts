@@ -2,8 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { generateModelId } from "./middlewares/generateModelId";
 import { generateModelIdForSeed } from "./middlewares/generateModelIdForSeed";
 
-export * from "@prisma/client";
-
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === "production") {
