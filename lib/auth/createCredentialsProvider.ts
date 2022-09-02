@@ -1,6 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { hashPassword, verifyPassword } from "./passwords";
-import { PrismaClient } from "../../prisma";
+import { PrismaClient } from "@prisma/client";
 
 export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: string) =>
   CredentialsProvider({
