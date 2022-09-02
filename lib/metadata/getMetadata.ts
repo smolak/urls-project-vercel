@@ -5,6 +5,7 @@ type URL = string;
 export interface Metadata {
   audio?: string;
   author?: string;
+  contentType?: string;
   copyright?: string;
   description?: string;
   email?: string;
@@ -25,7 +26,9 @@ export interface Metadata {
   video?: string;
 }
 
-export const getMetadata = async (url: URL, html?: string) => {
+export type GetMetadata = (url: URL, html?: string) => Promise<Metadata>;
+
+export const getMetadata: GetMetadata = async (url, html) => {
   const options = {
     url,
     html,
@@ -33,5 +36,5 @@ export const getMetadata = async (url: URL, html?: string) => {
 
   const result = await _getMetadata(options);
 
-  return result as Metadata;
+  return result;
 };
