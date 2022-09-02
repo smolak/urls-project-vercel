@@ -11,3 +11,4 @@
    - such item in the queue would live for e.g. a week, then some cron job would remove SUCCESS ones that are at least a week old
 6. Consider having events aggregator trigger events as http calls, to have a separate process running the scripts, not the one that triggered them
    - perhaps passing type `async` or `sync` would distinguish how they are called (or even `softsync` where a call is triggered in same process but it's fire and forget)
+7. Some URLs won't have title and description (e.g. an image or a link to a .zip file) - those fields can be edited later on by the owner of the URL
