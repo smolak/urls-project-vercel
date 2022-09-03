@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { LockClosedIcon } from "@heroicons/react/solid";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
 
 const MINIMUM_ACTIVITY_TIMEOUT = 850;
 type LoginFormValues = {
