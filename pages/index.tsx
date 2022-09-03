@@ -2,6 +2,7 @@ import Head from "next/head";
 import { ReactElement } from "react";
 import { LoggedInUserLayout } from "../lib/core/ui/LoggedInUserLayout";
 import { NextPageWithLayout } from "./_app";
+import { SessionProvider } from "next-auth/react";
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -18,7 +19,11 @@ const Home: NextPageWithLayout = () => {
 };
 
 Home.getLayout = function getLayout(page: ReactElement) {
-  return <LoggedInUserLayout>{page}</LoggedInUserLayout>;
+  return (
+    <SessionProvider>
+      <LoggedInUserLayout>{page}</LoggedInUserLayout>
+    </SessionProvider>
+  );
 };
 
 export default Home;
