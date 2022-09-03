@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon } from "@heroicons/react/solid";
+import { ChevronUpIcon } from "@heroicons/react/24/solid";
 
 interface ErrorLoadingUsersProps {
   error: Error;
