@@ -19,7 +19,9 @@ export const UserListItem: FC<User> = ({ id, email, role, name, image, createdAt
       <span className="flex items-center">{role}</span>
       <span className="flex items-center col-span-2">{format(new Date(createdAt), "yyyy-MM-dd'T'HH:mm:ss")}</span>
       <span className="flex items-center">
-        <UserListOptions />
+        <div className="w-56 text-right">
+          <UserListOptions />
+        </div>
       </span>
     </div>
   );
