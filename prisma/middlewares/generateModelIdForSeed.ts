@@ -1,8 +1,7 @@
-import { Prisma } from "../index";
-
 import { generateUserId } from "../../lib/user/utils/generateUserId";
 import { generateSessionId } from "../../lib/session/utils/generateSessionId";
 import { generateAccountId } from "../../lib/account/utils/generateAccountId";
+import { Prisma } from "@prisma/client";
 
 export const generateModelIdForSeed: Prisma.Middleware = async (params: Prisma.MiddlewareParams, next) => {
   if (params.action === "upsert") {
