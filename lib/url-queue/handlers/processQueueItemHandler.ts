@@ -11,12 +11,16 @@ export interface ProcessQueueItemEvent extends AnEvent<{ id: UrlQueue["id"] }> {
 }
 
 interface HeadResponse {
-  "content-type": string;
+  headers: {
+    "content-type": string;
+  };
 }
 
 const fetchMetadata = async (url: UrlQueue["rawUrl"]): Promise<Metadata> => {
   const result = await axios.head<any, HeadResponse>(url);
-  const isAWebsite = result["content-type"].includes("text/html");
+
+  const contentType = result.headers["content-type"];
+  const isAWebsite = contentType.includes("text/html");
 
   let metadata: Metadata = {};
 
@@ -24,7 +28,7 @@ const fetchMetadata = async (url: UrlQueue["rawUrl"]): Promise<Metadata> => {
     metadata = await getMetadata(url);
   }
 
-  metadata.contentType = result["content-type"];
+  metadata.contentType = contentType;
 
   return metadata;
 };

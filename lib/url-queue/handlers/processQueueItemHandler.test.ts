@@ -80,7 +80,9 @@ describe("processQueueItemHandler", () => {
     describe("when a website is detected", () => {
       beforeEach(() => {
         mockedAxios.head.mockResolvedValue({
-          "content-type": "text/html; charset=utf-8",
+          headers: {
+            "content-type": "text/html; charset=utf-8",
+          },
           // whatever else can be here, doesn't matter
         });
       });
@@ -97,7 +99,9 @@ describe("processQueueItemHandler", () => {
     describe("when anything other than a website is detected", () => {
       beforeEach(() => {
         mockedAxios.head.mockResolvedValue({
-          "content-type": "image/png",
+          headers: {
+            "content-type": "image/png",
+          },
           // whatever else can be here, doesn't matter
         });
       });
@@ -126,7 +130,9 @@ describe("processQueueItemHandler", () => {
 
       // Make sure website is detected so that metadata can be fetched
       mockedAxios.head.mockResolvedValue({
-        "content-type": websiteContentType,
+        headers: {
+          "content-type": websiteContentType,
+        },
         // whatever else can be here, doesn't matter
       });
 
@@ -161,7 +167,9 @@ describe("processQueueItemHandler", () => {
     describe("when the URL does not point to a website (that would have metadata, e.g. title, description)", () => {
       beforeEach(() => {
         mockedAxios.head.mockResolvedValue({
-          "content-type": "image/png",
+          headers: {
+            "content-type": "image/png",
+          },
           // whatever else can be here, doesn't matter
         });
       });
