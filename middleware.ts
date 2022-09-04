@@ -4,4 +4,4 @@ export { default } from "next-auth/middleware";
 // That does not include pages that might require being logged in (e.g. administration page,
 // whatever the path will be), but you don't want to be redirected, to indicate that
 // such a page exists.
-export const config = { matcher: ["/profile"] };
+export const config = { matcher: ["/profile", "/url/add"] };
