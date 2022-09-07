@@ -1,4 +1,4 @@
-import { generateId } from "../../utils/generateId";
+import { generateId } from "../../shared/utils/generateId";
 
 export const SESSION_ID_PREFIX = "ses_";
 
