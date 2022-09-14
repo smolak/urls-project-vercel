@@ -33,7 +33,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.34.2",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zod": "^3.19.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
