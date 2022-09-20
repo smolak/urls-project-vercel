@@ -1,4 +1,5 @@
 import { processQueueItemHandler, ProcessQueueItemEvent } from "../url-queue/handlers/processQueueItemHandler";
+import { logger } from "../../logger";
 
 export enum EventType {
   URL_QUEUE_CREATED,
@@ -10,6 +11,7 @@ export interface AnEvent<D = Record<string, unknown>> {
 }
 
 type ProcessableEvent = ProcessQueueItemEvent;
+export type TriggerEvent = (event: ProcessableEvent) => void;
 
 // TODO: IDEA#6
 
@@ -18,10 +20,10 @@ export const triggerEvent = (event: ProcessableEvent) => {
     switch (event.type) {
       case EventType.URL_QUEUE_CREATED:
         // I am not waiting for it to finish, hence no "await". Fire, forget.
-        processQueueItemHandler(event.data.id);
+        processQueueItemHandler({ id: event.data.id });
         return;
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
 };

@@ -1,10 +1,11 @@
-import axios from "axios";
-
-jest.mock("axios");
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+import axios, { Axios } from "axios";
+import { User } from "next-auth";
 
 import { fetchUsers } from "./fetchUsers";
-import { User } from "next-auth";
+
+vi.mock("axios");
+
+const mockedAxios = vi.mocked<Axios>(axios);
 
 describe("fetchUsers", () => {
   beforeEach(() => {

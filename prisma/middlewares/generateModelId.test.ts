@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { generateModelId } from "./generateModelId";
 import { USER_ID_PREFIX } from "../../lib/user/utils/generateUserId";
 import { SESSION_ID_PREFIX } from "../../lib/session/utils/generateSessionId";
@@ -19,7 +20,7 @@ describe("generateModelId middleware", () => {
             },
           },
         } as Prisma.MiddlewareParams;
-        const nextSpy = jest.fn();
+        const nextSpy = vi.fn();
 
         await generateModelId(params, nextSpy);
 
@@ -29,7 +30,7 @@ describe("generateModelId middleware", () => {
             ...params.args,
             data: {
               ...params.args.data,
-              id: expect.toStartWith(USER_ID_PREFIX),
+              id: expect.stringMatching(`^${USER_ID_PREFIX}`),
             },
           },
         });
@@ -47,7 +48,7 @@ describe("generateModelId middleware", () => {
             },
           },
         } as Prisma.MiddlewareParams;
-        const nextSpy = jest.fn();
+        const nextSpy = vi.fn();
 
         await generateModelId(params, nextSpy);
 
@@ -57,7 +58,7 @@ describe("generateModelId middleware", () => {
             ...params.args,
             data: {
               ...params.args.data,
-              id: expect.toStartWith(SESSION_ID_PREFIX),
+              id: expect.stringMatching(`^${SESSION_ID_PREFIX}`),
             },
           },
         });
@@ -75,7 +76,7 @@ describe("generateModelId middleware", () => {
             },
           },
         } as Prisma.MiddlewareParams;
-        const nextSpy = jest.fn();
+        const nextSpy = vi.fn();
 
         await generateModelId(params, nextSpy);
 
@@ -85,7 +86,7 @@ describe("generateModelId middleware", () => {
             ...params.args,
             data: {
               ...params.args.data,
-              id: expect.toStartWith(ACCOUNT_ID_PREFIX),
+              id: expect.stringMatching(`^${ACCOUNT_ID_PREFIX}`),
             },
           },
         });
@@ -103,7 +104,7 @@ describe("generateModelId middleware", () => {
             },
           },
         } as Prisma.MiddlewareParams;
-        const nextSpy = jest.fn();
+        const nextSpy = vi.fn();
 
         await generateModelId(params, nextSpy);
 
@@ -113,7 +114,7 @@ describe("generateModelId middleware", () => {
             ...params.args,
             data: {
               ...params.args.data,
-              id: expect.toStartWith(URL_QUEUE_ID_PREFIX),
+              id: expect.stringMatching(`^${URL_QUEUE_ID_PREFIX}`),
             },
           },
         });
@@ -131,7 +132,7 @@ describe("generateModelId middleware", () => {
             },
           },
         } as Prisma.MiddlewareParams;
-        const nextSpy = jest.fn();
+        const nextSpy = vi.fn();
 
         await generateModelId(params, nextSpy);
 
@@ -141,7 +142,7 @@ describe("generateModelId middleware", () => {
             ...params.args,
             data: {
               ...params.args.data,
-              id: expect.toStartWith(URL_ID_PREFIX),
+              id: expect.stringMatching(`^${URL_ID_PREFIX}`),
             },
           },
         });

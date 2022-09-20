@@ -4,6 +4,7 @@ describe("generateSessionId", () => {
   it("should prefix id with session prefix", () => {
     const id = generateSessionId();
 
-    expect(id).toStartWith(SESSION_ID_PREFIX);
+    const pattern = `^${SESSION_ID_PREFIX}`;
+    expect(id).toMatch(new RegExp(pattern));
   });
 });
