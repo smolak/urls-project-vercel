@@ -1,4 +1,3 @@
-import "jest-extended";
 import { DefaultUser, DefaultSession } from "next-auth";
 
 declare module "next-auth" {
