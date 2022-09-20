@@ -4,6 +4,7 @@ describe("generateUserId", () => {
   it("should prefix id with user prefix", () => {
     const id = generateUserId();
 
-    expect(id).toStartWith(USER_ID_PREFIX);
+    const pattern = `^${USER_ID_PREFIX}`;
+    expect(id).toMatch(new RegExp(pattern));
   });
 });

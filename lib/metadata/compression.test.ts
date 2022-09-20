@@ -68,7 +68,7 @@ describe("compressMetadata", () => {
         a: "audio",
       });
       const keyForAuthor = compressMapper["author"];
-      expect(compressedMetadata).not.toContainKey(keyForAuthor);
+      expect(compressedMetadata).not.toHaveProperty(keyForAuthor);
     });
   });
 });

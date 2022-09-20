@@ -4,6 +4,7 @@ describe("generateAccountId", () => {
   it("should prefix id with account prefix", () => {
     const id = generateAccountId();
 
-    expect(id).toStartWith(ACCOUNT_ID_PREFIX);
+    const pattern = `^${ACCOUNT_ID_PREFIX}`;
+    expect(id).toMatch(new RegExp(pattern));
   });
 });

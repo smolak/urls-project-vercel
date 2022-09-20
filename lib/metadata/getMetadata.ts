@@ -34,7 +34,5 @@ export const getMetadata: GetMetadata = async (url, html) => {
     html,
   };
 
-  const result = await _getMetadata(options);
-
-  return result;
+  return (await _getMetadata(options)) as unknown as Promise<Metadata>;
 };

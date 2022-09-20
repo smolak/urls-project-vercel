@@ -4,6 +4,7 @@ describe("generateUrlQueueId", () => {
   it("should prefix id with url queue prefix", () => {
     const id = generateUrlQueueId();
 
-    expect(id).toStartWith(URL_QUEUE_ID_PREFIX);
+    const pattern = `^${URL_QUEUE_ID_PREFIX}`;
+    expect(id).toMatch(new RegExp(pattern));
   });
 });

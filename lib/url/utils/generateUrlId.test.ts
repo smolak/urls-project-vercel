@@ -4,6 +4,7 @@ describe("generateUrlId", () => {
   it("should prefix id with url prefix", () => {
     const id = generateUrlId();
 
-    expect(id).toStartWith(URL_ID_PREFIX);
+    const pattern = `^${URL_ID_PREFIX}`;
+    expect(id).toMatch(new RegExp(pattern));
   });
 });
