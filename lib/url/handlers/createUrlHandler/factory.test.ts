@@ -10,6 +10,7 @@ import { EventType } from "../../../events-aggregator/triggerEvent";
 import { createUrlQueue } from "../../../../test/fixtures/urlQueue";
 
 import { createUrlHandlerFactory } from "./factory";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 
 const userId = generateUserId();
 const getToken = vi.fn();
@@ -128,7 +129,7 @@ describe("createUrlHandlerFactory", () => {
 
         expect(prismaMock.urlQueue.create).toHaveBeenCalledWith({
           data: {
-            id: "will-be-created-by-middleware",
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             rawUrl: URL_TO_ADD,
             rawUrlHash: sha1(URL_TO_ADD),
             userId,

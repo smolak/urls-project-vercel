@@ -5,6 +5,8 @@ import { generateAccountId } from "../../lib/account/utils/generateAccountId";
 import { generateUrlQueueId } from "../../lib/url-queue/utils/generateUrlQueueId";
 import { generateUrlId } from "../../lib/url/utils/generateUrlId";
 
+export const ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR = "ID_PLACEHOLDER";
+
 export const generateModelId: Prisma.Middleware = async (params: Prisma.MiddlewareParams, next) => {
   if (params.action === "create") {
     switch (params.model) {

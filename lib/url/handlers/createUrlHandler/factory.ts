@@ -5,6 +5,7 @@ import { sha1 } from "../../../crypto/sha1";
 import prisma from "../../../../prisma";
 import { EventType, TriggerEvent } from "../../../events-aggregator/triggerEvent";
 import { CreateUrlHandler } from "./index";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 
 type GetToken = (params: GetTokenParams) => Promise<JWT | null>;
 
@@ -69,7 +70,7 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
       // TODO: IDEA#5
       const urlInQueue = await prisma.urlQueue.create({
         data: {
-          id: "will-be-created-by-middleware",
+          id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
           rawUrl: url,
           rawUrlHash: urlHash,
           userId,

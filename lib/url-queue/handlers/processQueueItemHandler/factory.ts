@@ -6,6 +6,7 @@ import { Prisma, UrlQueue } from "@prisma/client";
 import { ProcessQueueItemHandler } from "./index";
 import axios from "axios";
 import { Logger } from "pino";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 
 interface HeadResponse {
   headers: {
@@ -67,7 +68,7 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
       const createdUrl = await prisma.$transaction(async (prisma) => {
         const createdUrl = await prisma.url.create({
           data: {
-            id: "will-be-created-by-middleware",
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             url,
             urlHash,
             title: metadata.title || "",
