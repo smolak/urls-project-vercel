@@ -11,6 +11,7 @@ import { sha1 } from "../../../crypto/sha1";
 import { compressMetadata } from "../../../metadata/compression";
 import { createExampleMetadata } from "../../../../test/fixtures/exampleMetadata";
 import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 
 vi.mock("axios");
 const mockedAxios = vi.mocked<Axios>(axios);
@@ -33,7 +34,7 @@ describe("processQueueItemHandler", () => {
 
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
 
-      expect(async () => await handler({ id: "url_queue_itemId" })).not.toThrow();
+      expect(async () => await handler({ id: generateUrlQueueId() })).not.toThrow();
     });
 
     it("should error log that fact", async () => {
@@ -168,7 +169,7 @@ describe("processQueueItemHandler", () => {
 
       const expectedPayload = {
         data: {
-          id: "will-be-created-by-middleware",
+          id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
           url: exampleMetadata.url,
           urlHash: sha1(exampleMetadata.url as string),
           title: exampleMetadata.title,
@@ -206,7 +207,7 @@ describe("processQueueItemHandler", () => {
 
         const expectedPayload = {
           data: {
-            id: "will-be-created-by-middleware",
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             url: urlQueueItem.rawUrl,
             urlHash: sha1(urlQueueItem.rawUrl),
             title: defaultTitleValueIfMissing,

@@ -1,6 +1,7 @@
 import { UrlQueue } from "@prisma/client";
 import { sha1 } from "../../../crypto/sha1";
 import { generateUrlQueueId } from "../../utils/generateUrlQueueId";
+import { generateUserId } from "../../../user/utils/generateUserId";
 
 const urlQueue: UrlQueue = {
   id: generateUrlQueueId(),
@@ -11,7 +12,7 @@ const urlQueue: UrlQueue = {
   status: "NEW",
   attemptCount: 0,
   metadata: {},
-  userId: "usr_userId",
+  userId: generateUserId(),
 };
 
 export const createUrlQueueItem = (overwrites: Partial<UrlQueue> = {}): UrlQueue => ({

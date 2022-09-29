@@ -1,5 +1,6 @@
 import { hash } from "argon2";
 import prisma from "./index";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "./middlewares/generateModelId";
 
 async function main() {
   const encryptedPassword = await hash("password1234");
@@ -7,7 +8,7 @@ async function main() {
     where: { email: "a@a.com" },
     update: {},
     create: {
-      id: "will-be-generated-by-middleware",
+      id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
       email: "a@a.com",
       name: "Alice",
       password: encryptedPassword,
@@ -18,7 +19,7 @@ async function main() {
     where: { email: "b@b.com" },
     update: {},
     create: {
-      id: "will-be-generated-by-middleware",
+      id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
       email: "b@b.com",
       name: "Bob",
       password: encryptedPassword,
@@ -29,7 +30,7 @@ async function main() {
     where: { email: "c@c.com" },
     update: {},
     create: {
-      id: "will-be-generated-by-middleware",
+      id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
       email: "c@c.com",
       name: "Carla",
       password: encryptedPassword,

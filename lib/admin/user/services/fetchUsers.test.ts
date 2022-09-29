@@ -2,6 +2,7 @@ import axios, { Axios } from "axios";
 import { User } from "next-auth";
 
 import { fetchUsers } from "./fetchUsers";
+import { generateUserId } from "../../../user/utils/generateUserId";
 
 vi.mock("axios");
 
@@ -21,7 +22,7 @@ describe("fetchUsers", () => {
   it("should return fetched users", async () => {
     const users: ReadonlyArray<User> = [
       {
-        id: "usr_someRandomStringForID",
+        id: generateUserId(),
         role: "user",
         createdAt: new Date().toISOString(),
       },

@@ -1,6 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { hashPassword, verifyPassword } from "./passwords";
 import { PrismaClient } from "@prisma/client";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../prisma/middlewares/generateModelId";
 
 export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: string) =>
   CredentialsProvider({
@@ -33,7 +34,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
         if (!maybeUser) {
           maybeUser = await dbAdapter.user.create({
             data: {
-              id: "anything-will-be-added-by-middleware",
+              id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
               email: credentials?.email,
               password: await hashPassword(credentials.password),
             },
