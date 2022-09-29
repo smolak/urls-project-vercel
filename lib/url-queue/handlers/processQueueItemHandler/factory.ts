@@ -79,6 +79,7 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
 
         await prisma.userUrl.create({
           data: {
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             userId: item.userId,
             urlId: createdUrl.id,
           },
