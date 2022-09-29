@@ -233,6 +233,7 @@ describe("processQueueItemHandler", () => {
 
       expect(prismaMock.userUrl.create).toHaveBeenCalledWith({
         data: {
+          id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
           userId: urlQueueItem.userId,
           urlId: urlEntity.id,
         },
