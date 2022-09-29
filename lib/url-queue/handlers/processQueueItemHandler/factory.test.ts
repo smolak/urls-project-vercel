@@ -52,11 +52,13 @@ describe("processQueueItemHandler", () => {
     const handler = processQueueItemHandlerFactory({ getMetadata, logger });
     await handler({ id: urlQueueItemId });
 
+    const processableStatuses = ["NEW", "FAILED"];
+
     expect(prismaMock.urlQueue.findFirstOrThrow).toHaveBeenCalledWith({
       where: {
         id: urlQueueItemId,
         status: {
-          in: ["NEW", "FAILED"],
+          in: processableStatuses,
         },
       },
     });
@@ -130,11 +132,13 @@ describe("processQueueItemHandler", () => {
     });
   });
 
-  describe("this is wrapped in transaction, either all succeed or none", () => {
+  describe("further processing is wrapped in transaction, either all succeed or none", () => {
     const urlEntity = createUrlEntity();
     const urlQueueItem = createUrlQueueItem();
     const exampleMetadata = createExampleMetadata({ contentType: undefined });
     const websiteContentType = "text/html; charset=utf-8";
+
+    const getTransactionCallback = () => prismaMock.$transaction.mock.calls[0][0];
 
     beforeEach(() => {
       getMetadata.mockResolvedValue(exampleMetadata);
@@ -159,7 +163,7 @@ describe("processQueueItemHandler", () => {
 
       // Triggering $transaction call. Don't know if it can be done otherwise.
       // TODO if it can
-      const transactionCallback = prismaMock.$transaction.mock.calls[0][0];
+      const transactionCallback = getTransactionCallback();
       await transactionCallback(prismaMock);
 
       const expectedPayload = {
@@ -176,7 +180,7 @@ describe("processQueueItemHandler", () => {
       expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
     });
 
-    describe("when the URL does not point to a website (that would have metadata, e.g. title, description)", () => {
+    describe("when the URL has no metadata (to be parsed from, e.g. an image) or title/description are missing", () => {
       beforeEach(() => {
         mockedAxios.head.mockResolvedValue({
           headers: {
@@ -186,9 +190,12 @@ describe("processQueueItemHandler", () => {
         });
       });
 
-      it("should not fetch metadata and use default values in such case", async () => {
+      it("should use default values for title and description", async () => {
         const handler = processQueueItemHandlerFactory({ getMetadata, logger });
         await handler({ id: urlQueueItem.id });
+
+        const defaultTitleValueIfMissing = "";
+        const defaultDescriptionValueIfMissing = "";
 
         expect(prismaMock.$transaction).toHaveBeenCalled();
 
@@ -202,14 +209,13 @@ describe("processQueueItemHandler", () => {
             id: "will-be-created-by-middleware",
             url: urlQueueItem.rawUrl,
             urlHash: sha1(urlQueueItem.rawUrl),
-            title: "",
-            description: "",
+            title: defaultTitleValueIfMissing,
+            description: defaultDescriptionValueIfMissing,
             metadata: compressMetadata({ contentType: "image/png" }),
           },
         };
 
         expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
-        expect(getMetadata).not.toHaveBeenCalled();
       });
     });
 
@@ -221,7 +227,7 @@ describe("processQueueItemHandler", () => {
 
       // Triggering $transaction call. Don't know if it can be done otherwise.
       // TODO if it can
-      const transactionCallback = prismaMock.$transaction.mock.calls[0][0];
+      const transactionCallback = getTransactionCallback();
       await transactionCallback(prismaMock);
 
       expect(prismaMock.userUrl.create).toHaveBeenCalledWith({
@@ -232,7 +238,7 @@ describe("processQueueItemHandler", () => {
       });
     });
 
-    it("url in queue is marked as accepted (no future processing, could be deleted by separate cron job)", async () => {
+    it("url in queue is marked as accepted (no future processing; entity can be deleted by separate job)", async () => {
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
       await handler({ id: urlQueueItem.id });
 
@@ -240,7 +246,7 @@ describe("processQueueItemHandler", () => {
 
       // Triggering $transaction call. Don't know if it can be done otherwise.
       // TODO if it can
-      const transactionCallback = prismaMock.$transaction.mock.calls[0][0];
+      const transactionCallback = getTransactionCallback();
       await transactionCallback(prismaMock);
 
       const compressedMetadata = compressMetadata(exampleMetadata);
