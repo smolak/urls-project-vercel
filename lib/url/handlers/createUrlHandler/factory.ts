@@ -55,6 +55,7 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
 
         await prisma.userUrl.create({
           data: {
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             userId,
             urlId: maybeUrl.id,
           },
