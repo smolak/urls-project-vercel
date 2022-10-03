@@ -75,8 +75,8 @@ model Url {
   // ones, that are too long for MySQL engine to even work
   urlHash     String    @unique @db.Char(40)
   // Both (title, description) are left for search capabilities, even though they are a part of metadata
-  title       String?
-  description String?
+  title       String?   @db.VarChar(250) @default("")
+  description String?   @db.VarChar(250) @default("")
   metadata    Json      @default("{}")
   UserUrl     UserUrl[]
 }
