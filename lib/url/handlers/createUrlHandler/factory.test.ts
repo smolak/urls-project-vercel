@@ -31,6 +31,8 @@ describe("createUrlHandlerFactory", () => {
 
   it("returns created handler", () => {
     const handler = createUrlHandlerFactory({ getToken, triggerEvent });
+
+    expect(handler).toBeTypeOf("function");
   });
 
   describe("requires the user to be authenticated", () => {
