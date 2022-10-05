@@ -6,6 +6,7 @@ import { ACCOUNT_ID_PREFIX } from "../../lib/account/utils/generateAccountId";
 import { URL_QUEUE_ID_PREFIX } from "../../lib/url-queue/utils/generateUrlQueueId";
 import { URL_ID_PREFIX } from "../../lib/url/utils/generateUrlId";
 import { Prisma } from "@prisma/client";
+import { USER_URL_ID_PREFIX } from "../../lib/user-url/utils/generateUserUrlId";
 
 describe("generateModelId middleware", () => {
   describe('for "create" action', () => {
@@ -143,6 +144,34 @@ describe("generateModelId middleware", () => {
             data: {
               ...params.args.data,
               id: expect.stringMatching(`^${URL_ID_PREFIX}`),
+            },
+          },
+        });
+      });
+    });
+
+    describe('when model is "UserUrl"', () => {
+      it("should generate ID prefixed for UserUrl model", async () => {
+        const params = {
+          action: "create",
+          model: "UserUrl",
+          args: {
+            data: {
+              // any url data
+            },
+          },
+        } as Prisma.MiddlewareParams;
+        const nextSpy = vi.fn();
+
+        await generateModelId(params, nextSpy);
+
+        expect(nextSpy).toHaveBeenCalledWith({
+          ...params,
+          args: {
+            ...params.args,
+            data: {
+              ...params.args.data,
+              id: expect.stringMatching(`^${USER_URL_ID_PREFIX}`),
             },
           },
         });
