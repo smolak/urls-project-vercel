@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
+    "test:watch": "vitest watch",
     "test:with-coverage": "vitest --coverage --run",
     "prisma:local": "dotenv -e .env.development.local -- prisma",
     "postinstall": "prisma generate"
