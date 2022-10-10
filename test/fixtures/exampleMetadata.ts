@@ -22,7 +22,7 @@ export const createExampleMetadata = (overwrites: Partial<Metadata> = {}): Metad
   twitter: "https://twitter.com/user",
   type: "Type info",
   url: "https://the.url",
-  video: "Vide info",
+  video: "Video info",
   ...overwrites,
 });
 
