@@ -2,6 +2,7 @@ import { Prisma, Url } from "@prisma/client";
 import { sha1 } from "../../lib/crypto/sha1";
 import { generateUrlId } from "../../lib/url/utils/generateUrlId";
 import { createExampleMetadata } from "./exampleMetadata";
+import { compressMetadata } from "../../lib/metadata/compression";
 
 const url = "https://example.url";
 const title = "Page title";
@@ -15,6 +16,6 @@ export const createUrlEntity = (overwrites: Partial<Url> = {}): Url => ({
   urlHash: sha1(url),
   title,
   description,
-  metadata: createExampleMetadata({ url, title, description }) as Prisma.JsonValue,
+  metadata: compressMetadata(createExampleMetadata({ url, title, description })) as Prisma.JsonValue,
   ...overwrites,
 });
