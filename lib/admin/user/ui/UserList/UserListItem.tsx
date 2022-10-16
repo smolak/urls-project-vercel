@@ -6,7 +6,7 @@ import { UserImage } from "../UserImage";
 
 export const UserListItem: FC<User> = ({ id, email, role, name, image, createdAt }) => {
   return (
-    <div key={id} className="border-t border-gray-200 px-3 py-3 sm:grid sm:grid-cols-10 sm:gap-3 sm:px-6 text-sm">
+    <div className="border-t border-gray-200 px-3 py-3 sm:grid sm:grid-cols-10 sm:gap-3 sm:px-6 text-sm">
       <div className="flex items-center col-span-3">
         <UserImage name={name || ""} image={image} />
         <span className="ml-4">
