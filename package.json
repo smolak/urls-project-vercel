@@ -11,7 +11,8 @@
     "test:watch": "vitest watch",
     "test:with-coverage": "vitest --coverage --run",
     "prisma:local": "dotenv -e .env.development.local -- prisma",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "typecheck": "tsc"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
