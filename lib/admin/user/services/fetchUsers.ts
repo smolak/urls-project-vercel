@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "next-auth";
+import { User } from "@prisma/client";
 
 export type FetchDataType = ReadonlyArray<User>;
 

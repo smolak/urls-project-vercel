@@ -1,6 +1,6 @@
 import { JWT } from "next-auth/jwt";
 import { generateUserId } from "../../lib/user/utils/generateUserId";
-import { User } from "next-auth";
+import { User } from "@prisma/client";
 
 interface Token extends JWT {
   role: User["role"];
@@ -16,7 +16,7 @@ export const createToken = (overwrites: Partial<Token> = {}): Token => ({
   email: "jacek@email.com",
   picture: "https://picture.url.com/jacek.png",
   sub: generateUserId(),
-  role: "user",
+  role: "USER",
   image: "https://picture.url.com/jacek.png",
   iat: 1664913411,
   exp: 1667505411,

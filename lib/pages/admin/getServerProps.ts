@@ -16,7 +16,7 @@ const normalizeForServerSideProps = (user: User) => {
 export const getServerProps: GetServerSideProps<AdminPageProps> = async (context) => {
   const session = await unstable_getServerSession(context.req, context.res, nextAuthOptions);
 
-  if (!session || session.user.role !== "admin") {
+  if (!session || session.user.role !== "ADMIN") {
     return {
       notFound: true,
     };
