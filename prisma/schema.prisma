@@ -75,8 +75,8 @@ model Url {
   // ones, that are too long for MySQL engine to even work
   urlHash     String    @unique @db.Char(40)
   // Both (title, description) are left for search capabilities, even though they are a part of metadata
-  title       String?   @db.VarChar(250) @default("")
-  description String?   @db.VarChar(250) @default("")
+  title       String?   @default("") @db.VarChar(250)
+  description String?   @default("") @db.VarChar(250)
   metadata    Json      @default("{}")
   UserUrl     UserUrl[]
 }
@@ -90,6 +90,11 @@ model UserUrl {
   createdAt DateTime @default(now())
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model User {
   id            String     @id
   createdAt     DateTime   @default(now())
@@ -99,7 +104,7 @@ model User {
   password      String?
   emailVerified DateTime?
   image         String?
-  role          String?    @default("user")
+  role          UserRole   @default(USER)
   apiKey        String?    @unique
   accounts      Account[]
   sessions      Session[]
