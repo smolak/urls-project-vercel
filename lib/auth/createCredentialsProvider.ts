@@ -28,6 +28,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
             name: true,
             role: true,
             image: true,
+            createdAt: true,
           },
         });
 
@@ -45,6 +46,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
               name: true,
               role: true,
               image: true,
+              createdAt: true,
             },
           });
         } else {
@@ -61,6 +63,7 @@ export const createCredentialsProvider = (dbAdapter: PrismaClient, providerId: s
           name: maybeUser.name,
           role: maybeUser.role,
           image: maybeUser.image,
+          createdAt: maybeUser.createdAt,
         };
       } catch (error) {
         console.log(error);

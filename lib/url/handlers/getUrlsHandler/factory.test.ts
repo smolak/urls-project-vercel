@@ -81,7 +81,7 @@ describe("getUrlsHandlerFactory", () => {
     });
 
     it("should send FORBIDDEN status if user is not an admin", async () => {
-      const notAnAdmin = createUser({ role: "user" });
+      const notAnAdmin = createUser({ role: "USER" });
       getToken.mockResolvedValue(notAnAdmin);
 
       const handler = getUrlsHandlerFactory({ getToken });
@@ -93,7 +93,7 @@ describe("getUrlsHandlerFactory", () => {
 
   describe('when a user has "admin" role', () => {
     beforeEach(() => {
-      getToken.mockResolvedValue(createToken({ role: "admin", sub: adminUserId }));
+      getToken.mockResolvedValue(createToken({ role: "ADMIN", sub: adminUserId }));
 
       // @ts-ignore
       prismaMock.userUrl.findMany.mockImplementation(({ include }) => {
@@ -124,6 +124,7 @@ describe("getUrlsHandlerFactory", () => {
               id: true,
               name: true,
               image: true,
+              createdAt: true,
             },
           },
         },

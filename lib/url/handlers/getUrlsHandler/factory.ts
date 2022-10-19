@@ -15,7 +15,7 @@ export const getUrlsHandlerFactory: GetUrlsHandlerFactory =
   async (req, res) => {
     const token = await getToken({ req });
 
-    if (!token || token?.role !== "admin") {
+    if (!token || token?.role !== "ADMIN") {
       res.status(StatusCodes.FORBIDDEN);
       return;
     }
@@ -28,6 +28,7 @@ export const getUrlsHandlerFactory: GetUrlsHandlerFactory =
             id: true,
             name: true,
             image: true,
+            createdAt: true,
           },
         },
       },

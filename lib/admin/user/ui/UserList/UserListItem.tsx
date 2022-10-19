@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { format } from "date-fns";
 import { UserListOptions } from "./UserListOptions";
-import { User } from "next-auth";
+import { User } from "@prisma/client";
 import { UserImage } from "../UserImage";
 
 export const UserListItem: FC<User> = ({ id, email, role, name, image, createdAt }) => {
