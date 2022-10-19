@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { User } from "next-auth";
+import { User } from "@prisma/client";
 import { UserListItem } from "./UserListItem";
 
 interface UserListProps {

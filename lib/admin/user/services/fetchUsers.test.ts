@@ -1,8 +1,8 @@
 import axios, { Axios } from "axios";
-import { User } from "next-auth";
+import { User } from "@prisma/client";
 
 import { fetchUsers } from "./fetchUsers";
-import { generateUserId } from "../../../user/utils/generateUserId";
+import { createUser } from "../../../../test/fixtures/user";
 
 vi.mock("axios");
 
@@ -20,13 +20,7 @@ describe("fetchUsers", () => {
   });
 
   it("should return fetched users", async () => {
-    const users: ReadonlyArray<User> = [
-      {
-        id: generateUserId(),
-        role: "user",
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    const users: ReadonlyArray<User> = [createUser()];
     mockedAxios.get.mockResolvedValue({ data: users });
 
     const fetchedUsers = await fetchUsers();
