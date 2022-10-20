@@ -5,10 +5,10 @@ import { getMetadata } from "../../../metadata/getMetadata";
 import { ProcessQueueItemHandlerPayload } from "./payload";
 import { logger } from "../../../../logger";
 
-export interface ProcessQueueItemEvent extends AnEvent<{ id: UrlQueue["id"] }> {
+export interface ProcessQueueItemEvent extends AnEvent<{ urlQueueId: UrlQueue["id"] }> {
   type: EventType.URL_QUEUE_CREATED;
 }
 
-export type ProcessQueueItemHandler = ({ id }: ProcessQueueItemHandlerPayload) => Promise<Url | undefined>;
+export type ProcessQueueItemHandler = ({ urlQueueId }: ProcessQueueItemHandlerPayload) => Promise<Url | undefined>;
 
 export const processQueueItemHandler: ProcessQueueItemHandler = processQueueItemHandlerFactory({ getMetadata, logger });

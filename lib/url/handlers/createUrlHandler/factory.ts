@@ -84,7 +84,7 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
       triggerEvent({
         type: EventType.URL_QUEUE_CREATED,
         data: {
-          id: urlInQueue["id"],
+          urlQueueId: urlInQueue["id"],
         },
       });
     } catch (e) {

@@ -1,29 +1,30 @@
 import { ProcessQueueItemHandlerPayload, processQueueItemHandlerPayloadSchema } from "./payload";
 import { SafeParseError, ZodError } from "zod";
+import { generateUrlQueueId } from "../../utils/generateUrlQueueId";
 
 describe("processQueueItemHandlerPayloadSchema", () => {
-  it('should pass validation for an object containing valid "id" property value', () => {
-    const id = "string-like-id";
-    const result = processQueueItemHandlerPayloadSchema.parse({ id });
+  it('should pass validation for an object containing valid "urlQueueId" property value', () => {
+    const urlQueueId = generateUrlQueueId();
+    const result = processQueueItemHandlerPayloadSchema.parse({ urlQueueId });
 
-    expect(result.id).toEqual(id);
+    expect(result.urlQueueId).toEqual(urlQueueId);
   });
 
-  it('should trim "id" upon successful validation', () => {
-    const id = "string-like-id";
-    const idToTrim = `   \n\n\n\t\t\t${id}\t\t\t\n\n\n    `;
+  it('should trim "urlQueueId" upon successful validation', () => {
+    const urlQueueId = generateUrlQueueId();
+    const idToTrim = `   \n\n\n\t\t\t${urlQueueId}\t\t\t\n\n\n    `;
 
-    const result = processQueueItemHandlerPayloadSchema.parse({ id: idToTrim });
+    const result = processQueueItemHandlerPayloadSchema.parse({ urlQueueId: idToTrim });
 
-    expect(result.id).toEqual(id);
+    expect(result.urlQueueId).toEqual(urlQueueId);
   });
 
-  describe('it should not pass validation when passed "id"', () => {
+  describe('it should not pass validation when passed "urlQueueId"', () => {
     it("is not a string", () => {
-      const id = 42;
+      const urlQueueId = 42;
 
       const { error } = processQueueItemHandlerPayloadSchema.safeParse({
-        id,
+        urlQueueId,
       }) as SafeParseError<ProcessQueueItemHandlerPayload>;
 
       expect(error).toBeInstanceOf(ZodError);

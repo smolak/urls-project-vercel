@@ -20,7 +20,7 @@ export const triggerEvent = (event: ProcessableEvent) => {
     switch (event.type) {
       case EventType.URL_QUEUE_CREATED:
         // I am not waiting for it to finish, hence no "await". Fire, forget.
-        processQueueItemHandler({ id: event.data.id });
+        processQueueItemHandler({ urlQueueId: event.data.urlQueueId });
         return;
     }
   } catch (e) {
