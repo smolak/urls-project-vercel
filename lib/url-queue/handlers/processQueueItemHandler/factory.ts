@@ -40,11 +40,11 @@ export type ProcessQueueItemHandlerFactory = ({ getMetadata }: Params) => Proces
 
 export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
   ({ getMetadata, logger }) =>
-  async ({ id }) => {
+  async ({ urlQueueId }) => {
     try {
       const item = await prisma.urlQueue.findFirstOrThrow({
         where: {
-          id,
+          id: urlQueueId,
           status: {
             in: ["NEW", "FAILED"],
           },
@@ -56,7 +56,7 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
           attemptCount: item.attemptCount + 1,
         },
         where: {
-          id,
+          id: urlQueueId,
         },
       });
 
@@ -91,7 +91,7 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
             status: "ACCEPTED",
           },
           where: {
-            id,
+            id: urlQueueId,
           },
         });
 

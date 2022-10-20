@@ -154,7 +154,7 @@ describe("createUrlHandlerFactory", () => {
           expect(triggerEvent).toHaveBeenCalledWith({
             type: EventType.URL_QUEUE_CREATED,
             data: {
-              id: urlQueue.id,
+              urlQueueId: urlQueue.id,
             },
           });
         });

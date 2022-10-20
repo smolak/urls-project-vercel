@@ -1,7 +1,7 @@
 import { Mock } from "vitest";
 import { EventType, triggerEvent } from "./triggerEvent";
 import { ProcessQueueItemEvent } from "../url-queue/handlers/processQueueItemHandler";
-import { createUrlQueueItem } from "../url-queue/test/fixtures/urlQueue";
+import { generateUrlQueueId } from "../url-queue/utils/generateUrlQueueId";
 
 vi.mock("../url-queue/handlers/processQueueItemHandler", () => {
   return {
@@ -27,13 +27,13 @@ describe("triggerEvent", () => {
   describe("URL_QUEUE_CREATED event type", () => {
     it("should be handled", () => {
       const eventExample: ProcessQueueItemEvent = {
-        data: { id: createUrlQueueItem().id },
+        data: { urlQueueId: generateUrlQueueId() },
         type: EventType.URL_QUEUE_CREATED,
       };
 
       triggerEvent(eventExample);
 
-      expect(processQueueItemHandler).toHaveBeenCalledWith({ id: eventExample.data.id });
+      expect(processQueueItemHandler).toHaveBeenCalledWith({ urlQueueId: eventExample.data.urlQueueId });
     });
   });
 
@@ -43,7 +43,7 @@ describe("triggerEvent", () => {
         throw new Error("Something went wrong");
       });
       const eventExample: ProcessQueueItemEvent = {
-        data: { id: createUrlQueueItem().id },
+        data: { urlQueueId: generateUrlQueueId() },
         type: EventType.URL_QUEUE_CREATED,
       };
 
@@ -57,7 +57,7 @@ describe("triggerEvent", () => {
         throw error;
       });
       const eventExample: ProcessQueueItemEvent = {
-        data: { id: createUrlQueueItem().id },
+        data: { urlQueueId: generateUrlQueueId() },
         type: EventType.URL_QUEUE_CREATED,
       };
 
