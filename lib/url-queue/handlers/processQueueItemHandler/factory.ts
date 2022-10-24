@@ -20,7 +20,12 @@ interface Params {
 }
 
 const fetchMetadata = async (getMetadata: GetMetadata, url: UrlQueue["rawUrl"]): Promise<Metadata> => {
-  const result = await axios.head<any, HeadResponse>(url);
+  const result = await axios.head<any, HeadResponse>(url, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
 
   const contentType = result.headers["content-type"];
   const isAWebsite = contentType.includes("text/html");
