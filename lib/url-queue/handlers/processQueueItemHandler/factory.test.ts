@@ -12,12 +12,14 @@ import { compressMetadata } from "../../../metadata/compression";
 import { createExampleMetadata } from "../../../../test/fixtures/exampleMetadata";
 import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
+import { generateRequestId } from "../../../shared/utils/generateRequestId";
 
 vi.mock("axios");
 const mockedAxios = vi.mocked<Axios>(axios);
 
 const getMetadata = vi.fn();
 const logger = mockDeep<Logger>();
+const requestId = generateRequestId();
 
 describe("processQueueItemHandler", () => {
   beforeEach(() => {
@@ -32,7 +34,7 @@ describe("processQueueItemHandler", () => {
 
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
 
-      expect(async () => await handler({ urlQueueId: generateUrlQueueId() })).not.toThrow();
+      expect(async () => await handler({ urlQueueId: generateUrlQueueId(), requestId })).not.toThrow();
     });
 
     it("should error log that fact", async () => {
@@ -41,9 +43,15 @@ describe("processQueueItemHandler", () => {
       prismaMock.urlQueue.findFirstOrThrow.mockRejectedValue(error);
 
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-      await handler({ urlQueueId: generateUrlQueueId() });
+      await handler({ urlQueueId: generateUrlQueueId(), requestId });
 
-      expect(logger.error).toHaveBeenCalledWith(error);
+      expect(logger.error).toHaveBeenCalledWith(
+        {
+          error,
+          requestId,
+        },
+        "Failed to process URL queue item."
+      );
     });
   });
 
@@ -70,7 +78,7 @@ describe("processQueueItemHandler", () => {
     prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueItem);
 
     const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-    await handler({ urlQueueId: urlQueueItem.id });
+    await handler({ urlQueueId: urlQueueItem.id, requestId });
 
     expect(prismaMock.urlQueue.update).toHaveBeenCalledWith({
       data: {
@@ -87,7 +95,7 @@ describe("processQueueItemHandler", () => {
       const urlQueueItem = createUrlQueueItem();
 
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-      await handler({ urlQueueId: urlQueueItem.id });
+      await handler({ urlQueueId: urlQueueItem.id, requestId });
 
       expect(mockedAxios.head).toHaveBeenCalledWith(urlQueueItem.rawUrl);
     });
@@ -106,7 +114,7 @@ describe("processQueueItemHandler", () => {
         const urlQueueItem = createUrlQueueItem();
 
         const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-        await handler({ urlQueueId: urlQueueItem.id });
+        await handler({ urlQueueId: urlQueueItem.id, requestId });
 
         expect(getMetadata).toHaveBeenCalledWith(urlQueueItem.rawUrl);
       });
@@ -124,7 +132,7 @@ describe("processQueueItemHandler", () => {
 
       it("should not obtain the metadata, as there is nothing to obtain it from", async () => {
         const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-        await handler({ urlQueueId: generateUrlQueueId() });
+        await handler({ urlQueueId: generateUrlQueueId(), requestId });
 
         expect(getMetadata).not.toHaveBeenCalled();
       });
@@ -156,7 +164,7 @@ describe("processQueueItemHandler", () => {
 
     it("Url entity is created", async () => {
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-      await handler({ urlQueueId: urlQueueItem.id });
+      await handler({ urlQueueId: urlQueueItem.id, requestId });
 
       expect(prismaMock.$transaction).toHaveBeenCalled();
 
@@ -191,7 +199,7 @@ describe("processQueueItemHandler", () => {
 
       it("should use default values for title and description", async () => {
         const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-        await handler({ urlQueueId: urlQueueItem.id });
+        await handler({ urlQueueId: urlQueueItem.id, requestId });
 
         const defaultTitleValueIfMissing = "";
         const defaultDescriptionValueIfMissing = "";
@@ -220,7 +228,7 @@ describe("processQueueItemHandler", () => {
 
     it("relationship between created url and user that added it is created", async () => {
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-      await handler({ urlQueueId: urlQueueItem.id });
+      await handler({ urlQueueId: urlQueueItem.id, requestId });
 
       expect(prismaMock.$transaction).toHaveBeenCalled();
 
@@ -240,7 +248,7 @@ describe("processQueueItemHandler", () => {
 
     it("url in queue is marked as accepted (no future processing; entity can be deleted by separate job)", async () => {
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
-      await handler({ urlQueueId: urlQueueItem.id });
+      await handler({ urlQueueId: urlQueueItem.id, requestId });
 
       expect(prismaMock.$transaction).toHaveBeenCalled();
 
