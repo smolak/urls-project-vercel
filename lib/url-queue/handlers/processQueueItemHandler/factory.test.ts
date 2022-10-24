@@ -97,7 +97,12 @@ describe("processQueueItemHandler", () => {
       const handler = processQueueItemHandlerFactory({ getMetadata, logger });
       await handler({ urlQueueId: urlQueueItem.id, requestId });
 
-      expect(mockedAxios.head).toHaveBeenCalledWith(urlQueueItem.rawUrl);
+      expect(mockedAxios.head).toHaveBeenCalledWith(urlQueueItem.rawUrl, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
     });
 
     describe("when a website is detected", () => {
