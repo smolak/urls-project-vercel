@@ -62,6 +62,9 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
       });
 
       const metadata = await fetchMetadata(getMetadata, item.rawUrl);
+
+      logger.info({ requestId, metadata }, "Metadata fetched.");
+
       const url = metadata.url || item.rawUrl;
       const urlHash = sha1(url);
       const compressedMetadata = compressMetadata(metadata);
