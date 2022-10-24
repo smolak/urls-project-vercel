@@ -40,7 +40,8 @@ export type ProcessQueueItemHandlerFactory = ({ getMetadata }: Params) => Proces
 
 export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
   ({ getMetadata, logger }) =>
-  async ({ urlQueueId }) => {
+  async ({ urlQueueId, requestId }) => {
+    logger.info({ requestId, urlQueueId }, "Processing URL queue item.");
     try {
       const item = await prisma.urlQueue.findFirstOrThrow({
         where: {
@@ -95,11 +96,13 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
           },
         });
 
+        logger.info({ requestId, createdUrl }, "Processing finished, URL created.");
+
         return createdUrl;
       });
 
       return createdUrl;
-    } catch (e) {
-      logger.error(e);
+    } catch (error) {
+      logger.error({ requestId, error }, "Failed to process URL queue item.");
     }
   };

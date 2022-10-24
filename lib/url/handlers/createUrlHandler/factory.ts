@@ -6,23 +6,33 @@ import prisma from "../../../../prisma";
 import { EventType, TriggerEvent } from "../../../events-aggregator/triggerEvent";
 import { CreateUrlHandler } from "./index";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
+import { Logger } from "pino";
+import { generateRequestId } from "../../../shared/utils/generateRequestId";
 
 type GetToken = (params: GetTokenParams) => Promise<JWT | null>;
 
 interface Params {
   getToken: GetToken;
+  logger: Logger;
   triggerEvent: TriggerEvent;
 }
 
-export type CreateUrlHandlerFactory = ({ getToken, triggerEvent }: Params) => CreateUrlHandler;
+export type CreateUrlHandlerFactory = ({ getToken, logger, triggerEvent }: Params) => CreateUrlHandler;
+
+const actionType = "createUrlHandler";
 
 export const createUrlHandlerFactory: CreateUrlHandlerFactory =
-  ({ getToken, triggerEvent }) =>
+  ({ getToken, logger, triggerEvent }) =>
   async (req, res) => {
     const token = await getToken({ req });
+    const requestId = generateRequestId();
+
+    logger.info({ requestId, actionType }, "Creating URL initiated.");
 
     // No token?
     if (!token) {
+      logger.warn({ requestId, actionType }, "Not logged in.");
+
       res.status(StatusCodes.FORBIDDEN);
       return;
     }
@@ -34,6 +44,8 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
     const result = createUrlHandlerPayloadSchema.safeParse(body);
 
     if (!result.success) {
+      logger.error({ requestId, actionType }, "Body validation error.");
+
       res.status(StatusCodes.NOT_ACCEPTABLE);
       return;
     }
@@ -61,6 +73,8 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
           },
         });
 
+        logger.info({ requestId, actionType, url }, "URL exists, added to user.");
+
         res.status(StatusCodes.CREATED);
         res.send({ url: maybeUrl.url });
 
@@ -78,6 +92,8 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
         },
       });
 
+      logger.info({ requestId, actionType, url }, "URL added to queue.");
+
       res.status(StatusCodes.CREATED);
       res.json({ urlQueueId: urlInQueue.id });
 
@@ -85,9 +101,12 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
         type: EventType.URL_QUEUE_CREATED,
         data: {
           urlQueueId: urlInQueue["id"],
+          requestId,
         },
       });
-    } catch (e) {
+    } catch (error) {
+      logger.error({ requestId, actionType, error }, "Failed to store the URL.");
+
       res.status(StatusCodes.INTERNAL_SERVER_ERROR);
       res.json({ error: "Failed to store the URL, try again." });
     }

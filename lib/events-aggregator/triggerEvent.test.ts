@@ -12,12 +12,16 @@ vi.mock("../../logger", () => {
   return {
     logger: {
       error: vi.fn(),
+      info: vi.fn(),
     },
   };
 });
 
 import { processQueueItemHandler } from "../url-queue/handlers/processQueueItemHandler";
 import { logger } from "../../logger";
+import { generateRequestId } from "../shared/utils/generateRequestId";
+
+const requestId = generateRequestId();
 
 describe("triggerEvent", () => {
   beforeEach(() => {
@@ -27,13 +31,13 @@ describe("triggerEvent", () => {
   describe("URL_QUEUE_CREATED event type", () => {
     it("should be handled", () => {
       const eventExample: ProcessQueueItemEvent = {
-        data: { urlQueueId: generateUrlQueueId() },
+        data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
 
       triggerEvent(eventExample);
 
-      expect(processQueueItemHandler).toHaveBeenCalledWith({ urlQueueId: eventExample.data.urlQueueId });
+      expect(processQueueItemHandler).toHaveBeenCalledWith({ urlQueueId: eventExample.data.urlQueueId, requestId });
     });
   });
 
@@ -43,7 +47,7 @@ describe("triggerEvent", () => {
         throw new Error("Something went wrong");
       });
       const eventExample: ProcessQueueItemEvent = {
-        data: { urlQueueId: generateUrlQueueId() },
+        data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
 
@@ -57,13 +61,16 @@ describe("triggerEvent", () => {
         throw error;
       });
       const eventExample: ProcessQueueItemEvent = {
-        data: { urlQueueId: generateUrlQueueId() },
+        data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
 
       triggerEvent(eventExample);
 
-      expect(logger.error).toHaveBeenCalledWith(error);
+      expect(logger.error).toHaveBeenCalledWith({
+        error,
+        event: eventExample,
+      });
     });
   });
 });
