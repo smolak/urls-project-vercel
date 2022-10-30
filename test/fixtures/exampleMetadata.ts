@@ -1,7 +1,7 @@
 import { Metadata } from "../../lib/metadata/getMetadata";
 import { MetaData } from "metadata-scraper";
 
-export const createExampleMetadata = (overwrites: Partial<Metadata> = {}): Metadata => ({
+export const createExampleWebsiteMetadata = (overwrites: Partial<Metadata> = {}): Metadata => ({
   audio: "Audio info",
   author: "Page Author",
   contentType: "text/html; charset=utf-8",
@@ -24,6 +24,10 @@ export const createExampleMetadata = (overwrites: Partial<Metadata> = {}): Metad
   url: "https://the.url",
   video: "Video info",
   ...overwrites,
+});
+
+export const createExampleImageMetadata = (overwriteContentType = ""): Metadata => ({
+  contentType: overwriteContentType || "image/jpg",
 });
 
 export const createExampleMetadataScraperResult = (overwrites: Partial<MetaData> = {}): MetaData => ({
