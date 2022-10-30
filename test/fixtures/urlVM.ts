@@ -1,6 +1,6 @@
 import { sha1 } from "../../lib/crypto/sha1";
 import { generateUrlId } from "../../lib/url/utils/generateUrlId";
-import { createExampleMetadata } from "./exampleMetadata";
+import { createExampleWebsiteMetadata } from "./exampleMetadata";
 import { UrlVM } from "../../lib/url/models/Url.vm";
 
 const url = "https://example.url";
@@ -16,7 +16,7 @@ export const createUrlEntity = (overwrites: Partial<UrlVM> = {}): UrlVM => {
     urlHash: sha1(url),
     title,
     description,
-    metadata: createExampleMetadata({ url, title, description }),
+    metadata: createExampleWebsiteMetadata({ url, title, description }),
     ...overwrites,
   };
 };

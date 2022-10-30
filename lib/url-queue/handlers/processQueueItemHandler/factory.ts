@@ -1,50 +1,21 @@
 import prisma from "../../../../prisma";
-import { GetMetadata, Metadata } from "../../../metadata/getMetadata";
 import { compressMetadata } from "../../../metadata/compression";
 import { sha1 } from "../../../crypto/sha1";
-import { Prisma, UrlQueue } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { ProcessQueueItemHandler } from "./index";
-import axios from "axios";
 import { Logger } from "pino";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
-
-interface HeadResponse {
-  headers: {
-    "content-type": string;
-  };
-}
+import { FetchMetadata } from "../../../metadata/fetchMetadata";
 
 interface Params {
-  getMetadata: GetMetadata;
+  fetchMetadata: FetchMetadata;
   logger: Logger;
 }
 
-const fetchMetadata = async (getMetadata: GetMetadata, url: UrlQueue["rawUrl"]): Promise<Metadata> => {
-  const result = await axios.head<any, HeadResponse>(url, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
-
-  const contentType = result.headers["content-type"];
-  const isAWebsite = contentType.includes("text/html");
-
-  let metadata: Metadata = {};
-
-  if (isAWebsite) {
-    metadata = await getMetadata(url);
-  }
-
-  metadata.contentType = contentType;
-
-  return metadata;
-};
-
-export type ProcessQueueItemHandlerFactory = ({ getMetadata }: Params) => ProcessQueueItemHandler;
+export type ProcessQueueItemHandlerFactory = (params: Params) => ProcessQueueItemHandler;
 
 export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
-  ({ getMetadata, logger }) =>
+  ({ fetchMetadata, logger }) =>
   async ({ urlQueueId, requestId }) => {
     logger.info({ requestId, urlQueueId }, "Processing URL queue item.");
     try {
@@ -66,7 +37,7 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
         },
       });
 
-      const metadata = await fetchMetadata(getMetadata, item.rawUrl);
+      const metadata = await fetchMetadata(item.rawUrl);
 
       logger.info({ requestId, metadata }, "Metadata fetched.");
 

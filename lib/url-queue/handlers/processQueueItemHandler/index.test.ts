@@ -10,12 +10,12 @@ vi.mock("./factory", () => {
 
 import { processQueueItemHandlerFactory } from "./factory";
 import { processQueueItemHandler } from "./index";
-import { getMetadata } from "../../../metadata/getMetadata";
+import { fetchMetadata } from "../../../metadata/fetchMetadata";
 import { logger } from "../../../../logger";
 
 describe("processQueueItemHandler", () => {
   it("is create when imported", () => {
-    expect(processQueueItemHandlerFactory).toHaveBeenCalledWith({ getMetadata, logger });
+    expect(processQueueItemHandlerFactory).toHaveBeenCalledWith({ fetchMetadata, logger });
     expect(processQueueItemHandler).toEqual(handler);
   });
 });

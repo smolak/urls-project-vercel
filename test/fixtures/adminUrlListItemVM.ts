@@ -2,7 +2,7 @@ import { generateUrlId } from "../../lib/url/utils/generateUrlId";
 import { sha1 } from "../../lib/crypto/sha1";
 import { generateUserUrlId } from "../../lib/user-url/utils/generateUserUrlId";
 import { generateUserId } from "../../lib/user/utils/generateUserId";
-import { createExampleMetadata } from "./exampleMetadata";
+import { createExampleWebsiteMetadata } from "./exampleMetadata";
 import { toPublicUserDataVM } from "../../lib/user/models/PublicUserData.vm";
 import { createUser } from "./user";
 import { AdminUrlListItemVM } from "../../lib/admin/urls/models/AdminUrlListItem.vm";
@@ -31,7 +31,7 @@ export const createAdminUrlListItemVM = (overwrites: Partial<AdminUrlListItemVM>
       urlHash: sha1(url),
       title,
       description,
-      metadata: createExampleMetadata(),
+      metadata: createExampleWebsiteMetadata(),
       ...overwrites.url,
     },
     user: toPublicUserDataVM(createUser({ id: userId, ...overwrites.user })),
