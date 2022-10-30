@@ -79,6 +79,20 @@ describe("fetchMetadata", () => {
     });
   });
 
+  describe("when content type is not in the headers (as it is not guaranteed to be there)", () => {
+    beforeEach(() => {
+      nock(baseUrl).head(path).reply(200);
+    });
+
+    it("should use an empty string to allow verification and as a default value", async () => {
+      const metadata = await fetchMetadata(url);
+
+      expect(metadata).toEqual({
+        contentType: "",
+      });
+    });
+  });
+
   describe("when fetching metadata fails", () => {
     const error = {
       message: "Something went wrong...",
