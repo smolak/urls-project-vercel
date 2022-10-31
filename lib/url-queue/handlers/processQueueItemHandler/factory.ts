@@ -14,9 +14,10 @@ interface Params {
 
 export type ProcessQueueItemHandlerFactory = (params: Params) => ProcessQueueItemHandler;
 
-export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
-  ({ fetchMetadata, logger }) =>
-  async ({ urlQueueId, requestId }) => {
+export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory = ({ fetchMetadata, logger }) => {
+  console.log("DO I START?");
+
+  return async ({ urlQueueId, requestId }) => {
     logger.info({ requestId, urlQueueId }, "Processing URL queue item.");
 
     try {
@@ -90,3 +91,4 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory =
       logger.error({ requestId, error }, "Failed to process URL queue item.");
     }
   };
+};
