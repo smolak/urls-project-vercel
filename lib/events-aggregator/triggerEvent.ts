@@ -16,7 +16,7 @@ export type TriggerEvent = (event: ProcessableEvent) => void;
 
 // TODO: IDEA#6
 
-export const triggerEvent = (event: ProcessableEvent) => {
+export const triggerEvent = async (event: ProcessableEvent) => {
   try {
     switch (event.type) {
       case EventType.URL_QUEUE_CREATED:
@@ -25,10 +25,16 @@ export const triggerEvent = (event: ProcessableEvent) => {
         console.log("Triggering queue item processing", event.data.urlQueueId);
 
         // I am not waiting for it to finish, hence no "await". Fire, forget.
-        processQueueItemHandler({ urlQueueId: event.data.urlQueueId, requestId: event.data.requestId });
-        return;
+        const url = await processQueueItemHandler({
+          urlQueueId: event.data.urlQueueId,
+          requestId: event.data.requestId,
+        });
+
+        return url;
     }
   } catch (error) {
+    console.log("Something went wrong", error);
+
     logger.error({
       error,
       event,
