@@ -22,6 +22,8 @@ export const triggerEvent = (event: ProcessableEvent) => {
       case EventType.URL_QUEUE_CREATED:
         logger.info({ requestId: event.data.requestId, event: event.type }, `Event ${event.type} triggered.`);
 
+        console.log("Triggering queue item processing", event.data.urlQueueId);
+
         // I am not waiting for it to finish, hence no "await". Fire, forget.
         processQueueItemHandler({ urlQueueId: event.data.urlQueueId, requestId: event.data.requestId });
         return;
