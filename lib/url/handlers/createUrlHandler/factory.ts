@@ -97,13 +97,17 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
       res.status(StatusCodes.CREATED);
       res.json({ urlQueueId: urlInQueue.id });
 
-      triggerEvent({
+      const result = await triggerEvent({
         type: EventType.URL_QUEUE_CREATED,
         data: {
           urlQueueId: urlInQueue["id"],
           requestId,
         },
       });
+
+      console.log("Successs...", result);
+
+      logger.info({ requestId, result }, "SUCCESS!!!");
     } catch (error) {
       logger.error({ requestId, actionType, error }, "Failed to store the URL.");
 
