@@ -8,6 +8,7 @@ import { CreateUrlHandler } from "./index";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { Logger } from "pino";
 import { generateRequestId } from "../../../shared/utils/generateRequestId";
+import axios from "axios";
 
 type GetToken = (params: GetTokenParams) => Promise<JWT | null>;
 
@@ -94,9 +95,6 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
 
       logger.info({ requestId, actionType, url }, "URL added to queue.");
 
-      res.status(StatusCodes.CREATED);
-      res.json({ urlQueueId: urlInQueue.id });
-
       const result = await triggerEvent({
         type: EventType.URL_QUEUE_CREATED,
         data: {
@@ -108,6 +106,9 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
       console.log("Successs...", result);
 
       logger.info({ requestId, result }, "SUCCESS!!!");
+
+      res.status(StatusCodes.CREATED);
+      res.json({ urlQueueId: urlInQueue.id });
     } catch (error) {
       logger.error({ requestId, actionType, error }, "Failed to store the URL.");
 
