@@ -95,13 +95,15 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
 
       logger.info({ requestId, actionType, url }, "URL added to queue.");
 
-      triggerEvent({
+      await triggerEvent({
         type: EventType.URL_QUEUE_CREATED,
         data: {
           urlQueueId: urlInQueue["id"],
           requestId,
         },
       });
+
+      logger.info({ requestId }, "Success.");
 
       res.status(StatusCodes.CREATED);
       res.json({ urlQueueId: urlInQueue.id });
