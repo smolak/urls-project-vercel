@@ -22,19 +22,12 @@ export const triggerEvent = async (event: ProcessableEvent) => {
       case EventType.URL_QUEUE_CREATED:
         logger.info({ requestId: event.data.requestId, event: event.type }, `Event ${event.type} triggered.`);
 
-        console.log("Triggering queue item processing", event.data.urlQueueId);
-
-        // I am not waiting for it to finish, hence no "await". Fire, forget.
-        const url = await processQueueItemHandler({
+        return await processQueueItemHandler({
           urlQueueId: event.data.urlQueueId,
           requestId: event.data.requestId,
         });
-
-        return url;
     }
   } catch (error) {
-    console.log("Something went wrong", error);
-
     logger.error({
       error,
       event,
