@@ -11,12 +11,14 @@ export interface AnEvent<D = Record<string, unknown>> {
   data: D & { requestId?: RequestId };
 }
 
-type ProcessableEvent = ProcessQueueItemEvent;
-export type TriggerEvent = (event: ProcessableEvent) => void;
+type UrlQueueCreatedEvent = (event: ProcessQueueItemEvent) => ReturnType<typeof processQueueItemHandler>;
+
+// List of event types
+export type TriggerEvent = UrlQueueCreatedEvent;
 
 // TODO: IDEA#6
 
-export const triggerEvent = async (event: ProcessableEvent) => {
+export const triggerEvent: TriggerEvent = async (event) => {
   try {
     switch (event.type) {
       case EventType.URL_QUEUE_CREATED:
