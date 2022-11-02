@@ -3,7 +3,7 @@ import { logger } from "../../logger";
 import { RequestId } from "../shared/utils/generateRequestId";
 
 export enum EventType {
-  URL_QUEUE_CREATED,
+  URL_QUEUE_CREATED = "URL_QUEUE_CREATED",
 }
 
 export interface AnEvent<D = Record<string, unknown>> {
@@ -34,5 +34,7 @@ export const triggerEvent: TriggerEvent = async (event) => {
       error,
       event,
     });
+
+    throw error;
   }
 };
