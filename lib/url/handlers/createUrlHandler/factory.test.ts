@@ -12,15 +12,20 @@ import { createUrlQueue } from "../../../../test/fixtures/urlQueue";
 
 import { createUrlHandlerFactory } from "./factory";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
-import { expect } from "vitest";
+import { expect, Mock } from "vitest";
 
 const userId = generateUserId();
 const getToken = vi.fn();
 const triggerEvent = vi.fn();
 
+triggerEvent.mockName("triggerEvent");
+
 const logger = mockDeep<Logger>();
 const reqMock = mockDeep<NextApiRequest>();
 const resMock = mockDeep<NextApiResponse>();
+
+resMock.status.mockName("res.status");
+resMock.json.mockName("res.json");
 
 const URL_TO_ADD = "https://urlshare.me";
 
@@ -169,6 +174,37 @@ describe("createUrlHandlerFactory", () => {
 
           expect(resMock.status).toHaveBeenCalledWith(StatusCodes.CREATED);
           expect(resMock.json).toHaveBeenCalledWith({ urlQueueId: urlQueue.id });
+        });
+
+        it("should send responses as the very last thing", async () => {
+          // It turned out that when response is called, anything after that is not executed.
+          // This happens on Vercel, and not locally and was a cause of a ton of headaches for me.
+
+          const handler = createUrlHandlerFactory({ getToken, logger, triggerEvent });
+          await handler(reqMock, resMock);
+
+          expect.extend({
+            toHaveBeenCalledAfter: (received: Mock, expected: Mock) => {
+              if (received.mock.invocationCallOrder < expected.mock.invocationCallOrder) {
+                return {
+                  message: () =>
+                    `expected ${received.getMockName()} to have been called after ${expected.getMockName()}.`,
+                  pass: false,
+                };
+              }
+
+              return {
+                message: () => "Passed",
+                pass: true,
+              };
+            },
+          });
+
+          // Vitest is sooo not prepared for this
+          // @ts-ignore
+          expect(resMock.status).toHaveBeenCalledAfter(triggerEvent);
+          // @ts-ignore
+          expect(resMock.json).toHaveBeenCalledAfter(triggerEvent);
         });
       });
 
