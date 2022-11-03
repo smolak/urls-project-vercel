@@ -12,7 +12,7 @@ expect.extend({
   toHaveBeenCalledAfter: (received: Mock, expected: Mock) => {
     if (received.mock.invocationCallOrder < expected.mock.invocationCallOrder) {
       return {
-        message: () => `expected ${received.getMockName()} to have been called after ${expected.getMockName()}.`,
+        message: () => `Expected "${received.getMockName()}" to have been called after "${expected.getMockName()}".`,
         pass: false,
       };
     }
