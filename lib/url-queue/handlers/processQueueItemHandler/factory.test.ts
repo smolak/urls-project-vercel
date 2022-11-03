@@ -1,7 +1,6 @@
 import { vi } from "vitest";
 import { Logger } from "pino";
 import { mockDeep } from "vitest-mock-extended";
-import https from "node:https";
 
 import { generateUrlQueueId } from "../../utils/generateUrlQueueId";
 import { createUrlQueueItem } from "../../test/fixtures/urlQueue";
@@ -14,45 +13,16 @@ import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { generateRequestId } from "../../../shared/utils/generateRequestId";
 
-vi.mock("node:https");
-const mockedHttps = vi.mocked(https);
-
 const fetchMetadata = vi.fn();
 const logger = mockDeep<Logger>();
 const requestId = generateRequestId();
 
 describe("processQueueItemHandler", () => {
   beforeEach(() => {
+    vi.resetAllMocks();
+
     prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(createUrlQueueItem());
-    fetchMetadata.mockReset();
-  });
-
-  describe("when url queue item is not to be found", () => {
-    it("should not throw, handler is silent", async () => {
-      // trigger any type of error that might occur in the handler
-      prismaMock.urlQueue.findFirstOrThrow.mockRejectedValue(new Error("Item not found"));
-
-      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
-
-      expect(async () => await handler({ urlQueueId: generateUrlQueueId(), requestId })).not.toThrow();
-    });
-
-    it("should error log that fact", async () => {
-      // trigger any type of error that might occur in the handler
-      const error = new Error("Item not found");
-      prismaMock.urlQueue.findFirstOrThrow.mockRejectedValue(error);
-
-      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
-      await handler({ urlQueueId: generateUrlQueueId(), requestId });
-
-      expect(logger.error).toHaveBeenCalledWith(
-        {
-          error,
-          requestId,
-        },
-        "Failed to process URL queue item."
-      );
-    });
+    fetchMetadata.mockResolvedValue(createExampleWebsiteMetadata());
   });
 
   it("should look for item in queue, but only for one in processable status", async () => {
@@ -219,6 +189,18 @@ describe("processQueueItemHandler", () => {
           id: urlQueueItem.id,
         },
       });
+    });
+  });
+
+  describe("error handling - when any part of the implementation throws", () => {
+    it("should rethrow the error, ", async () => {
+      // trigger any type of error that might occur in the handler
+      const error = new Error("Item not found.");
+      prismaMock.urlQueue.findFirstOrThrow.mockRejectedValue(error);
+
+      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+
+      expect(async () => await handler({ urlQueueId: generateUrlQueueId(), requestId })).rejects.toThrow(error);
     });
   });
 });
