@@ -8,7 +8,6 @@ import { CreateUrlHandler } from "./index";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { Logger } from "pino";
 import { generateRequestId } from "../../../shared/utils/generateRequestId";
-import axios from "axios";
 
 type GetToken = (params: GetTokenParams) => Promise<JWT | null>;
 
