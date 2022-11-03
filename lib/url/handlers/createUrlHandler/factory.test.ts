@@ -183,27 +183,7 @@ describe("createUrlHandlerFactory", () => {
           const handler = createUrlHandlerFactory({ getToken, logger, triggerEvent });
           await handler(reqMock, resMock);
 
-          expect.extend({
-            toHaveBeenCalledAfter: (received: Mock, expected: Mock) => {
-              if (received.mock.invocationCallOrder < expected.mock.invocationCallOrder) {
-                return {
-                  message: () =>
-                    `expected ${received.getMockName()} to have been called after ${expected.getMockName()}.`,
-                  pass: false,
-                };
-              }
-
-              return {
-                message: () => "Passed",
-                pass: true,
-              };
-            },
-          });
-
-          // Vitest is sooo not prepared for this
-          // @ts-ignore
           expect(resMock.status).toHaveBeenCalledAfter(triggerEvent);
-          // @ts-ignore
           expect(resMock.json).toHaveBeenCalledAfter(triggerEvent);
         });
       });
