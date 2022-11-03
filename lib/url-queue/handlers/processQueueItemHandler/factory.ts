@@ -83,6 +83,8 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory = fu
       return createdUrl;
     } catch (error) {
       logger.error({ requestId, error }, "Failed to process URL queue item.");
+
+      throw error;
     }
   };
 };
