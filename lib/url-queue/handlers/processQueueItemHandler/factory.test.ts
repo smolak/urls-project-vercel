@@ -8,7 +8,7 @@ import { prismaMock } from "../../../../test/helpers/prismaSingleton";
 import { processQueueItemHandlerFactory } from "./factory";
 import { sha1 } from "../../../crypto/sha1";
 import { compressMetadata } from "../../../metadata/compression";
-import { createExampleWebsiteMetadata, createExampleImageMetadata } from "../../../../test/fixtures/exampleMetadata";
+import { createExampleWebsiteMetadata } from "../../../../test/fixtures/exampleMetadata";
 import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { generateRequestId } from "../../../shared/utils/generateRequestId";
@@ -102,49 +102,11 @@ describe("processQueueItemHandler", () => {
           id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
           url: exampleMetadata.url,
           urlHash: sha1(exampleMetadata.url as string),
-          title: exampleMetadata.title,
-          description: exampleMetadata.description,
           metadata: compressMetadata(exampleMetadata),
         },
       };
 
       expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
-    });
-
-    describe("when the URL has no metadata (to be parsed from, e.g. an image) or title/description are missing", () => {
-      const imageMetadata = createExampleImageMetadata();
-
-      beforeEach(() => {
-        fetchMetadata.mockResolvedValue(imageMetadata);
-      });
-
-      it("should use default values for title and description", async () => {
-        const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
-        await handler({ urlQueueId: urlQueueItem.id, requestId });
-
-        const defaultTitleValueIfMissing = "";
-        const defaultDescriptionValueIfMissing = "";
-
-        expect(prismaMock.$transaction).toHaveBeenCalled();
-
-        // Triggering $transaction call. Don't know if it can be done otherwise.
-        // TODO if it can
-        const transactionCallback = prismaMock.$transaction.mock.calls[0][0];
-        await transactionCallback(prismaMock);
-
-        const expectedPayload = {
-          data: {
-            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-            url: urlQueueItem.rawUrl,
-            urlHash: sha1(urlQueueItem.rawUrl),
-            title: defaultTitleValueIfMissing,
-            description: defaultDescriptionValueIfMissing,
-            metadata: compressMetadata(imageMetadata),
-          },
-        };
-
-        expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
-      });
     });
 
     it("relationship between created url and user that added it is created", async () => {

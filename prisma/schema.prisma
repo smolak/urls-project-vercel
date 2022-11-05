@@ -74,9 +74,6 @@ model Url {
   // Reserved for SHA1 hash - required as 2k long URLs will create too long index keys
   // ones, that are too long for MySQL engine to even work
   urlHash     String    @unique @db.Char(40)
-  // Both (title, description) are left for search capabilities, even though they are a part of metadata
-  title       String?   @default("") @db.VarChar(250)
-  description String?   @default("") @db.VarChar(250)
   metadata    Json      @default("{}")
   UserUrl     UserUrl[]
 }

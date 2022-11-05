@@ -4,8 +4,6 @@ import { createExampleWebsiteMetadata } from "./exampleMetadata";
 import { UrlVM } from "../../lib/url/models/Url.vm";
 
 const url = "https://example.url";
-const title = "Page title";
-const description = "Description";
 
 export const createUrlEntity = (overwrites: Partial<UrlVM> = {}): UrlVM => {
   return {
@@ -14,9 +12,7 @@ export const createUrlEntity = (overwrites: Partial<UrlVM> = {}): UrlVM => {
     updatedAt: new Date(),
     url,
     urlHash: sha1(url),
-    title,
-    description,
-    metadata: createExampleWebsiteMetadata({ url, title, description }),
+    metadata: createExampleWebsiteMetadata({ url }),
     ...overwrites,
   };
 };
