@@ -8,8 +8,6 @@ import { createUser } from "./user";
 import { AdminUrlListItemVM } from "../../lib/admin/urls/models/AdminUrlListItem.vm";
 
 const url = "https://example.url";
-const title = "Page title";
-const description = "Description";
 
 export const createAdminUrlListItemVM = (overwrites: Partial<AdminUrlListItemVM> = {}): AdminUrlListItemVM => {
   const userId = generateUserId();
@@ -29,8 +27,6 @@ export const createAdminUrlListItemVM = (overwrites: Partial<AdminUrlListItemVM>
       updatedAt: new Date(),
       url,
       urlHash: sha1(url),
-      title,
-      description,
       metadata: createExampleWebsiteMetadata(),
       ...overwrites.url,
     },

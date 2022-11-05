@@ -51,8 +51,6 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory = fu
             id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             url,
             urlHash,
-            title: metadata.title || "",
-            description: metadata.description || "",
             metadata: compressedMetadata as Prisma.JsonObject,
           },
         });
