@@ -8,7 +8,7 @@ import { prismaMock } from "../../../../test/helpers/prismaSingleton";
 import { processQueueItemHandlerFactory } from "./factory";
 import { sha1 } from "../../../crypto/sha1";
 import { compressMetadata } from "../../../metadata/compression";
-import { createExampleWebsiteMetadata } from "../../../../test/fixtures/exampleMetadata";
+import { createExampleImageMetadata, createExampleWebsiteMetadata } from "../../../../test/fixtures/exampleMetadata";
 import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { generateRequestId } from "../../../shared/utils/generateRequestId";
@@ -107,6 +107,37 @@ describe("processQueueItemHandler", () => {
       };
 
       expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
+    });
+
+    describe('if metadata doesn\'t contain "url" property (e.g. it was an image, metadata was not obtained)', () => {
+      const exampleImageMetadata = createExampleImageMetadata();
+
+      beforeEach(() => {
+        fetchMetadata.mockResolvedValue(exampleImageMetadata);
+      });
+
+      it("should use rawUrl for payload creation", async () => {
+        const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+        await handler({ urlQueueId: urlQueueItem.id, requestId });
+
+        expect(prismaMock.$transaction).toHaveBeenCalled();
+
+        // Triggering $transaction call. Don't know if it can be done otherwise.
+        // TODO if it can
+        const transactionCallback = getTransactionCallback();
+        await transactionCallback(prismaMock);
+
+        const expectedPayload = {
+          data: {
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+            url: urlQueueItem.rawUrl,
+            urlHash: sha1(urlQueueItem.rawUrl),
+            metadata: compressMetadata(exampleImageMetadata),
+          },
+        };
+
+        expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
+      });
     });
 
     it("relationship between created url and user that added it is created", async () => {
