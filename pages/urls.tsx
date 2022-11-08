@@ -1,53 +1,62 @@
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
-import { Url } from "@prisma/client";
 import prisma from "../prisma";
 import { decompressMetadata } from "../lib/metadata/compression";
-import { Metadata } from "../lib/metadata/getMetadata";
+import { FeedListItem } from "../lib/feed/ui/FeedListItem";
+import { FeedList } from "../lib/feed/ui/FeedList";
 
-const UrlsPage: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ urls }) => {
+const UrlsPage: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ userUrls }) => {
   return (
     <div>
-      <ul>
-        {urls.map((url) => (
-          <li key={url.id}>{url.url}</li>
-        ))}
-      </ul>
+      <FeedList items={userUrls} />
     </div>
   );
 };
 
 export default UrlsPage;
 
-interface UrlVM extends Omit<Url, "createdAt" | "updatedAt" | "metadata"> {
-  createdAt: string;
-  updatedAt: string;
-  metadata: Metadata;
-}
-
 interface UrlsProps {
-  urls: ReadonlyArray<UrlVM>;
+  userUrls: ReadonlyArray<FeedListItem>;
 }
 
 export const getServerSideProps: GetServerSideProps<UrlsProps> = async () => {
-  const urls = await prisma.url
+  const userUrls = await prisma.userUrl
     .findMany({
       take: 10,
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+        url: {
+          select: {
+            id: true,
+            url: true,
+            metadata: true,
+          },
+        },
+      },
     })
-    .then((urls) =>
-      urls.map((url) => ({
-        ...url,
-        createdAt: url.createdAt.toISOString(),
-        updatedAt: url.updatedAt.toISOString(),
-        metadata: decompressMetadata(url.metadata as Object),
+    .then((data) =>
+      data.map(({ id, createdAt, user, url }) => ({
+        id,
+        createdAt: createdAt.toISOString(),
+        url: {
+          ...url,
+          metadata: decompressMetadata(url.metadata as Object),
+        },
+        user,
       }))
     );
 
   return {
     props: {
-      urls,
+      userUrls,
     },
   };
 };
