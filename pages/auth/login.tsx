@@ -1,162 +1,67 @@
-import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
-import { getSession, getCsrfToken, signIn, getProviders, ClientSafeProvider } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
+import { BsGithub } from "react-icons/bs";
+import { useRouter } from "next/router";
 import Head from "next/head";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Link from "next/link";
-import { LockClosedIcon } from "@heroicons/react/24/solid";
 
-const MINIMUM_ACTIVITY_TIMEOUT = 850;
-type LoginFormValues = {
-  csrfToken: string;
-  email: string;
-  password: string;
-};
+const providers = [
+  {
+    name: "github",
+    displayName: "GitHub",
+    Icon: BsGithub,
+  },
+];
 
-const Login: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ csrfToken, providers }) => {
-  const [isSubmitting, setSubmitting] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const { register, handleSubmit } = useForm<LoginFormValues>();
+const Login = () => {
+  const { data: session, status } = useSession();
+  const { push } = useRouter();
 
-  const onSubmit = async (data: LoginFormValues) => {
-    setSubmitting(true);
-    setIsError(false);
+  if (status === "loading") return <div>Checking Authentication...</div>;
 
-    try {
-      setTimeout(() => {
-        setSubmitting(false);
-      }, MINIMUM_ACTIVITY_TIMEOUT);
+  if (session) {
+    setTimeout(() => {
+      push("/");
+    }, 5000);
 
-      const result = await signIn("credentials-login", {
-        redirect: false,
-        email: data.email,
-        password: data.password,
-      });
+    return <h2>you are already signed in and will be redirected to homepage now.</h2>;
+  }
 
-      if (result?.error) {
-        setIsError(true);
-      }
-
-      if (result?.ok) {
-        let redirectTo = "/";
-
-        if (result.url) {
-          const url = new URL(result.url);
-
-          if (url?.searchParams?.get("callbackUrl")) {
-            redirectTo = url.searchParams.get("callbackUrl") || redirectTo;
-          }
-        }
-
-        window.location.href = redirectTo;
-      }
-    } catch (error) {
-      console.error(error);
-      //   setError(error)
-      setSubmitting(false);
-    }
-  };
+  const handleOAuthSignIn = (provider: string) => () => signIn(provider);
 
   return (
     <>
       <Head>
         <title>Login</title>
-        <link rel="icon" href="/public/favicon.ico" />
       </Head>
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <img
-              className="mx-auto h-12 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-              alt="Workflow"
-            />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Login to your account</h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              (or register, here, if you don&apos;t have an account yet)
-            </p>
-          </div>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            <input type="hidden" name="remember" defaultValue="true" />
-            <input {...register("csrfToken")} type="hidden" defaultValue={csrfToken} hidden />
-            <div className="-space-y-px">
-              <div>
-                <label htmlFor="email-address" className="sr-only">
-                  Email address
-                </label>
-                <input
-                  id="email-address"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
-                  placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500
-                  focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Email address"
-                  {...register("email")}
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="sr-only">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  minLength={10}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
-                  placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500
-                  focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
-                  {...register("password")}
-                />
-              </div>
-            </div>
-
-            {isError && (
-              <div className="space-y-1 px-3 py-2 bg-rose-500 text-white rounded-md">
-                Something&apos;s wrong, try again.
-              </div>
-            )}
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <Link href="/password-forgotten">
-                  <a className="font-medium text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
-                </Link>
-              </div>
-            </div>
-
+      <div className="flex justify-center items-center h-screen">
+        <div className="min-h-full max-w-md flex flex-col py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md space-y-8">
             <div>
+              <img
+                className="mx-auto h-12 w-auto"
+                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                alt="Workflow"
+              />
+              <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Login to your account</h2>
+            </div>
+          </div>
+          <div className="mt-8 space-y-6">
+            {providers.map(({ displayName, name, Icon }) => (
               <button
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm
                 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
                 focus:ring-offset-2 focus:ring-indigo-500
                 disabled:bg-gray-500 disabled:hover:bg-gray-700 disabled:cursor-not-allowed"
-                disabled={isSubmitting}
+                key={name}
+                onClick={handleOAuthSignIn(name)}
               >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
+                  <Icon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                 </span>
-                Login
+                Login with {displayName}
               </button>
-            </div>
-          </form>
+            ))}
+          </div>
         </div>
       </div>
     </>
@@ -164,24 +69,3 @@ const Login: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
 };
 
 export default Login;
-
-interface ServerSideProps {
-  csrfToken: string | undefined;
-  providers: ClientSafeProvider[];
-}
-
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
-  const session = await getSession(context);
-
-  if (session) {
-    return { redirect: { permanent: false, destination: "/" } };
-  }
-
-  const csrfToken = await getCsrfToken({ req: context.req });
-  const allProviders = await getProviders();
-  const providers = allProviders ? Object.values(allProviders) : [];
-
-  return {
-    props: { csrfToken, providers },
-  };
-};
