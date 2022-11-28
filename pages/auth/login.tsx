@@ -22,7 +22,7 @@ const Login = () => {
       push("/");
     }, 5000);
 
-    return <h2>you are already signed in and will be redirected to homepage now.</h2>;
+    return <h2>You are signed in and will be redirected to homepage now.</h2>;
   }
 
   const handleOAuthSignIn = (provider: string) => () => signIn(provider);
