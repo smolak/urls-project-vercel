@@ -87,7 +87,11 @@ model UserUrl {
 }
 
 enum UserRole {
+  // This is a newly created user, one that will be asked to set handle and name (and whatever is there to be set)
+  NEW_USER
+  // Once setting up user data for new user, the role will become this, to distinguish one from the other
   USER
+  // They rule here
   ADMIN
 }
 
@@ -100,7 +104,7 @@ model User {
   password      String?
   emailVerified DateTime?
   image         String?
-  role          UserRole   @default(USER)
+  role          UserRole   @default(NEW_USER)
   apiKey        String?    @unique
   accounts      Account[]
   sessions      Session[]
