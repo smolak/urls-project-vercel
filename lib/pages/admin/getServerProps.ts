@@ -1,13 +1,13 @@
-import { User } from "next-auth";
+import { SessionUser } from "next-auth";
 import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth/next";
 import { nextAuthOptions } from "../../../pages/api/auth/[...nextauth]";
 
 interface AdminPageProps {
-  user: User;
+  user: SessionUser;
 }
 
-const normalizeForServerSideProps = (user: User) => {
+const normalizeForServerSideProps = (user: SessionUser) => {
   user.image = user.image || null;
 
   return user;

@@ -18,6 +18,10 @@ const Login = () => {
   if (status === "loading") return <div>Checking Authentication...</div>;
 
   if (session) {
+    if (session.user.role === "NEW_USER") {
+      push("/");
+    }
+
     setTimeout(() => {
       push("/");
     }, 5000);
