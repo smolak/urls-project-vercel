@@ -1,11 +1,11 @@
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model Account {
@@ -30,6 +30,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -38,6 +39,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum UrlQueueStatus {
@@ -63,18 +66,20 @@ model UrlQueue {
   // also it will be used later to populate the UserUrl table
   user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
+
+  @@index([userId])
 }
 
 model Url {
-  id          String    @id
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  url         String    @db.VarChar(2000)
+  id        String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  url       String    @db.VarChar(2000)
   // Reserved for SHA1 hash - required as 2k long URLs will create too long index keys
   // ones, that are too long for MySQL engine to even work
-  urlHash     String    @unique @db.Char(40)
-  metadata    Json      @default("{}")
-  UserUrl     UserUrl[]
+  urlHash   String    @unique @db.Char(40)
+  metadata  Json      @default("{}")
+  UserUrl   UserUrl[]
 }
 
 model UserUrl {
@@ -84,6 +89,9 @@ model UserUrl {
   url       Url      @relation(fields: [urlId], references: [id])
   urlId     String
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([urlId])
 }
 
 enum UserRole {
