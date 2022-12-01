@@ -6,6 +6,9 @@ declare module "next-auth" {
     role: PrismaUser["role"];
   }
 
+  /**
+   * @deprecated Don't use, as it might be mistaken for Prisma's User model. Use SessionUser instead.
+   */
   interface User extends SessionUser {}
 
   interface Session extends DefaultSession {
