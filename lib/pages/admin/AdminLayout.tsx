@@ -2,7 +2,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { FC, PropsWithChildren, Fragment } from "react";
 import { BellIcon, Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { User } from "next-auth";
+import { SessionUser } from "next-auth";
 import { signOut } from "next-auth/react";
 import { UserImage } from "../../admin/user/ui/UserImage";
 
@@ -25,7 +25,7 @@ const userNavigation = [
 
 interface AdminLayoutProps extends PropsWithChildren {
   title: string;
-  user: User;
+  user: SessionUser;
   page: Page;
 }
 
