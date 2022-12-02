@@ -104,21 +104,30 @@ enum UserRole {
 }
 
 model User {
-  id            String     @id
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  name          String?
-  email         String?    @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  role          UserRole   @default(NEW_USER)
-  apiKey        String?    @unique
-  username      String?    @unique @db.Char(20)
-  accounts      Account[]
-  sessions      Session[]
-  UrlQueue      UrlQueue[]
-  UserUrl       UserUrl[]
+  id              String            @id
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  name            String?
+  email           String?           @unique
+  password        String?
+  emailVerified   DateTime?
+  image           String?
+  role            UserRole          @default(NEW_USER)
+  accounts        Account[]
+  sessions        Session[]
+  UrlQueue        UrlQueue[]
+  UserUrl         UserUrl[]
+  UserProfileData UserProfileData[]
+}
+
+model UserProfileData {
+  id       String @id
+  apiKey   String @unique
+  username String @unique @db.Char(20)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+
+  @@index([userId])
 }
 
 model VerificationToken {
