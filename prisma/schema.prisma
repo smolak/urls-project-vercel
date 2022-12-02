@@ -114,6 +114,7 @@ model User {
   image         String?
   role          UserRole   @default(NEW_USER)
   apiKey        String?    @unique
+  username      String?    @unique @db.Char(20)
   accounts      Account[]
   sessions      Session[]
   UrlQueue      UrlQueue[]
