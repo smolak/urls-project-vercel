@@ -12,6 +12,5 @@ export const createUser = (overwrites: Partial<User> = {}): User => ({
   password: generateId(),
   image: "https://s.gravatar.com/avatar/b4b8160fad763019bb200ba1380b9f34?s=80",
   role: "USER",
-  apiKey: generateId(),
   ...overwrites,
 });
