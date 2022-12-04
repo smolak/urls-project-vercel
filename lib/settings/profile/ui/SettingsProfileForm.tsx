@@ -4,7 +4,7 @@ import debounce from "debounce";
 import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import { ApiResponse } from "../../../user/handlers/usernameCheckHandler";
-import { usernameCheckHandlerPayloadSchema } from "../../../user/handlers/usernameCheckHandler/payload";
+import { usernameCheckHandlerPayloadSchema } from "../../../user/handlers/usernameCheckHandler/payload.schema";
 
 export const SettingsProfileForm = () => {
   const {
