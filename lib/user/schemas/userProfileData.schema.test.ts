@@ -1,24 +1,22 @@
-import { usernameCheckHandlerPayloadSchema, UsernameCheckHandlerPayload } from "./payload";
+import { usernameSchema, UsernameSchema } from "./userProfileData.schema";
 import { expect } from "vitest";
 import { SafeParseError, SafeParseSuccess } from "zod";
 
-describe("usernameCheckHandlerPayloadSchema", () => {
+describe("usernameSchema", () => {
   it("should allow to use _azAZ09 characters only", () => {
     const validUsernames = ["Jacek", "_Jacek", "Jacek_", "Jacek123", "J_a_c_e_k", "__Jacek__", "123_jacek__"];
 
     validUsernames.forEach((username) => {
-      expect(() => usernameCheckHandlerPayloadSchema.parse({ username })).not.toThrow();
+      expect(() => usernameSchema.parse(username)).not.toThrow();
     });
 
     const invalidUsernames = ["with spaces", "nonAZchars_ęóą", "badChars_!@#$%^"];
 
     invalidUsernames.forEach((username) => {
-      const result = usernameCheckHandlerPayloadSchema.safeParse({
-        username,
-      }) as SafeParseError<UsernameCheckHandlerPayload>;
+      const result = usernameSchema.safeParse(username) as SafeParseError<UsernameSchema>;
 
       expect(result.success).toEqual(false);
-      expect(result.error.format().username?._errors).toContain("Only a-z, A-Z, 0-9 and _ characters allowed.");
+      expect(result.error.format()._errors).toContain("Only a-z, A-Z, 0-9 and _ characters allowed.");
     });
   });
 
@@ -30,16 +28,14 @@ describe("usernameCheckHandlerPayloadSchema", () => {
     const usernamesOutsideOfLengthLimit = ["a".repeat(minLength - 1), "a".repeat(maxLength + 1)];
 
     usernamesWithinLengthLimit.forEach((username) => {
-      expect(() => usernameCheckHandlerPayloadSchema.parse({ username })).not.toThrow();
+      expect(() => usernameSchema.parse(username)).not.toThrow();
     });
 
     usernamesOutsideOfLengthLimit.forEach((username) => {
-      const result = usernameCheckHandlerPayloadSchema.safeParse({
-        username,
-      }) as SafeParseError<UsernameCheckHandlerPayload>;
+      const result = usernameSchema.safeParse(username) as SafeParseError<UsernameSchema>;
 
       expect(result.success).toEqual(false);
-      expect(result.error.format().username?._errors).toContain(
+      expect(result.error.format()._errors).toContain(
         "Username cannot be shorter than 4 and longer than 15 characters."
       );
     });
@@ -56,11 +52,9 @@ describe("usernameCheckHandlerPayloadSchema", () => {
     ];
 
     stringsWithSpacesAroundThem.forEach((usernameWithSpaces) => {
-      const result = usernameCheckHandlerPayloadSchema.safeParse({
-        username: usernameWithSpaces,
-      }) as SafeParseSuccess<UsernameCheckHandlerPayload>;
+      const result = usernameSchema.safeParse(usernameWithSpaces) as SafeParseSuccess<UsernameSchema>;
 
-      expect(result.data.username).toEqual(username);
+      expect(result.data).toEqual(username);
     });
   });
 });
