@@ -1,4 +1,3 @@
-import { GetTokenParams, JWT } from "next-auth/jwt";
 import { StatusCodes } from "http-status-codes";
 import { createUrlHandlerPayloadSchema } from "./payload";
 import { sha1 } from "../../../crypto/sha1";
@@ -8,8 +7,7 @@ import { CreateUrlHandler } from "./index";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { Logger } from "pino";
 import { generateRequestId } from "../../../shared/utils/generateRequestId";
-
-type GetToken = (params: GetTokenParams) => Promise<JWT | null>;
+import { GetToken } from "../../../auth/models/GetToken";
 
 interface Params {
   getToken: GetToken;
