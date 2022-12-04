@@ -12,11 +12,11 @@ interface Params {
   logger: Logger;
 }
 
-export type CreateUsernameCheckHandlerFactory = ({ getToken, logger }: Params) => UsernameCheckHandler;
+type UsernameCheckHandlerFactory = ({ getToken, logger }: Params) => UsernameCheckHandler;
 
 const actionType = "usernameCheck";
 
-export const usernameCheckHandlerFactory: CreateUsernameCheckHandlerFactory =
+export const usernameCheckHandlerFactory: UsernameCheckHandlerFactory =
   ({ getToken, logger }) =>
   async (req, res) => {
     const token = await getToken({ req });

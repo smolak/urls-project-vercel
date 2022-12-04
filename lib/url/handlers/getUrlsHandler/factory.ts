@@ -8,7 +8,7 @@ interface Params {
   getToken: GetToken;
 }
 
-export type GetUrlsHandlerFactory = ({ getToken }: Params) => GetUrlsHandler;
+type GetUrlsHandlerFactory = ({ getToken }: Params) => GetUrlsHandler;
 
 export const getUrlsHandlerFactory: GetUrlsHandlerFactory =
   ({ getToken }) =>
