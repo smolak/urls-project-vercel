@@ -12,7 +12,8 @@ import { createUrlQueue } from "../../../../test/fixtures/urlQueue";
 
 import { createUrlHandlerFactory } from "./factory";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
-import { expect, Mock } from "vitest";
+import { expect } from "vitest";
+import { createToken } from "../../../../test/fixtures/token";
 
 const userId = generateUserId();
 const getToken = vi.fn();
@@ -33,8 +34,7 @@ describe("createUrlHandlerFactory", () => {
   beforeEach(() => {
     vi.resetAllMocks();
 
-    const token = { sub: userId };
-    getToken.mockResolvedValue(token);
+    getToken.mockResolvedValue(createToken({ sub: userId }));
   });
 
   it("returns created handler", () => {
