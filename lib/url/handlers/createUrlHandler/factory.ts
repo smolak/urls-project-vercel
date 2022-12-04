@@ -15,7 +15,7 @@ interface Params {
   triggerEvent: TriggerEvent;
 }
 
-export type CreateUrlHandlerFactory = ({ getToken, logger, triggerEvent }: Params) => CreateUrlHandler;
+type CreateUrlHandlerFactory = ({ getToken, logger, triggerEvent }: Params) => CreateUrlHandler;
 
 const actionType = "createUrlHandler";
 
