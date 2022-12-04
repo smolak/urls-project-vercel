@@ -124,11 +124,11 @@ model UserProfileData {
   id                 String   @id
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
-  apiKey             String   @unique
+  apiKey             String
   username           String   @unique @db.Char(20)
   usernameNormalized String   @unique @db.Char(20)
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId             String
+  userId             String   @unique
 
   @@index([userId])
 }
