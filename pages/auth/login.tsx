@@ -19,12 +19,12 @@ const Login = () => {
 
   if (session) {
     if (session.user.role === "NEW_USER") {
-      push("/");
+      return push("/settings/profile");
     }
 
     setTimeout(() => {
       push("/");
-    }, 5000);
+    }, 3000);
 
     return <h2>You are signed in and will be redirected to homepage now.</h2>;
   }
