@@ -2,7 +2,7 @@ import { AnEvent, EventType } from "../../../events-aggregator/triggerEvent";
 import { Url, UrlQueue } from "@prisma/client";
 import { processQueueItemHandlerFactory } from "./factory";
 import { fetchMetadata } from "../../../metadata/fetchMetadata";
-import { ProcessQueueItemHandlerPayload } from "./payload";
+import { ProcessQueueItemHandlerPayloadSchema } from "./payload.schema";
 import { logger } from "../../../../logger";
 import { RequestId } from "../../../shared/utils/generateRequestId";
 
@@ -13,7 +13,7 @@ export interface ProcessQueueItemEvent extends AnEvent<{ urlQueueId: UrlQueue["i
 export type ProcessQueueItemHandler = ({
   urlQueueId,
   requestId,
-}: ProcessQueueItemHandlerPayload & { requestId?: RequestId }) => Promise<Url | undefined>;
+}: ProcessQueueItemHandlerPayloadSchema & { requestId?: RequestId }) => Promise<Url | undefined>;
 
 export const processQueueItemHandler: ProcessQueueItemHandler = processQueueItemHandlerFactory({
   fetchMetadata,

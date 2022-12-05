@@ -1,6 +1,6 @@
 import z from "zod";
 
-export type CreateUrlHandlerPayload = z.infer<typeof createUrlHandlerPayloadSchema>;
+export type CreateUrlHandlerPayloadSchema = z.infer<typeof createUrlHandlerPayloadSchema>;
 
 export const createUrlHandlerPayloadSchema = z.object({
   url: z

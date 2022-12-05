@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { createUrlHandlerPayloadSchema } from "./payload";
+import { createUrlHandlerPayloadSchema } from "./payload.schema";
 import { sha1 } from "../../../crypto/sha1";
 import prisma from "../../../../prisma";
 import { EventType, TriggerEvent } from "../../../events-aggregator/triggerEvent";

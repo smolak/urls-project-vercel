@@ -1,4 +1,4 @@
-import { CreateUrlHandlerPayload, createUrlHandlerPayloadSchema } from "./payload";
+import { CreateUrlHandlerPayloadSchema, createUrlHandlerPayloadSchema } from "./payload.schema";
 import { ZodError, SafeParseError } from "zod";
 
 describe("createUrlHandlerPayloadSchema", () => {
@@ -23,7 +23,7 @@ describe("createUrlHandlerPayloadSchema", () => {
 
       const { error } = createUrlHandlerPayloadSchema.safeParse({
         url: notAString,
-      }) as SafeParseError<CreateUrlHandlerPayload>;
+      }) as SafeParseError<CreateUrlHandlerPayloadSchema>;
 
       expect(error).toBeInstanceOf(ZodError);
     });
@@ -33,7 +33,7 @@ describe("createUrlHandlerPayloadSchema", () => {
 
       const { error } = createUrlHandlerPayloadSchema.safeParse({
         url: notAUrl,
-      }) as SafeParseError<CreateUrlHandlerPayload>;
+      }) as SafeParseError<CreateUrlHandlerPayloadSchema>;
 
       expect(error).toBeInstanceOf(ZodError);
     });
@@ -43,7 +43,7 @@ describe("createUrlHandlerPayloadSchema", () => {
 
       const { error } = createUrlHandlerPayloadSchema.safeParse({
         url: notWantedUrl,
-      }) as SafeParseError<CreateUrlHandlerPayload>;
+      }) as SafeParseError<CreateUrlHandlerPayloadSchema>;
 
       expect(error).toBeInstanceOf(ZodError);
 
@@ -56,7 +56,7 @@ describe("createUrlHandlerPayloadSchema", () => {
 
       const { error } = createUrlHandlerPayloadSchema.safeParse({
         url: tooLongUrl,
-      }) as SafeParseError<CreateUrlHandlerPayload>;
+      }) as SafeParseError<CreateUrlHandlerPayloadSchema>;
 
       expect(error).toBeInstanceOf(ZodError);
 
