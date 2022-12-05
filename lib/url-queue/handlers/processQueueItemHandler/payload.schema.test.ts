@@ -1,4 +1,4 @@
-import { ProcessQueueItemHandlerPayload, processQueueItemHandlerPayloadSchema } from "./payload";
+import { ProcessQueueItemHandlerPayloadSchema, processQueueItemHandlerPayloadSchema } from "./payload.schema";
 import { SafeParseError, ZodError } from "zod";
 import { generateUrlQueueId } from "../../utils/generateUrlQueueId";
 
@@ -25,7 +25,7 @@ describe("processQueueItemHandlerPayloadSchema", () => {
 
       const { error } = processQueueItemHandlerPayloadSchema.safeParse({
         urlQueueId,
-      }) as SafeParseError<ProcessQueueItemHandlerPayload>;
+      }) as SafeParseError<ProcessQueueItemHandlerPayloadSchema>;
 
       expect(error).toBeInstanceOf(ZodError);
     });
