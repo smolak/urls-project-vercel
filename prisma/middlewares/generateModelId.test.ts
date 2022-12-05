@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { expect, vi } from "vitest";
 import { generateModelId } from "./generateModelId";
 import { USER_ID_PREFIX } from "../../lib/user/utils/generateUserId";
 import { SESSION_ID_PREFIX } from "../../lib/session/utils/generateSessionId";
@@ -7,7 +7,7 @@ import { URL_QUEUE_ID_PREFIX } from "../../lib/url-queue/utils/generateUrlQueueI
 import { URL_ID_PREFIX } from "../../lib/url/utils/generateUrlId";
 import { Prisma } from "@prisma/client";
 import { USER_URL_ID_PREFIX } from "../../lib/user-url/utils/generateUserUrlId";
-import { USER_PROFILE_DATA_ID_PREFIX } from "../../lib/user/utils/generateUserProfileDataId";
+import { generateUserProfileDataId, USER_PROFILE_DATA_ID_PREFIX } from "../../lib/user/utils/generateUserProfileDataId";
 
 describe("generateModelId middleware", () => {
   describe('for "create" action', () => {
@@ -201,6 +201,36 @@ describe("generateModelId middleware", () => {
             data: {
               ...params.args.data,
               id: expect.stringMatching(`^${USER_URL_ID_PREFIX}`),
+            },
+          },
+        });
+      });
+    });
+  });
+
+  describe('for "upsert" action', () => {
+    describe('when model is "UserProfileData"', () => {
+      it("should generate ID prefixed for creation of UserProfileData model", async () => {
+        const params = {
+          action: "upsert",
+          model: "UserProfileData",
+          args: {
+            create: {
+              // any url data
+            },
+          },
+        } as Prisma.MiddlewareParams;
+        const nextSpy = vi.fn();
+
+        await generateModelId(params, nextSpy);
+
+        expect(nextSpy).toHaveBeenCalledWith({
+          ...params,
+          args: {
+            ...params.args,
+            create: {
+              ...params.args.data,
+              id: expect.stringMatching(`^${USER_PROFILE_DATA_ID_PREFIX}`),
             },
           },
         });

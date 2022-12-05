@@ -10,6 +10,14 @@ import { generateUserProfileDataId } from "../../lib/user/utils/generateUserProf
 export const ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR = "ID_PLACEHOLDER";
 
 export const generateModelId: Prisma.Middleware = async (params: Prisma.MiddlewareParams, next) => {
+  if (params.action === "upsert") {
+    switch (params.model) {
+      case "UserProfileData":
+        params.args.create.id = generateUserProfileDataId();
+        break;
+    }
+  }
+
   if (params.action === "create") {
     switch (params.model) {
       case "User":
