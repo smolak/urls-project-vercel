@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { generateModelId } from "./middlewares/generateModelId";
-import { generateModelIdForSeed } from "./middlewares/generateModelIdForSeed";
 
 let prisma: PrismaClient;
 
@@ -19,9 +18,6 @@ if (process.env.NODE_ENV === "production") {
 
   // @ts-ignore
   prisma = globalThis["prisma"];
-
-  console.log("Registering seed middleware...");
-  prisma.$use(generateModelIdForSeed);
 }
 
 prisma.$use(generateModelId);
