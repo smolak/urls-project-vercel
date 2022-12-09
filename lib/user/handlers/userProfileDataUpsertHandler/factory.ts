@@ -5,9 +5,7 @@ import { generateRequestId } from "../../../shared/utils/generateRequestId";
 import { StatusCodes } from "http-status-codes";
 import { userProfileDataUpsertPayloadSchema } from "./payload.schema";
 import prisma from "../../../../prisma";
-import { UserProfileData } from "@prisma/client";
 import { normalizeUsername } from "../../utils/normalizeUsername";
-import { generateUserProfileDataId } from "../../utils/generateUserProfileDataId";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 
 interface Params {
@@ -48,11 +46,11 @@ export const userProfileDataUpsertHandlerFactory: UserProfileDataUpsertHandlerFa
 
     const updateData = {
       apiKey: "", // empty for now
-      username,
-      usernameNormalized: normalizeUsername(username),
     };
     const createData = {
-      ...updateData,
+      apiKey: "", // empty for now
+      username,
+      usernameNormalized: normalizeUsername(username),
       id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
       userId,
     };
