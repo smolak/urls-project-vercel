@@ -78,7 +78,7 @@ describe("userProfileDataUpsertHandlerFactory", () => {
       prismaMock.userProfileData.upsert.mockResolvedValue(userProfileData);
     });
 
-    it("send upsert data", async () => {
+    it("send upsert data, with limitation to username and usernameNormalized to be set only once", async () => {
       const handler = userProfileDataUpsertHandlerFactory({ getToken, logger });
       await handler(reqMock, resMock);
 
@@ -95,10 +95,15 @@ describe("userProfileDataUpsertHandlerFactory", () => {
         },
         update: {
           apiKey: "",
-          username: USERNAME_TO_SET,
-          usernameNormalized: normalizeUsername(USERNAME_TO_SET),
         },
       });
+
+      // IMPORTANT:
+      // Those expects are intended as it is crucial that username / usernameNormalized will not be changed once set
+      const payload = prismaMock.userProfileData.upsert.mock.calls[0][0];
+
+      expect(payload.update).not.toHaveProperty("username");
+      expect(payload.update).not.toHaveProperty("usernameNormalized");
     });
 
     it("should return information that this username is available", async () => {
