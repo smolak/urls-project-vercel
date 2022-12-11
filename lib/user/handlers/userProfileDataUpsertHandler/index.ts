@@ -4,11 +4,18 @@ import { userProfileDataUpsertHandlerFactory } from "./factory";
 import { logger } from "../../../../logger";
 import { getToken } from "next-auth/jwt";
 
-interface ApiResponse {
+interface SuccessApiResponse {
   userProfileData: UserProfileData;
 }
 
-export type UserProfileDataUpsertHandler = (req: NextApiRequest, res: NextApiResponse<ApiResponse>) => Promise<void>;
+export interface ConflictApiResponse {
+  reason: string;
+}
+
+export type UserProfileDataUpsertHandler = (
+  req: NextApiRequest,
+  res: NextApiResponse<SuccessApiResponse | ConflictApiResponse>
+) => Promise<void>;
 
 export const userProfileDataUpsertHandler: UserProfileDataUpsertHandler = userProfileDataUpsertHandlerFactory({
   getToken,
