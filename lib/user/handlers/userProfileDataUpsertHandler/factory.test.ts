@@ -67,7 +67,7 @@ describe("userProfileDataUpsertHandlerFactory", () => {
     });
   });
 
-  describe("user profile upsert", () => {
+  describe("saving user profile data", () => {
     const userProfileData = createUserProfileData({
       userId,
       username: USERNAME_TO_SET,
@@ -76,6 +76,36 @@ describe("userProfileDataUpsertHandlerFactory", () => {
     beforeEach(() => {
       reqMock.body = { username: USERNAME_TO_SET };
       prismaMock.userProfileData.upsert.mockResolvedValue(userProfileData);
+    });
+
+    it("should fetch the current profile data, to see if it exists", async () => {
+      const handler = userProfileDataUpsertHandlerFactory({ getToken, logger });
+      await handler(reqMock, resMock);
+
+      expect(prismaMock.userProfileData.findUnique).toHaveBeenCalledWith({
+        where: {
+          userId,
+        },
+        select: {
+          // Select only ID, as we don't want to fetch all, especially API key and alike
+          id: true,
+        },
+      });
+    });
+
+    describe("when profile data exists and payload contains `username`", () => {
+      beforeEach(() => {
+        prismaMock.userProfileData.findUnique.mockResolvedValue(userProfileData);
+      });
+
+      it("should return the information that it's not possible (username once set, can't be changed)", async () => {
+        const handler = userProfileDataUpsertHandlerFactory({ getToken, logger });
+        await handler(reqMock, resMock);
+
+        const reason = "Username already set for this account. Once it's set, it can't be changed.";
+        expect(resMock.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+        expect(resMock.json).toHaveBeenCalledWith({ reason });
+      });
     });
 
     it("send upsert data, with limitation to username and usernameNormalized to be set only once", async () => {

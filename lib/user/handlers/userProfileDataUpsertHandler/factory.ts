@@ -44,6 +44,24 @@ export const userProfileDataUpsertHandlerFactory: UserProfileDataUpsertHandlerFa
     const username = result.data.username;
     const userId = token.sub as string;
 
+    const maybeUserProfileData = await prisma.userProfileData.findUnique({
+      where: {
+        userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (maybeUserProfileData && username) {
+      const reason = "Username already set for this account. Once it's set, it can't be changed.";
+
+      res.status(StatusCodes.CONFLICT);
+      res.json({ reason });
+
+      return;
+    }
+
     const updateData = {
       apiKey: "", // empty for now
     };
