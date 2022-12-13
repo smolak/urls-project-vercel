@@ -131,6 +131,7 @@ model UserProfileData {
   userId             String   @unique
 
   @@index([userId])
+  @@index([apiKey])
 }
 
 model VerificationToken {
