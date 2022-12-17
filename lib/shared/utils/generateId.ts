@@ -1,5 +1,5 @@
 import { customAlphabet } from "nanoid";
 
-const ALPHABET = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ1234567890_";
+export const ALPHABET = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ1234567890_";
 
-export const generateId = (prefix = "") => `${prefix}${customAlphabet(ALPHABET)()}`;
+export const generateId = (prefix = "", size = 21) => `${prefix}${customAlphabet(ALPHABET, size)()}`;
