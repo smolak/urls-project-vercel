@@ -1,8 +1,11 @@
 import z from "zod";
-import { usernameSchema } from "../../schemas/userProfileData.schema";
+import { apiKeySchema, usernameSchema } from "../../schemas/userProfileData.schema";
 
-export type UserProfileDataUpsertHandler = z.infer<typeof userProfileDataUpsertPayloadSchema>;
-
-export const userProfileDataUpsertPayloadSchema = z.object({
+export const createUserProfileDataPayloadSchema = z.object({
   username: usernameSchema,
+  apiKey: apiKeySchema,
+});
+
+export const updateUserProfileDataPayloadSchema = z.object({
+  apiKey: apiKeySchema,
 });
