@@ -24,7 +24,7 @@ const Login = () => {
         push("/");
       }
     }
-  }, [session]);
+  }, [session, push]);
 
   const handleOAuthSignIn = (provider: string) => () => signIn(provider);
 
