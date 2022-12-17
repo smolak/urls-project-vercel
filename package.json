@@ -28,6 +28,7 @@
     "argon2": "^0.30.2",
     "axios": "^1.2.1",
     "clsx": "^1.2.1",
+    "copy-to-clipboard": "^3.3.3",
     "date-fns": "^2.29.2",
     "debounce": "^1.2.1",
     "http-status-codes": "^2.2.0",
