@@ -13,7 +13,7 @@ const Home: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Welcome to URLs project (beta)</h1>
+      <h1>Welcome to urlshare.me (alpha)</h1>
     </div>
   );
 };
