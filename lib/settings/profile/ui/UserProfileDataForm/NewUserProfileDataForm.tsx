@@ -16,7 +16,6 @@ import { useCheckIfUserProfileDataExists } from "../../../../user-profile-data/h
 import { usernameCheck } from "../../../../user-profile-data/services/usernameCheck";
 import { useRouter } from "next/router";
 import { Link } from "../../../../shared/ui/Link";
-import { router } from "next/client";
 
 interface FormValues {
   username: string;
@@ -27,7 +26,7 @@ const usernameExamples = ["ThomasAnderson", "__I_AM_ROBOT__", "JeanneDArc"];
 
 export const NewUserProfileDataForm = () => {
   const { isChecking, exists } = useCheckIfUserProfileDataExists();
-  const { route, push } = useRouter();
+  const { route } = useRouter();
 
   /**
    * As a new user, one should not have user profile data yet.
