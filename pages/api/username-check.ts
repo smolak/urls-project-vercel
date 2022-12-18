@@ -1,6 +1,6 @@
 import type { NextApiHandler } from "next";
 import { StatusCodes } from "http-status-codes";
-import { usernameCheckHandler } from "../../lib/user/handlers/usernameCheckHandler";
+import { usernameCheckHandler } from "../../lib/user-profile-data/handlers/usernameCheckHandler";
 
 const handler: NextApiHandler = async (req, res) => {
   const { method } = req;

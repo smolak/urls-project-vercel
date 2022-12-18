@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import {
   getPrivateUserProfileDataHandler,
   GetPrivateUserProfileDataResponse,
-} from "../../../lib/user/handlers/getPrivateUserProfileDataHandler";
+} from "../../../lib/user-profile-data/handlers/getPrivateUserProfileDataHandler";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<GetPrivateUserProfileDataResponse>) {
   const { method } = req;

@@ -7,7 +7,10 @@ import { URL_QUEUE_ID_PREFIX } from "../../lib/url-queue/utils/generateUrlQueueI
 import { URL_ID_PREFIX } from "../../lib/url/utils/generateUrlId";
 import { Prisma } from "@prisma/client";
 import { USER_URL_ID_PREFIX } from "../../lib/user-url/utils/generateUserUrlId";
-import { generateUserProfileDataId, USER_PROFILE_DATA_ID_PREFIX } from "../../lib/user/utils/generateUserProfileDataId";
+import {
+  generateUserProfileDataId,
+  USER_PROFILE_DATA_ID_PREFIX,
+} from "../../lib/user-profile-data/utils/generateUserProfileDataId";
 
 describe("generateModelId middleware", () => {
   describe('for "create" action', () => {

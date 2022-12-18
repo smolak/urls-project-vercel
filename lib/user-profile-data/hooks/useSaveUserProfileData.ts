@@ -4,7 +4,7 @@ import {
   SaveUserProfileDataError,
   SaveUserProfileDataPayload,
   SaveUserProfileDataSuccess,
-} from "../../services/saveUserProfileData";
+} from "../services/saveUserProfileData";
 
 export const useSaveUserProfileData = () =>
   useMutation<SaveUserProfileDataSuccess, SaveUserProfileDataError, SaveUserProfileDataPayload>((userProfileData) =>

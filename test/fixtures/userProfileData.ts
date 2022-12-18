@@ -1,6 +1,6 @@
 import { UserProfileData } from "@prisma/client";
-import { generateUserProfileDataId } from "../../lib/user/utils/generateUserProfileDataId";
-import { normalizeUsername } from "../../lib/user/utils/normalizeUsername";
+import { generateUserProfileDataId } from "../../lib/user-profile-data/utils/generateUserProfileDataId";
+import { normalizeUsername } from "../../lib/user-profile-data/utils/normalizeUsername";
 import { generateUserId } from "../../lib/user/utils/generateUserId";
 import { generateId } from "../../lib/shared/utils/generateId";
 

@@ -1,7 +1,7 @@
 import { usernameSchema, UsernameSchema, apiKeySchema, ApiKeySchema } from "./userProfileData.schema";
 import { expect } from "vitest";
 import { SafeParseError, SafeParseSuccess } from "zod";
-import { generateApiKey } from "../utils/generateApiKey";
+import { generateApiKey } from "../../user/utils/generateApiKey";
 import { ALPHABET } from "../../shared/utils/generateId";
 
 describe("usernameSchema", () => {

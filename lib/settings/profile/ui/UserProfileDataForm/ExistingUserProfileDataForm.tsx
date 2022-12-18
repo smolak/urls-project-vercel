@@ -5,10 +5,10 @@ import copyToClipboard from "copy-to-clipboard";
 
 import { BsKey } from "react-icons/bs";
 import { MdContentCopy } from "react-icons/md";
-import { useSaveUserProfileData } from "../../../../user/ui/hooks/useSaveUserProfileData";
-import { updateUserProfileDataPayloadSchema } from "../../../../user/handlers/userProfileDataUpsertHandler/payload.schema";
+import { useSaveUserProfileData } from "../../../../user-profile-data/hooks/useSaveUserProfileData";
+import { updateUserProfileDataPayloadSchema } from "../../../../user-profile-data/handlers/userProfileDataUpsertHandler/payload.schema";
 import { generateApiKey } from "../../../../user/utils/generateApiKey";
-import { useGetPrivateUserProfileData } from "../../../../user/ui/hooks/useGetPrivateUserProfileData";
+import { useGetPrivateUserProfileData } from "../../../../user-profile-data/hooks/useGetPrivateUserProfileData";
 import { LoadingIndicator } from "../../../../core/ui/LoadingIndicator";
 import { useRouter } from "next/router";
 import { Link } from "../../../../shared/ui/Link";

@@ -3,7 +3,7 @@ import {
   getPrivateUserProfileData,
   GetPrivateUserProfileDataError,
   GetPrivateUserProfileDataSuccess,
-} from "../../services/getPrivateUserProfileData";
+} from "../services/getPrivateUserProfileData";
 
 export const useGetPrivateUserProfileData = () =>
   useQuery<GetPrivateUserProfileDataSuccess, GetPrivateUserProfileDataError>(["privateUserProfile"], () =>

@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import {
   userProfileDataUpsertHandler,
   UserProfileDataUpsertResponse,
-} from "../../../lib/user/handlers/userProfileDataUpsertHandler";
+} from "../../../lib/user-profile-data/handlers/userProfileDataUpsertHandler";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<UserProfileDataUpsertResponse>) {
   const { method } = req;

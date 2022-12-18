@@ -3,7 +3,7 @@ import {
   getPrivateUserProfileData,
   GetPrivateUserProfileDataError,
   GetPrivateUserProfileDataSuccess,
-} from "../../services/getPrivateUserProfileData";
+} from "../services/getPrivateUserProfileData";
 
 type ExistsValue = "unknown" | boolean;
 type ExistenceCheck =

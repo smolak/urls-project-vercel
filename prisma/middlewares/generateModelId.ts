@@ -5,7 +5,7 @@ import { generateAccountId } from "../../lib/account/utils/generateAccountId";
 import { generateUrlQueueId } from "../../lib/url-queue/utils/generateUrlQueueId";
 import { generateUrlId } from "../../lib/url/utils/generateUrlId";
 import { generateUserUrlId } from "../../lib/user-url/utils/generateUserUrlId";
-import { generateUserProfileDataId } from "../../lib/user/utils/generateUserProfileDataId";
+import { generateUserProfileDataId } from "../../lib/user-profile-data/utils/generateUserProfileDataId";
 
 export const ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR = "ID_PLACEHOLDER";
 
