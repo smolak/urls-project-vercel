@@ -40,10 +40,8 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ children, title, user,
                 <div className="flex items-center justify-between h-16">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <Link href="/">
-                        <a className="block bg-white px-2 py-1 text-xl rounded">
-                          <HiShare className="text-gray-800" />
-                        </a>
+                      <Link href="/" className="block bg-white px-2 py-1 text-xl rounded">
+                        <HiShare className="text-gray-800" />
                       </Link>
                     </div>
                     <div className="hidden md:block">

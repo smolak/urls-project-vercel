@@ -43,10 +43,11 @@ export const ErrorLoadingUrls: FC<ErrorLoadingUsersProps> = ({ error }) => {
       </div>
       <div className="flex">
         <div className="rounded-md shadow">
-          <Link href="/admin/users">
-            <a className="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-2 md:text-lg md:px-5">
-              Try again
-            </a>
+          <Link
+            href="/admin/users"
+            className="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-2 md:text-lg md:px-5"
+          >
+            Try again
           </Link>
         </div>
       </div>

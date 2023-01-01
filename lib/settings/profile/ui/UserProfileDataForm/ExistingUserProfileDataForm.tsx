@@ -29,11 +29,7 @@ export const ExistingUserProfileDataForm = () => {
         {isError && (
           <div className="flex justify-center items-center p-10">
             <p>
-              Something went wrong,{" "}
-              <Link href={route}>
-                <a className="font-medium text-blue-600 hover:underline">try again</a>
-              </Link>
-              .
+              Something went wrong, <Link href={route}>try again</Link>.
             </p>
           </div>
         )}

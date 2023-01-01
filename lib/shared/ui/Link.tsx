@@ -3,10 +3,10 @@ import { FC, PropsWithChildren } from "react";
 
 interface LinkProps extends NextLinkProps {}
 
-export const Link: FC<PropsWithChildren<LinkProps>> = ({ children, href }) => {
+export const Link: FC<PropsWithChildren<LinkProps>> = ({ children, ...rest }) => {
   return (
-    <NextLink href={href}>
-      <a className="font-medium text-blue-600 hover:underline">{children}</a>
+    <NextLink {...rest} className="font-medium text-blue-600 hover:underline">
+      {children}
     </NextLink>
   );
 };
