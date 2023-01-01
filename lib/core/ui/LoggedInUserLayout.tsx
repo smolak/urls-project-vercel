@@ -10,20 +10,14 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       {status === "loading" && <LoadingIndicator title="Checking auth status" />}
-      {status === "unauthenticated" && (
-        <Link href="/auth/login">
-          <a>Login</a>
-        </Link>
-      )}
+      {status === "unauthenticated" && <Link href="/auth/login">Login</Link>}
       {status === "authenticated" && (
         <>
           <div>
             Hello, {session.user.name}. <LogoutButton />
           </div>
           <div>
-            <Link href="/url/add">
-              <a>Add a URL</a>
-            </Link>
+            <Link href="/url/add">Add a URL</Link>
           </div>
         </>
       )}
