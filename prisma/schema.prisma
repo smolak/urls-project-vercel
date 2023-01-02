@@ -123,11 +123,11 @@ model User {
 }
 
 model Follows {
-  follower    User   @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
   followerId  String
-  following   User   @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+  following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String
-  createdAt DateTime @default(now())
+  createdAt   DateTime @default(now())
 
   @@id([followerId, followingId])
   @@index([followerId])
@@ -143,6 +143,8 @@ model UserProfileData {
   usernameNormalized String   @unique @db.Char(20)
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId             String   @unique
+  following          Int      @default(0) @db.UnsignedInt
+  followedBy         Int      @default(0) @db.UnsignedInt
 
   @@index([userId])
   @@index([apiKey])
