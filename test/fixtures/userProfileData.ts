@@ -15,6 +15,8 @@ export const createUserProfileData = (overwrites: Partial<UserProfileData> = {})
     username,
     usernameNormalized: normalizeUsername(username),
     userId: generateUserId(),
+    following: 0,
+    followedBy: 0,
     ...overwrites,
   };
 };
