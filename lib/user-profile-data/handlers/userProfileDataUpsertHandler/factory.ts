@@ -1,7 +1,7 @@
 import { GetToken } from "../../../auth/models/GetToken";
 import { Logger } from "pino";
 import { UserProfileDataUpsertHandler } from "./index";
-import { generateRequestId } from "../../../shared/utils/generateRequestId";
+import { generateRequestId } from "../../../request-id/utils/generateRequestId";
 import { StatusCodes } from "http-status-codes";
 import { createUserProfileDataPayloadSchema, updateUserProfileDataPayloadSchema } from "./payload.schema";
 import prisma from "../../../../prisma";

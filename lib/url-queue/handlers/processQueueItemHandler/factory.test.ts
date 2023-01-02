@@ -11,7 +11,7 @@ import { compressMetadata } from "../../../metadata/compression";
 import { createExampleImageMetadata, createExampleWebsiteMetadata } from "../../../../test/fixtures/exampleMetadata";
 import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
-import { generateRequestId } from "../../../shared/utils/generateRequestId";
+import { generateRequestId } from "../../../request-id/utils/generateRequestId";
 
 const fetchMetadata = vi.fn();
 const logger = mockDeep<Logger>();

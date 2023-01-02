@@ -19,7 +19,7 @@ vi.mock("../../logger", () => {
 
 import { processQueueItemHandler } from "../url-queue/handlers/processQueueItemHandler";
 import { logger } from "../../logger";
-import { generateRequestId } from "../shared/utils/generateRequestId";
+import { generateRequestId } from "../request-id/utils/generateRequestId";
 import { createUrlEntity } from "../../test/fixtures/urlEntity";
 
 const requestId = generateRequestId();

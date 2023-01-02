@@ -4,7 +4,7 @@ import { processQueueItemHandlerFactory } from "./factory";
 import { fetchMetadata } from "../../../metadata/fetchMetadata";
 import { ProcessQueueItemHandlerPayloadSchema } from "./payload.schema";
 import { logger } from "../../../../logger";
-import { RequestId } from "../../../shared/utils/generateRequestId";
+import { RequestId } from "../../../request-id/utils/generateRequestId";
 
 export interface ProcessQueueItemEvent extends AnEvent<{ urlQueueId: UrlQueue["id"] }> {
   type: EventType.URL_QUEUE_CREATED;

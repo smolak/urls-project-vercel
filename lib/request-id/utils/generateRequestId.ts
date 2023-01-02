@@ -1,4 +1,4 @@
-import { generateId } from "./generateId";
+import { generateId } from "../../shared/utils/generateId";
 
 export const REQUEST_ID_PREFIX = "req_";
 
