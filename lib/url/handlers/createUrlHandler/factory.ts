@@ -6,7 +6,7 @@ import { EventType, TriggerEvent } from "../../../events-aggregator/triggerEvent
 import { CreateUrlHandler } from "./index";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { Logger } from "pino";
-import { generateRequestId } from "../../../shared/utils/generateRequestId";
+import { generateRequestId } from "../../../request-id/utils/generateRequestId";
 import { GetToken } from "../../../auth/models/GetToken";
 
 interface Params {

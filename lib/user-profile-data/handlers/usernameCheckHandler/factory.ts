@@ -2,7 +2,7 @@ import { GetToken } from "../../../auth/models/GetToken";
 import { Logger } from "pino";
 import { UsernameCheckHandler } from "./index";
 import prisma from "../../../../prisma";
-import { generateRequestId } from "../../../shared/utils/generateRequestId";
+import { generateRequestId } from "../../../request-id/utils/generateRequestId";
 import { StatusCodes } from "http-status-codes";
 import { usernameCheckHandlerPayloadSchema } from "./payload.schema";
 import { normalizeUsername } from "../../utils/normalizeUsername";

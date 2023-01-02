@@ -2,7 +2,7 @@ import { GetToken } from "../../../auth/models/GetToken";
 import { Logger } from "pino";
 import { GetPrivateUserProfileDataHandler } from "./index";
 import prisma from "../../../../prisma";
-import { generateRequestId } from "../../../shared/utils/generateRequestId";
+import { generateRequestId } from "../../../request-id/utils/generateRequestId";
 import { StatusCodes } from "http-status-codes";
 import { toPrivateUserProfileDataVM } from "../../models/PrivateUserProfileData.vm";
 

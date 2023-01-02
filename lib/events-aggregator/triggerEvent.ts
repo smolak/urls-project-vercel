@@ -1,6 +1,6 @@
 import { processQueueItemHandler, ProcessQueueItemEvent } from "../url-queue/handlers/processQueueItemHandler";
 import { logger } from "../../logger";
-import { RequestId } from "../shared/utils/generateRequestId";
+import { RequestId } from "../request-id/utils/generateRequestId";
 
 export enum EventType {
   URL_QUEUE_CREATED = "URL_QUEUE_CREATED",
