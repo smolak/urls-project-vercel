@@ -144,7 +144,7 @@ model UserProfileData {
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId             String   @unique
   following          Int      @default(0) @db.UnsignedInt
-  followedBy         Int      @default(0) @db.UnsignedInt
+  followers          Int      @default(0) @db.UnsignedInt
 
   @@index([userId])
   @@index([apiKey])
