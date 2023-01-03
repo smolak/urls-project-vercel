@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getPrivateUserProfileDataHandlerFactory } from "./factory";
 import { getToken } from "next-auth/jwt";
 import { logger } from "../../../../logger";
-import { PrivateUserProfileDataVm } from "../../models/PrivateUserProfileData.vm";
+import { PrivateUserProfileDataVM } from "../../models/PrivateUserProfileData.vm";
 
 interface NotFoundResponse {
   message: string;
 }
 
-export type GetPrivateUserProfileDataSuccess = PrivateUserProfileDataVm;
+export type GetPrivateUserProfileDataSuccess = PrivateUserProfileDataVM;
 export type GetPrivateUserProfileDataFailure = NotFoundResponse;
 export type GetPrivateUserProfileDataResponse = GetPrivateUserProfileDataSuccess | GetPrivateUserProfileDataFailure;
 
