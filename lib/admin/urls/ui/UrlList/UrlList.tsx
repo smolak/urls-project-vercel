@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { UrlListItem } from "./UrlListItem";
-import { AdminUrlListVm } from "../../models/AdminUrlList.vm";
+import { AdminUrlListVM } from "../../models/AdminUrlList.vm";
 
 interface UrlListProps {
-  urls: AdminUrlListVm;
+  urls: AdminUrlListVM;
 }
 
 export const UrlList: FC<UrlListProps> = ({ urls }) => {

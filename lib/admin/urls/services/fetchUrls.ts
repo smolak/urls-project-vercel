@@ -1,7 +1,7 @@
 import axios from "axios";
-import { AdminUrlListVm } from "../models/AdminUrlList.vm";
+import { AdminUrlListVM } from "../models/AdminUrlList.vm";
 
-export type FetchDataType = AdminUrlListVm;
+export type FetchDataType = AdminUrlListVM;
 
 export const fetchUrls = async () => {
   const { data } = await axios.get<FetchDataType>("/api/url");

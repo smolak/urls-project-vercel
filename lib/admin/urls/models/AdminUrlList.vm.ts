@@ -1,3 +1,3 @@
 import { AdminUrlListItemVM } from "./AdminUrlListItem.vm";
 
-export type AdminUrlListVm = ReadonlyArray<AdminUrlListItemVM>;
+export type AdminUrlListVM = ReadonlyArray<AdminUrlListItemVM>;
