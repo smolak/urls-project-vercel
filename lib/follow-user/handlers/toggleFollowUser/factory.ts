@@ -42,7 +42,7 @@ export const toggleFollowUserHandlerFactory: ToggleFollowUserHandlerFactory = ({
       return;
     }
 
-    const followingId = result.data.followingId;
+    const followingId = result.data.userId;
 
     const maybeFollowing = await prisma.follows.findUnique({
       where: {
