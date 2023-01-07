@@ -44,17 +44,17 @@ export const toggleFollowUserHandlerFactory: ToggleFollowUserHandlerFactory = ({
 
     const followingId = result.data.userId;
 
-    const maybeFollowing = await prisma.follows.findUnique({
-      where: {
-        followerId_followingId: {
-          followingId,
-          followerId: userId,
-        },
-      },
-    });
-    const notFollowing = maybeFollowing === null;
-
     try {
+      const maybeFollowing = await prisma.follows.findUnique({
+        where: {
+          followerId_followingId: {
+            followingId,
+            followerId: userId,
+          },
+        },
+      });
+      const notFollowing = maybeFollowing === null;
+
       if (notFollowing) {
         await prisma.$transaction(async (prisma) => {
           await prisma.follows.create({
