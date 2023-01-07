@@ -5,8 +5,8 @@ import { toggleFollowUserHandlerFactory } from "./factory";
 import { logger } from "../../../../logger";
 import { ToggleFollowUserPayloadSchema } from "./payload.schema";
 
-type FollowingUser = { following: User["id"] };
-type UnfollowedUser = { unfollowed: User["id"] };
+type FollowingUser = { status: "following"; userId: User["id"] };
+type UnfollowedUser = { status: "unfollowed"; userId: User["id"] };
 type SomethingWentWrong = { error: string };
 
 export type ToggleFollowUserSuccessResponse = FollowingUser | UnfollowedUser;

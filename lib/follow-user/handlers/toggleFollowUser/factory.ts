@@ -90,7 +90,7 @@ export const toggleFollowUserHandlerFactory: ToggleFollowUserHandlerFactory = ({
         logger.info({ requestId, actionType, userId, followingId }, "Followed user.");
 
         res.status(StatusCodes.CREATED);
-        res.json({ following: followingId });
+        res.json({ status: "following", userId: followingId });
       } else {
         await prisma.$transaction(async (prisma) => {
           await prisma.follows.delete({
@@ -128,7 +128,7 @@ export const toggleFollowUserHandlerFactory: ToggleFollowUserHandlerFactory = ({
         logger.info({ requestId, actionType, userId, followingId }, "Unfollowed user.");
 
         res.status(StatusCodes.CREATED);
-        res.json({ unfollowed: followingId });
+        res.json({ status: "unfollowed", userId: followingId });
       }
     } catch (error) {
       logger.error({ requestId, actionType, error }, "Failed to (un)follow a user.");
