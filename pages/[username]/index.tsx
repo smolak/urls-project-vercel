@@ -8,9 +8,16 @@ import { CompressedMetadata, decompressMetadata } from "../../lib/metadata/compr
 import { Url } from "@prisma/client";
 import { Metadata } from "../../lib/metadata/getMetadata";
 import { UserImage } from "../../lib/user/ui/UserImage";
+import { ToggleFollowUser } from "../../lib/follow-user/ui/ToggleFollowUser";
+import { getToken } from "next-auth/jwt";
+
+type Self = {
+  id: string;
+} | null;
 
 type UserProfilePageProps =
   | {
+      self: Self;
       userData: {
         username: string;
         user: {
@@ -36,11 +43,18 @@ type UserProfilePageProps =
 
 const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
   if (props.userData) {
+    const canToggleFollow = props.self?.id && props.self.id !== props.userData.user.id;
+
     return (
       <section className="mx-auto my-3 max-w-[600px]">
         <div className="flex items-center gap-2 aspect-square w-8 object-cover">
           <UserImage {...props.userData.user} />
           <p>@{props.userData.username}</p>
+          {canToggleFollow && (
+            <div className="ml-4">
+              <ToggleFollowUser userId={props.userData.user.id} />
+            </div>
+          )}
         </div>
 
         <ul className="space-y-2">
@@ -74,7 +88,7 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
 
 export default UserProfilePage;
 
-export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
   const username = query.username;
   const parsingResult = usernameSchema.safeParse(username);
 
@@ -85,6 +99,13 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
       props: { error: parsingResult.error.message, errorCode: StatusCodes.NOT_FOUND, userData: null, urls: null },
     };
   }
+
+  const token = await getToken({ req });
+  const self = token
+    ? {
+        id: token.sub as string,
+      }
+    : null;
 
   const maybePublicUserData = await prisma.userProfileData.findUnique({
     where: {
@@ -149,5 +170,5 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
     },
   };
 
-  return { props: { userData: serializedUserData, urls: urlsDataSerialized } };
+  return { props: { userData: serializedUserData, urls: urlsDataSerialized, self } };
 };
