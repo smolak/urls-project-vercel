@@ -44,6 +44,15 @@ export const toggleFollowUserHandlerFactory: ToggleFollowUserHandlerFactory = ({
 
     const followingId = result.data.userId;
 
+    if (followingId === userId) {
+      logger.error({ requestId, actionType }, "Attempt on following self.");
+
+      // IDEA #8
+      res.status(StatusCodes.NOT_ACCEPTABLE);
+      res.json({ error: "Why would you want to follow yourself?" });
+      return;
+    }
+
     try {
       const maybeFollowing = await prisma.follows.findUnique({
         where: {
