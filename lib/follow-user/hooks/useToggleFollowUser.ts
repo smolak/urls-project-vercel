@@ -5,22 +5,17 @@ import {
   ToggleFollowUserPayload,
   ToggleFollowUserSuccess,
 } from "../services/toggleFollowUser";
+import { createIsFollowingUserKey } from "./useIsFollowingUser";
 
 export const useToggleFollowUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation<ToggleFollowUserSuccess, ToggleFollowUserFailure, ToggleFollowUserPayload>({
     mutationFn: toggleFollowUser,
-    onSuccess: ({ status, userId }) => {
-      const newData: ToggleFollowUserSuccess =
-        status === "following"
-          ? {
-              status: "unfollowed",
-              userId,
-            }
-          : { status: "following", userId };
-
-      queryClient.setQueryData(["isFollowing", userId], newData);
+    onSuccess: ({ userId }) => {
+      queryClient.setQueryData(createIsFollowingUserKey(userId), ({ isFollowing }) => ({
+        isFollowing: !isFollowing,
+      }));
     },
   });
 };
