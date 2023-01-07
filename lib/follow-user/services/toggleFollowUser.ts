@@ -10,7 +10,7 @@ export type ToggleFollowUserFailure = AxiosError<ToggleFollowUserFailureResponse
 export type ToggleFollowUserPayload = Payload;
 
 export const toggleFollowUser = async (payload: ToggleFollowUserPayload) => {
-  const { data } = await axios.post<ToggleFollowUserSuccess>("/api/toggle-follow-user", payload);
+  const { data } = await axios.post<ToggleFollowUserSuccess>("/api/follow-user", payload);
 
   return data;
 };
