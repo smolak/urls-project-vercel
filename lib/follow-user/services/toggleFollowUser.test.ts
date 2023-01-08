@@ -11,20 +11,20 @@ describe("toggleFollowUser", () => {
   beforeEach(() => {
     // Anything, as long as the `data` destructuring works.
     mockedAxios.post.mockResolvedValue({});
-  })
+  });
 
   it("should send request for toggling user follow", async () => {
     const payload = { userId: generateUserId() };
 
     await toggleFollowUser(payload);
 
-    expect(mockedAxios.post).toHaveBeenCalledWith("/api/toggle-follow-user", payload);
+    expect(mockedAxios.post).toHaveBeenCalledWith("/api/follow-user", payload);
   });
 
   describe("when user was not followed", () => {
     it("should reply with following user response", async () => {
       const userId = generateUserId();
-      const followingUserResponse: ToggleFollowUserSuccess = { following: userId };
+      const followingUserResponse: ToggleFollowUserSuccess = { status: "following", userId };
       mockedAxios.post.mockResolvedValue({ data: followingUserResponse });
 
       const result = await toggleFollowUser({ userId });
@@ -36,7 +36,7 @@ describe("toggleFollowUser", () => {
   describe("when user is being followed", () => {
     it("should reply with unfollowing user response", async () => {
       const userId = generateUserId();
-      const unfollowingUserResponse: ToggleFollowUserSuccess = { unfollowed: userId };
+      const unfollowingUserResponse: ToggleFollowUserSuccess = { status: "unfollowed", userId };
       mockedAxios.post.mockResolvedValue({ data: unfollowingUserResponse });
 
       const result = await toggleFollowUser({ userId });
