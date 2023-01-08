@@ -79,14 +79,14 @@ model Url {
   // ones, that are too long for MySQL engine to even work
   urlHash   String    @unique @db.Char(40)
   metadata  Json      @default("{}")
-  UserUrl   UserUrl[]
+  users     UserUrl[]
 }
 
 model UserUrl {
   id        String   @id
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  url       Url      @relation(fields: [urlId], references: [id])
+  url       Url      @relation(fields: [urlId], references: [id], onDelete: Cascade)
   urlId     String
   createdAt DateTime @default(now())
 
@@ -104,22 +104,22 @@ enum UserRole {
 }
 
 model User {
-  id              String            @id
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  id              String           @id
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   name            String?
-  email           String?           @unique
+  email           String?          @unique
   password        String?
   emailVerified   DateTime?
   image           String?
-  role            UserRole          @default(NEW_USER)
-  followedBy      Follows[]         @relation("following")
-  following       Follows[]         @relation("follower")
+  role            UserRole         @default(NEW_USER)
+  followedBy      Follows[]        @relation("following")
+  following       Follows[]        @relation("follower")
   accounts        Account[]
   sessions        Session[]
-  UrlQueue        UrlQueue[]
-  UserUrl         UserUrl[]
-  UserProfileData UserProfileData[]
+  urlsInQueue     UrlQueue[]
+  urls            UserUrl[]
+  userProfileData UserProfileData?
 }
 
 model Follows {
