@@ -10,3 +10,4 @@
    6.1.[] Password strength validation visualisation (weak, strong, very strong ...)
 7. [] Perhaps addMany handling in generateModelId middleware would be needed
 8. [] Move fixtures from test/.. to appropriate libs
+9. [] When /[username] is entered, a query for user data is performed that requests apiKey - it should not!
