@@ -6,6 +6,7 @@ import { generateUrlQueueId } from "../../lib/url-queue/utils/generateUrlQueueId
 import { generateUrlId } from "../../lib/url/utils/generateUrlId";
 import { generateUserUrlId } from "../../lib/user-url/utils/generateUserUrlId";
 import { generateUserProfileDataId } from "../../lib/user-profile-data/utils/generateUserProfileDataId";
+import { generateFeedId } from "../../lib/feed/utils/generateFeedId";
 
 export const ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR = "ID_PLACEHOLDER";
 
@@ -46,6 +47,10 @@ export const generateModelId: Prisma.Middleware = async (params: Prisma.Middlewa
 
       case "UserUrl":
         params.args.data.id = generateUserUrlId();
+        break;
+
+      case "Feed":
+        params.args.data.id = generateFeedId();
         break;
     }
   }
