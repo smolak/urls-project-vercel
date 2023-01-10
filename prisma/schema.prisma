@@ -83,13 +83,14 @@ model Url {
 }
 
 model UserUrl {
-  id        String   @id
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  url       Url      @relation(fields: [urlId], references: [id], onDelete: Cascade)
-  urlId     String
-  feeds     Feed[]
-  createdAt DateTime @default(now())
+  id           String      @id
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  url          Url         @relation(fields: [urlId], references: [id], onDelete: Cascade)
+  urlId        String
+  feeds        Feed[]
+  feedsInQueue FeedQueue[]
+  createdAt    DateTime    @default(now())
 
   @@index([userId])
   @@index([urlId])
@@ -101,6 +102,29 @@ model Feed {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userUrlId String
   userUrl   UserUrl @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userUrlId])
+}
+
+enum FeedQueueStatus {
+  NEW // For new entries
+  PROCESSING // For an entry that's being processed, so that it's not processed by more handlers
+  SUCCESS // Added to the feed
+  FAILED // Failed attempt, but it's not over yet
+  REJECTED // All attempts failed, not going to be processed anymore
+}
+
+model FeedQueue {
+  id           String          @id
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @default(now())
+  status       FeedQueueStatus @default(NEW)
+  attemptCount Int             @default(0) @db.UnsignedTinyInt
+  userId       String
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userUrlId    String
+  userUrl      UserUrl         @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userUrlId])
@@ -133,6 +157,7 @@ model User {
   urls            UserUrl[]
   userProfileData UserProfileData?
   feedUrls        Feed[]
+  feedsInQueue    FeedQueue[]
 }
 
 model Follows {
