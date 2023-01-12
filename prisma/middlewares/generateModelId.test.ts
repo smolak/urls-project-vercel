@@ -1,15 +1,16 @@
 import { expect, vi } from "vitest";
-import { generateModelId } from "./generateModelId";
-import { USER_ID_PREFIX } from "../../lib/user/utils/generateUserId";
+import { generateModelId, ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "./generateModelId";
+import { generateUserId, USER_ID_PREFIX } from "../../lib/user/utils/generateUserId";
 import { SESSION_ID_PREFIX } from "../../lib/session/utils/generateSessionId";
 import { ACCOUNT_ID_PREFIX } from "../../lib/account/utils/generateAccountId";
 import { URL_QUEUE_ID_PREFIX } from "../../lib/url-queue/utils/generateUrlQueueId";
 import { URL_ID_PREFIX } from "../../lib/url/utils/generateUrlId";
-import { Prisma } from "@prisma/client";
+import { Feed, Prisma } from "@prisma/client";
 import { USER_URL_ID_PREFIX } from "../../lib/user-url/utils/generateUserUrlId";
 import { USER_PROFILE_DATA_ID_PREFIX } from "../../lib/user-profile-data/utils/generateUserProfileDataId";
 import { FEED_ID_PREFIX } from "../../lib/feed/utils/generateFeedId";
 import { FEED_QUEUE_ID_PREFIX } from "../../lib/feed-queue/utils/generateFeedQueueId";
+import { createFeed } from "../../test/fixtures/feed";
 
 describe("generateModelId middleware", () => {
   describe('for "create" action', () => {
@@ -261,6 +262,34 @@ describe("generateModelId middleware", () => {
               id: expect.stringMatching(`^${FEED_QUEUE_ID_PREFIX}`),
             },
           },
+        });
+      });
+    });
+  });
+
+  describe('for "createMany" action', () => {
+    describe('when model is "Feed"', () => {
+      it("should generate ID prefixed for every Feed model on the list", async () => {
+        const userId = generateUserId();
+        const data = new Array(10).fill(null).map(() => {
+          return createFeed({ userId, id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR });
+        });
+        const params = {
+          action: "createMany",
+          model: "Feed",
+          args: {
+            data,
+          },
+        } as Prisma.MiddlewareParams;
+        const nextSpy = vi.fn();
+
+        await generateModelId(params, nextSpy);
+
+        const itemsInData: ReadonlyArray<Feed> = nextSpy.mock.calls[0][0].args.data;
+        const hasFeedIdGenerated = ({ id }: Feed) => id.startsWith(FEED_ID_PREFIX);
+
+        itemsInData.forEach((item) => {
+          expect(item).toSatisfy(hasFeedIdGenerated);
         });
       });
     });
