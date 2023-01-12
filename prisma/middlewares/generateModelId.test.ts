@@ -9,6 +9,7 @@ import { Prisma } from "@prisma/client";
 import { USER_URL_ID_PREFIX } from "../../lib/user-url/utils/generateUserUrlId";
 import { USER_PROFILE_DATA_ID_PREFIX } from "../../lib/user-profile-data/utils/generateUserProfileDataId";
 import { FEED_ID_PREFIX } from "../../lib/feed/utils/generateFeedId";
+import { FEED_QUEUE_ID_PREFIX } from "../../lib/feed-queue/utils/generateFeedQueueId";
 
 describe("generateModelId middleware", () => {
   describe('for "create" action', () => {
@@ -230,6 +231,34 @@ describe("generateModelId middleware", () => {
             data: {
               ...params.args.data,
               id: expect.stringMatching(`^${FEED_ID_PREFIX}`),
+            },
+          },
+        });
+      });
+    });
+
+    describe('when model is "FeedQueue"', () => {
+      it("should generate ID prefixed for FeedQueue model", async () => {
+        const params = {
+          action: "create",
+          model: "FeedQueue",
+          args: {
+            data: {
+              // any url data
+            },
+          },
+        } as Prisma.MiddlewareParams;
+        const nextSpy = vi.fn();
+
+        await generateModelId(params, nextSpy);
+
+        expect(nextSpy).toHaveBeenCalledWith({
+          ...params,
+          args: {
+            ...params.args,
+            data: {
+              ...params.args.data,
+              id: expect.stringMatching(`^${FEED_QUEUE_ID_PREFIX}`),
             },
           },
         });
