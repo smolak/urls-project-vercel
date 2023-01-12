@@ -55,7 +55,7 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory = fu
           },
         });
 
-        await prisma.userUrl.create({
+        const userUrl = await prisma.userUrl.create({
           data: {
             id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             userId: item.userId,
@@ -70,6 +70,14 @@ export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory = fu
           },
           where: {
             id: urlQueueId,
+          },
+        });
+
+        await prisma.feedQueue.create({
+          data: {
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+            userId: item.userId,
+            userUrlId: userUrl.id,
           },
         });
 

@@ -12,6 +12,7 @@ import { createExampleImageMetadata, createExampleWebsiteMetadata } from "../../
 import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { generateRequestId } from "../../../request-id/utils/generateRequestId";
+import { createUserUrl } from "../../../../test/fixtures/userUrl";
 
 const fetchMetadata = vi.fn();
 const logger = mockDeep<Logger>();
@@ -75,6 +76,10 @@ describe("processQueueItemHandler", () => {
   describe("further processing is wrapped in transaction, either all succeed or none", () => {
     const urlEntity = createUrlEntity();
     const urlQueueItem = createUrlQueueItem();
+    const userUrlItem = createUserUrl({
+      urlId: urlEntity.id,
+      userId: urlQueueItem.userId,
+    });
     const exampleMetadata = createExampleWebsiteMetadata({ contentType: undefined });
 
     const getTransactionCallback = () => prismaMock.$transaction.mock.calls[0][0];
@@ -84,6 +89,7 @@ describe("processQueueItemHandler", () => {
 
       prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueItem);
       prismaMock.url.create.mockResolvedValue(urlEntity);
+      prismaMock.userUrl.create.mockResolvedValue(userUrlItem);
     });
 
     it("Url entity is created", async () => {
@@ -180,6 +186,26 @@ describe("processQueueItemHandler", () => {
         },
         where: {
           id: urlQueueItem.id,
+        },
+      });
+    });
+
+    it("adds entry for this URL to the feed queue", async () => {
+      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+      await handler({ urlQueueId: urlQueueItem.id, requestId });
+
+      expect(prismaMock.$transaction).toHaveBeenCalled();
+
+      // Triggering $transaction call. Don't know if it can be done otherwise.
+      // TODO if it can
+      const transactionCallback = getTransactionCallback();
+      await transactionCallback(prismaMock);
+
+      expect(prismaMock.feedQueue.create).toHaveBeenCalledWith({
+        data: {
+          id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+          userId: userUrlItem.userId,
+          userUrlId: userUrlItem.id,
         },
       });
     });
