@@ -20,6 +20,19 @@ export const generateModelId: Prisma.Middleware = async (params: Prisma.Middlewa
     }
   }
 
+  if (params.action === "createMany") {
+    switch (params.model) {
+      case "Feed":
+        params.args.data = params.args.data.map((item: Prisma.FeedCreateManyInput) => {
+          return {
+            ...item,
+            id: generateFeedId(),
+          };
+        });
+        break;
+    }
+  }
+
   if (params.action === "create") {
     switch (params.model) {
       case "User":
