@@ -128,6 +128,7 @@ model FeedQueue {
 
   @@index([userId])
   @@index([userUrlId])
+  @@index([status, lastAddedFeedCreatedAt, createdAt])
 }
 
 enum UserRole {
