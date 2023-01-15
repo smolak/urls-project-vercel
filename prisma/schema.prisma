@@ -109,22 +109,22 @@ model Feed {
 
 enum FeedQueueStatus {
   NEW // For new entries
-  PROCESSING // For an entry that's being processed, so that it's not processed by more handlers
   SUCCESS // Added to the feed
-  FAILED // Failed attempt, but it's not over yet
-  REJECTED // All attempts failed, not going to be processed anymore
+  ONGOING // For lots of users following other user and it needs to be done in batches
+  REJECTED // All attempts failed, should alert
 }
 
 model FeedQueue {
-  id           String          @id
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @default(now())
-  status       FeedQueueStatus @default(NEW)
-  attemptCount Int             @default(0) @db.UnsignedTinyInt
-  userId       String
-  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userUrlId    String
-  userUrl      UserUrl         @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
+  id                     String          @id
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @default(now())
+  status                 FeedQueueStatus @default(NEW)
+  attemptCount           Int             @default(0) @db.UnsignedTinyInt
+  lastAddedFeedCreatedAt DateTime        @default(dbgenerated("'1999-01-01 00:00:00.000'")) // any date long in the past
+  userId                 String
+  user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userUrlId              String
+  userUrl                UserUrl         @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userUrlId])
