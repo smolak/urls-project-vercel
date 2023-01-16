@@ -14,12 +14,14 @@ interface Params {
 
 export type ProcessUrlQueueItemHandlerFactory = (params: Params) => ProcessUrlQueueItemHandler;
 
+const actionType = "processUrlQueueItemHandler";
+
 export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactory = function ({
   fetchMetadata,
   logger,
 }) {
   return async ({ urlQueueId, requestId }) => {
-    logger.info({ requestId, urlQueueId }, "Processing URL queue item.");
+    logger.info({ requestId, actionType, urlQueueId }, "Processing URL queue item.");
 
     try {
       const item = await prisma.urlQueue.findFirstOrThrow({
@@ -50,7 +52,7 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
 
       const metadata = await fetchMetadata(item.rawUrl);
 
-      logger.info({ requestId, metadata }, "Metadata fetched.");
+      logger.info({ requestId, actionType, metadata }, "Metadata fetched.");
 
       const url = metadata.url || item.rawUrl;
       const urlHash = sha1(url);
@@ -94,14 +96,14 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
           });
         }
 
-        logger.info({ requestId, createdUrl }, "Processing finished, URL created.");
+        logger.info({ requestId, actionType, createdUrl }, "Processing finished, URL created.");
 
         return createdUrl;
       });
 
       return createdUrl;
     } catch (error) {
-      logger.error({ requestId, error }, "Failed to process URL queue item.");
+      logger.error({ requestId, actionType, error }, "Failed to process URL queue item.");
 
       throw error;
     }
