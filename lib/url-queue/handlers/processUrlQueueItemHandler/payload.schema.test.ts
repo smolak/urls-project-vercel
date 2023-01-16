@@ -1,11 +1,11 @@
-import { ProcessQueueItemHandlerPayloadSchema, processQueueItemHandlerPayloadSchema } from "./payload.schema";
+import { ProcessUrlQueueItemHandlerPayloadSchema, processUrlQueueItemHandlerPayloadSchema } from "./payload.schema";
 import { SafeParseError, ZodError } from "zod";
 import { generateUrlQueueId } from "../../utils/generateUrlQueueId";
 
 describe("processQueueItemHandlerPayloadSchema", () => {
   it('should pass validation for an object containing valid "urlQueueId" property value', () => {
     const urlQueueId = generateUrlQueueId();
-    const result = processQueueItemHandlerPayloadSchema.parse({ urlQueueId });
+    const result = processUrlQueueItemHandlerPayloadSchema.parse({ urlQueueId });
 
     expect(result.urlQueueId).toEqual(urlQueueId);
   });
@@ -14,7 +14,7 @@ describe("processQueueItemHandlerPayloadSchema", () => {
     const urlQueueId = generateUrlQueueId();
     const idToTrim = `   \n\n\n\t\t\t${urlQueueId}\t\t\t\n\n\n    `;
 
-    const result = processQueueItemHandlerPayloadSchema.parse({ urlQueueId: idToTrim });
+    const result = processUrlQueueItemHandlerPayloadSchema.parse({ urlQueueId: idToTrim });
 
     expect(result.urlQueueId).toEqual(urlQueueId);
   });
@@ -23,9 +23,9 @@ describe("processQueueItemHandlerPayloadSchema", () => {
     it("is not a string", () => {
       const urlQueueId = 42;
 
-      const { error } = processQueueItemHandlerPayloadSchema.safeParse({
+      const { error } = processUrlQueueItemHandlerPayloadSchema.safeParse({
         urlQueueId,
-      }) as SafeParseError<ProcessQueueItemHandlerPayloadSchema>;
+      }) as SafeParseError<ProcessUrlQueueItemHandlerPayloadSchema>;
 
       expect(error).toBeInstanceOf(ZodError);
     });
