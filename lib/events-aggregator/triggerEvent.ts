@@ -1,4 +1,4 @@
-import { processQueueItemHandler, ProcessQueueItemEvent } from "../url-queue/handlers/processQueueItemHandler";
+import { ProcessUrlQueueItemEvent, processUrlQueueItemHandler } from "../url-queue/handlers/processUrlQueueItemHandler";
 import { logger } from "../../logger";
 import { RequestId } from "../request-id/utils/generateRequestId";
 
@@ -11,7 +11,7 @@ export interface AnEvent<D = Record<string, unknown>> {
   data: D & { requestId?: RequestId };
 }
 
-type UrlQueueCreatedEvent = (event: ProcessQueueItemEvent) => ReturnType<typeof processQueueItemHandler>;
+type UrlQueueCreatedEvent = (event: ProcessUrlQueueItemEvent) => ReturnType<typeof processUrlQueueItemHandler>;
 
 // List of event types
 export type TriggerEvent = UrlQueueCreatedEvent;
@@ -24,7 +24,7 @@ export const triggerEvent: TriggerEvent = async (event) => {
       case EventType.URL_QUEUE_CREATED:
         logger.info({ requestId: event.data.requestId, event: event.type }, `Event ${event.type} triggered.`);
 
-        return await processQueueItemHandler({
+        return await processUrlQueueItemHandler({
           urlQueueId: event.data.urlQueueId,
           requestId: event.data.requestId,
         });

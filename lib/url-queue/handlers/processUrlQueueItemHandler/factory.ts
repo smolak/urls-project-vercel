@@ -2,7 +2,7 @@ import prisma from "../../../../prisma";
 import { compressMetadata } from "../../../metadata/compression";
 import { sha1 } from "../../../crypto/sha1";
 import { Prisma } from "@prisma/client";
-import { ProcessQueueItemHandler } from "./index";
+import { ProcessUrlQueueItemHandler } from "./index";
 import { Logger } from "pino";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { FetchMetadata } from "../../../metadata/fetchMetadata";
@@ -12,9 +12,12 @@ interface Params {
   logger: Logger;
 }
 
-export type ProcessQueueItemHandlerFactory = (params: Params) => ProcessQueueItemHandler;
+export type ProcessUrlQueueItemHandlerFactory = (params: Params) => ProcessUrlQueueItemHandler;
 
-export const processQueueItemHandlerFactory: ProcessQueueItemHandlerFactory = function ({ fetchMetadata, logger }) {
+export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactory = function ({
+  fetchMetadata,
+  logger,
+}) {
   return async ({ urlQueueId, requestId }) => {
     logger.info({ requestId, urlQueueId }, "Processing URL queue item.");
 

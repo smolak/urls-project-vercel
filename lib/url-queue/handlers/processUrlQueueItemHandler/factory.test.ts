@@ -5,7 +5,7 @@ import { mockDeep } from "vitest-mock-extended";
 import { generateUrlQueueId } from "../../utils/generateUrlQueueId";
 import { createUrlQueueItem } from "../../test/fixtures/urlQueue";
 import { prismaMock } from "../../../../test/helpers/prismaSingleton";
-import { processQueueItemHandlerFactory } from "./factory";
+import { processUrlQueueItemHandlerFactory } from "./factory";
 import { sha1 } from "../../../crypto/sha1";
 import { compressMetadata } from "../../../metadata/compression";
 import { createExampleImageMetadata, createExampleWebsiteMetadata } from "../../../../test/fixtures/exampleMetadata";
@@ -31,7 +31,7 @@ describe("processQueueItemHandler", () => {
   });
 
   it("should look for item in queue, but only for one in processable status", async () => {
-    const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+    const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
     const urlQueueId = generateUrlQueueId();
 
     await handler({ urlQueueId });
@@ -52,7 +52,7 @@ describe("processQueueItemHandler", () => {
     const urlQueueItem = createUrlQueueItem();
     prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueItem);
 
-    const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+    const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
     await handler({ urlQueueId: urlQueueItem.id, requestId });
 
     expect(prismaMock.urlQueue.update).toHaveBeenCalledWith({
@@ -69,7 +69,7 @@ describe("processQueueItemHandler", () => {
     const urlQueueItem = createUrlQueueItem();
     prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueItem);
 
-    const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+    const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
     const urlQueueId = generateUrlQueueId();
 
     await handler({ urlQueueId });
@@ -97,7 +97,7 @@ describe("processQueueItemHandler", () => {
     });
 
     it("Url entity is created", async () => {
-      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
       await handler({ urlQueueId: urlQueueItem.id, requestId });
 
       expect(prismaMock.$transaction).toHaveBeenCalled();
@@ -127,7 +127,7 @@ describe("processQueueItemHandler", () => {
       });
 
       it("should use rawUrl for payload creation", async () => {
-        const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+        const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
         await handler({ urlQueueId: urlQueueItem.id, requestId });
 
         expect(prismaMock.$transaction).toHaveBeenCalled();
@@ -151,7 +151,7 @@ describe("processQueueItemHandler", () => {
     });
 
     it("relationship between created url and user that added it is created", async () => {
-      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
       await handler({ urlQueueId: urlQueueItem.id, requestId });
 
       expect(prismaMock.$transaction).toHaveBeenCalled();
@@ -171,7 +171,7 @@ describe("processQueueItemHandler", () => {
     });
 
     it("url in queue is marked as accepted (no future processing; entity can be deleted by separate job)", async () => {
-      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
       await handler({ urlQueueId: urlQueueItem.id, requestId });
 
       expect(prismaMock.$transaction).toHaveBeenCalled();
@@ -200,7 +200,7 @@ describe("processQueueItemHandler", () => {
       });
 
       it("should not add this URL to the feed queue", async () => {
-        const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+        const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
         await handler({ urlQueueId: urlQueueItem.id, requestId });
 
         expect(prismaMock.$transaction).toHaveBeenCalled();
@@ -220,7 +220,7 @@ describe("processQueueItemHandler", () => {
       });
 
       it("adds entry for this URL to the feed queue", async () => {
-        const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+        const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
         await handler({ urlQueueId: urlQueueItem.id, requestId });
 
         expect(prismaMock.$transaction).toHaveBeenCalled();
@@ -247,7 +247,7 @@ describe("processQueueItemHandler", () => {
       const error = new Error("Item not found.");
       prismaMock.urlQueue.findFirstOrThrow.mockRejectedValue(error);
 
-      const handler = processQueueItemHandlerFactory({ fetchMetadata, logger });
+      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
 
       expect(async () => await handler({ urlQueueId: generateUrlQueueId(), requestId })).rejects.toThrow(error);
     });

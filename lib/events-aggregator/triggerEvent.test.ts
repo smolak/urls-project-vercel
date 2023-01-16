@@ -1,11 +1,14 @@
 import { Mock } from "vitest";
 import { EventType, triggerEvent } from "./triggerEvent";
-import { ProcessQueueItemEvent } from "../url-queue/handlers/processQueueItemHandler";
+import { ProcessUrlQueueItemEvent, processUrlQueueItemHandler } from "../url-queue/handlers/processUrlQueueItemHandler";
 import { generateUrlQueueId } from "../url-queue/utils/generateUrlQueueId";
+import { logger } from "../../logger";
+import { generateRequestId } from "../request-id/utils/generateRequestId";
+import { createUrlEntity } from "../../test/fixtures/urlEntity";
 
-vi.mock("../url-queue/handlers/processQueueItemHandler", () => {
+vi.mock("../url-queue/handlers/processUrlQueueItemHandler", () => {
   return {
-    processQueueItemHandler: vi.fn(),
+    processUrlQueueItemHandler: vi.fn(),
   };
 });
 vi.mock("../../logger", () => {
@@ -16,11 +19,6 @@ vi.mock("../../logger", () => {
     },
   };
 });
-
-import { processQueueItemHandler } from "../url-queue/handlers/processQueueItemHandler";
-import { logger } from "../../logger";
-import { generateRequestId } from "../request-id/utils/generateRequestId";
-import { createUrlEntity } from "../../test/fixtures/urlEntity";
 
 const requestId = generateRequestId();
 
@@ -33,22 +31,22 @@ describe("triggerEvent", () => {
     const url = createUrlEntity();
 
     beforeEach(() => {
-      (processQueueItemHandler as Mock).mockResolvedValue(url);
+      (processUrlQueueItemHandler as Mock).mockResolvedValue(url);
     });
 
     it("should be handled", async () => {
-      const eventExample: ProcessQueueItemEvent = {
+      const eventExample: ProcessUrlQueueItemEvent = {
         data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
 
       await triggerEvent(eventExample);
 
-      expect(processQueueItemHandler).toHaveBeenCalledWith({ urlQueueId: eventExample.data.urlQueueId, requestId });
+      expect(processUrlQueueItemHandler).toHaveBeenCalledWith({ urlQueueId: eventExample.data.urlQueueId, requestId });
     });
 
     it("should log the attempt", async () => {
-      const eventExample: ProcessQueueItemEvent = {
+      const eventExample: ProcessUrlQueueItemEvent = {
         data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
@@ -65,7 +63,7 @@ describe("triggerEvent", () => {
     });
 
     it("should resolve with value coming from event handler", async () => {
-      const eventExample: ProcessQueueItemEvent = {
+      const eventExample: ProcessUrlQueueItemEvent = {
         data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
@@ -79,9 +77,9 @@ describe("triggerEvent", () => {
   describe("when an error is thrown from any of the event handlers", () => {
     it("should log that fact", async () => {
       const error = new Error("Something went wrong.");
-      (processQueueItemHandler as Mock).mockRejectedValue(error);
+      (processUrlQueueItemHandler as Mock).mockRejectedValue(error);
 
-      const eventExample: ProcessQueueItemEvent = {
+      const eventExample: ProcessUrlQueueItemEvent = {
         data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
@@ -97,9 +95,9 @@ describe("triggerEvent", () => {
 
     it("should rethrow the error (something higher will catch it)", async () => {
       const error = new Error("Something went wrong.");
-      (processQueueItemHandler as Mock).mockRejectedValue(error);
+      (processUrlQueueItemHandler as Mock).mockRejectedValue(error);
 
-      const eventExample: ProcessQueueItemEvent = {
+      const eventExample: ProcessUrlQueueItemEvent = {
         data: { urlQueueId: generateUrlQueueId(), requestId },
         type: EventType.URL_QUEUE_CREATED,
       };
