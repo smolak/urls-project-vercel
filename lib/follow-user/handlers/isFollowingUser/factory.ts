@@ -34,7 +34,7 @@ export const isFollowingUserHandlerFactory: IsFollowingUserHandlerFactory = ({ g
     const result = isFollowingUserPayloadSchema.safeParse(req.query);
 
     if (!result.success) {
-      logger.error({ requestId, actionType }, "Body validation error.");
+      logger.error({ requestId, actionType }, "Query validation error.");
 
       res.status(StatusCodes.NOT_ACCEPTABLE);
       return;
