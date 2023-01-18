@@ -83,14 +83,14 @@ model Url {
 }
 
 model UserUrl {
-  id           String      @id
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
-  url          Url         @relation(fields: [urlId], references: [id], onDelete: Cascade)
-  urlId        String
-  feeds        Feed[]
-  feedsInQueue FeedQueue[]
-  createdAt    DateTime    @default(now())
+  id        String     @id
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  url       Url        @relation(fields: [urlId], references: [id], onDelete: Cascade)
+  urlId     String
+  feeds     Feed[]
+  feedQueue FeedQueue?
+  createdAt DateTime   @default(now())
 
   @@index([userId])
   @@index([urlId])
@@ -123,7 +123,7 @@ model FeedQueue {
   lastAddedFeedCreatedAt DateTime        @default(dbgenerated("'1999-01-01 00:00:00.000'")) // any date long in the past
   userId                 String
   user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userUrlId              String
+  userUrlId              String          @unique
   userUrl                UserUrl         @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
 
   @@index([userId])
