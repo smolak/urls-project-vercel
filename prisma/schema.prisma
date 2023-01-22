@@ -97,11 +97,13 @@ model UserUrl {
 }
 
 model Feed {
-  id        String  @id
+  id        String   @id
   userId    String
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userUrlId String
-  userUrl   UserUrl @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
+  userUrl   UserUrl  @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@index([userId])
   @@index([userUrlId])
@@ -115,20 +117,20 @@ enum FeedQueueStatus {
 }
 
 model FeedQueue {
-  id                     String          @id
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @default(now())
-  status                 FeedQueueStatus @default(NEW)
-  attemptCount           Int             @default(0) @db.UnsignedTinyInt
-  lastAddedFeedCreatedAt DateTime        @default(dbgenerated("'1999-01-01 00:00:00.000'")) // any date long in the past
-  userId                 String
-  user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userUrlId              String          @unique
-  userUrl                UserUrl         @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
+  id                String          @id
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now())
+  status            FeedQueueStatus @default(NEW)
+  attemptCount      Int             @default(0) @db.UnsignedTinyInt
+  lastAddedFollowId BigInt          @default(0)
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userUrlId         String          @unique
+  userUrl           UserUrl         @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userUrlId])
-  @@index([status, lastAddedFeedCreatedAt, createdAt])
+  @@index([status, lastAddedFollowId, createdAt])
 }
 
 enum UserRole {
@@ -162,13 +164,14 @@ model User {
 }
 
 model Follows {
+  id          BigInt   @id @default(autoincrement())
   follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
   followerId  String
   following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String
   createdAt   DateTime @default(now())
 
-  @@id([followerId, followingId])
+  @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
 }
