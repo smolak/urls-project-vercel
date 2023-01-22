@@ -58,7 +58,7 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
       const urlHash = sha1(url);
       const compressedMetadata = compressMetadata(metadata);
 
-      const createdUrl = await prisma.$transaction(async (prisma) => {
+      return await prisma.$transaction(async (prisma) => {
         const createdUrl = await prisma.url.create({
           data: {
             id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
@@ -100,8 +100,6 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
 
         return createdUrl;
       });
-
-      return createdUrl;
     } catch (error) {
       logger.error({ requestId, actionType, error }, "Failed to process URL queue item.");
 
