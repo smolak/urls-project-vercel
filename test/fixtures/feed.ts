@@ -7,5 +7,7 @@ export const createFeed = (overwrites: Partial<Feed> = {}): Feed => ({
   id: generateFeedId(),
   userId: generateUserId(),
   userUrlId: generateUserUrlId(),
+  createdAt: new Date(),
+  updatedAt: new Date(),
   ...overwrites,
 });
