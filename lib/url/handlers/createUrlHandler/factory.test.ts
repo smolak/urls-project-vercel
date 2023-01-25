@@ -14,6 +14,8 @@ import { createUrlHandlerFactory } from "./factory";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { expect } from "vitest";
 import { createToken } from "../../../../test/fixtures/token";
+import { createFeed } from "../../../../test/fixtures/feed";
+import { createUserUrl } from "../../../../test/fixtures/userUrl";
 
 const userId = generateUserId();
 const getToken = vi.fn();
@@ -88,20 +90,58 @@ describe("createUrlHandlerFactory", () => {
 
     describe("when passed URL already exists in the DB", () => {
       const urlEntity = createUrlEntity({ url: URL_TO_ADD });
+      const userUrlItem = createUserUrl({
+        urlId: urlEntity.id,
+        userId,
+      });
+      const feedEntity = createFeed({
+        userId,
+        userUrlId: userUrlItem.id,
+      });
+      const getTransactionCallback = () => prismaMock.$transaction.mock.calls[0][0];
 
       beforeEach(() => {
         prismaMock.url.findUnique.mockResolvedValue(urlEntity);
+        prismaMock.userUrl.create.mockResolvedValue(userUrlItem);
+        prismaMock.feed.create.mockResolvedValue(feedEntity);
       });
 
       it("should assign this URL to the user that attempts to add it", async () => {
         const handler = createUrlHandlerFactory({ getToken, logger, triggerEvent });
         await handler(reqMock, resMock);
 
+        expect(prismaMock.$transaction).toHaveBeenCalled();
+
+        // Triggering $transaction call. Don't know if it can be done otherwise.
+        // TODO if it can
+        const transactionCallback = getTransactionCallback();
+        await transactionCallback(prismaMock);
+
         expect(prismaMock.userUrl.create).toHaveBeenCalledWith({
           data: {
             id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
             userId,
             urlId: urlEntity.id,
+          },
+        });
+      });
+
+      it("should add the user's url to the feed queue (so that it will appear on author's feed as well)", async () => {
+        const handler = createUrlHandlerFactory({ getToken, logger, triggerEvent });
+        await handler(reqMock, resMock);
+
+        expect(prismaMock.$transaction).toHaveBeenCalled();
+
+        // Triggering $transaction call. Don't know if it can be done otherwise.
+        // TODO if it can
+        const transactionCallback = getTransactionCallback();
+        await transactionCallback(prismaMock);
+
+        expect(prismaMock.feedQueue.create).toHaveBeenCalledWith({
+          data: {
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+            userId,
+            userUrlId: userUrlItem.id,
           },
         });
       });
@@ -116,10 +156,17 @@ describe("createUrlHandlerFactory", () => {
         });
       });
 
-      describe("when assigning URL to the user fails", () => {
-        it("should respond with INTERNAL_SERVER_ERROR and an explanation", async () => {
-          prismaMock.userUrl.create.mockRejectedValue(new Error("Something went wrong"));
+      describe("when any operation within transaction fails", () => {
+        // Sadly, I don't know how to make $transaction mock behave in the original manner,
+        // so that it would use the error created by one of CRUD operations performed in it.
+        // That is why I am mimicking the behaviour which is exactly that: when any CRUD operation
+        // fails, $transaction rethrows.
+        // TODO: fix this if possible so that the underlying CRUD operations throw and $transaction rethrows
+        beforeEach(() => {
+          prismaMock.$transaction.mockRejectedValue(new Error("Something went wrong when creating user url."));
+        });
 
+        it("should respond with INTERNAL_SERVER_ERROR and an explanation", async () => {
           const handler = createUrlHandlerFactory({ getToken, logger, triggerEvent });
           await handler(reqMock, resMock);
 

@@ -13,7 +13,6 @@ import { createUrlEntity } from "../../../../test/fixtures/urlEntity";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 import { generateRequestId } from "../../../request-id/utils/generateRequestId";
 import { createUserUrl } from "../../../../test/fixtures/userUrl";
-import { createUserProfileData } from "../../../../test/fixtures/userProfileData";
 import { generateUserId } from "../../../user/utils/generateUserId";
 
 const fetchMetadata = vi.fn();
@@ -26,7 +25,6 @@ describe("processQueueItemHandler", () => {
     vi.resetAllMocks();
 
     prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(createUrlQueueItem({ userId }));
-    prismaMock.userProfileData.findUniqueOrThrow.mockResolvedValue(createUserProfileData({ userId }));
     fetchMetadata.mockResolvedValue(createExampleWebsiteMetadata());
   });
 
@@ -170,6 +168,26 @@ describe("processQueueItemHandler", () => {
       });
     });
 
+    it("adds the user's url to the feed queue (so that it will appear on author's feed as well)", async () => {
+      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
+      await handler({ urlQueueId: urlQueueItem.id, requestId });
+
+      expect(prismaMock.$transaction).toHaveBeenCalled();
+
+      // Triggering $transaction call. Don't know if it can be done otherwise.
+      // TODO if it can
+      const transactionCallback = getTransactionCallback();
+      await transactionCallback(prismaMock);
+
+      expect(prismaMock.feedQueue.create).toHaveBeenCalledWith({
+        data: {
+          id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+          userId: userUrlItem.userId,
+          userUrlId: userUrlItem.id,
+        },
+      });
+    });
+
     it("url in queue is marked as accepted (no future processing; entity can be deleted by separate job)", async () => {
       const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
       await handler({ urlQueueId: urlQueueItem.id, requestId });
@@ -191,52 +209,6 @@ describe("processQueueItemHandler", () => {
         where: {
           id: urlQueueItem.id,
         },
-      });
-    });
-
-    describe("when the user has no people following them", () => {
-      beforeEach(() => {
-        prismaMock.userProfileData.findUniqueOrThrow.mockResolvedValue(createUserProfileData({ userId, followers: 0 }));
-      });
-
-      it("should not add this URL to the feed queue", async () => {
-        const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
-        await handler({ urlQueueId: urlQueueItem.id, requestId });
-
-        expect(prismaMock.$transaction).toHaveBeenCalled();
-
-        // Triggering $transaction call. Don't know if it can be done otherwise.
-        // TODO if it can
-        const transactionCallback = getTransactionCallback();
-        await transactionCallback(prismaMock);
-
-        expect(prismaMock.feedQueue.create).not.toHaveBeenCalled();
-      });
-    });
-
-    describe("when the user has any people following them (and only then)", () => {
-      beforeEach(() => {
-        prismaMock.userProfileData.findUniqueOrThrow.mockResolvedValue(createUserProfileData({ userId, followers: 1 }));
-      });
-
-      it("adds entry for this URL to the feed queue", async () => {
-        const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
-        await handler({ urlQueueId: urlQueueItem.id, requestId });
-
-        expect(prismaMock.$transaction).toHaveBeenCalled();
-
-        // Triggering $transaction call. Don't know if it can be done otherwise.
-        // TODO if it can
-        const transactionCallback = getTransactionCallback();
-        await transactionCallback(prismaMock);
-
-        expect(prismaMock.feedQueue.create).toHaveBeenCalledWith({
-          data: {
-            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-            userId: userUrlItem.userId,
-            userUrlId: userUrlItem.id,
-          },
-        });
       });
     });
   });

@@ -32,14 +32,6 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
           },
         },
       });
-      const userProfileData = await prisma.userProfileData.findUniqueOrThrow({
-        where: {
-          userId: item.userId,
-        },
-        select: {
-          followers: true,
-        },
-      });
 
       await prisma.urlQueue.update({
         data: {
@@ -76,6 +68,14 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
           },
         });
 
+        await prisma.feedQueue.create({
+          data: {
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+            userId: item.userId,
+            userUrlId: userUrl.id,
+          },
+        });
+
         await prisma.urlQueue.update({
           data: {
             metadata: compressedMetadata as Prisma.JsonObject,
@@ -85,16 +85,6 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
             id: urlQueueId,
           },
         });
-
-        if (userProfileData.followers > 0) {
-          await prisma.feedQueue.create({
-            data: {
-              id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-              userId: item.userId,
-              userUrlId: userUrl.id,
-            },
-          });
-        }
 
         logger.info({ requestId, actionType, createdUrl }, "Processing finished, URL created.");
 

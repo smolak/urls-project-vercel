@@ -63,12 +63,22 @@ export const createUrlHandlerFactory: CreateUrlHandlerFactory =
       if (maybeUrl) {
         // TODO: Perhaps IDEA#4
 
-        await prisma.userUrl.create({
-          data: {
-            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-            userId,
-            urlId: maybeUrl.id,
-          },
+        await prisma.$transaction(async (prisma) => {
+          const userUrl = await prisma.userUrl.create({
+            data: {
+              id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+              userId,
+              urlId: maybeUrl.id,
+            },
+          });
+
+          await prisma.feedQueue.create({
+            data: {
+              id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+              userId,
+              userUrlId: userUrl.id,
+            },
+          });
         });
 
         logger.info({ requestId, actionType, url }, "URL exists, added to user.");

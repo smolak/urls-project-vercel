@@ -99,6 +99,7 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
             userId,
             userUrlId,
             lastAddedFollowId: lastAddedFollowIdSource,
+            createdAt,
           } = ongoingFeedQueueItems[i];
 
           let followersWithNotAddedFeedArePresent = true;
@@ -124,7 +125,7 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
                 return await handleNoMoreFollowersCase(prisma, { feedQueueId, lastAddedFollowId });
               }
 
-              const { count } = await addFeeds(prisma, { followers, userUrlId });
+              const { count } = await addFeeds(prisma, { followers, userUrlId, createdAt });
 
               telemetry.feedsAdded.push(count);
               lastAddedFollowId = getLastAddedFollowId(followers);
@@ -182,7 +183,7 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
         }
 
         for (let i = 0; i < newFeedQueueItems.length; i++) {
-          const { id: feedQueueId, userId, userUrlId } = newFeedQueueItems[i];
+          const { id: feedQueueId, userId, userUrlId, createdAt } = newFeedQueueItems[i];
 
           let followersWithNotAddedFeedArePresent = true;
           let lastAddedFollowId = BigInt(0);
@@ -203,11 +204,12 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
                 cache.set(cacheKey, followers);
               }
 
-              if (followers.length === 0) {
-                return await handleNoMoreFollowersCase(prisma, { feedQueueId, lastAddedFollowId });
-              }
+              // Adding self, only for the new ones, to make sure author will get their URL on their feed as well
+              // Hence the `0` ID, so that, if adding fails on the very first feed adding, including self, the
+              // fetch of followers will begin from ID > 0 (as it is by default).
+              followers = [{ id: BigInt(0), followerId: userId }].concat(followers);
 
-              const { count } = await addFeeds(prisma, { followers, userUrlId });
+              const { count } = await addFeeds(prisma, { followers, userUrlId, createdAt });
 
               telemetry.feedsAdded.push(count);
               lastAddedFollowId = getLastAddedFollowId(followers);

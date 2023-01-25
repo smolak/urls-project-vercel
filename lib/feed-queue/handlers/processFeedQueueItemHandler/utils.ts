@@ -47,6 +47,7 @@ export const getFeedQueueEntries = (prisma: PrismaClient, status: FeedQueueStatu
       userId: true,
       userUrlId: true,
       lastAddedFollowId: true,
+      createdAt: true,
     },
     take,
     skip: page * take,
@@ -123,15 +124,17 @@ export const handleNoMoreTimeCase: HandleNoMoreTimeCase = async (
 
 type AddFeeds = (
   prisma: Prisma.TransactionClient,
-  data: { followers: GetFollowersReturnType; userUrlId: UserUrl["id"] }
+  data: { followers: GetFollowersReturnType; userUrlId: UserUrl["id"]; createdAt: UserUrl["createdAt"] }
 ) => PrismaPromise<Prisma.BatchPayload>;
 
-export const addFeeds: AddFeeds = (prisma, { followers, userUrlId }) => {
+export const addFeeds: AddFeeds = (prisma, { followers, userUrlId, createdAt }) => {
   return prisma.feed.createMany({
     data: followers.map(({ followerId }) => ({
       id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
       userId: followerId,
       userUrlId,
+      createdAt,
+      updatedAt: createdAt,
     })),
   });
 };
