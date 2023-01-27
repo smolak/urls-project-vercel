@@ -1,25 +1,6 @@
-import { expect, Mock } from "vitest";
+import { expect } from "vitest";
 
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      toHaveBeenCalledAfter(mock: Mock): R;
-    }
-  }
-}
+// @ts-ignore
+import * as matchers from "jest-extended";
 
-expect.extend({
-  toHaveBeenCalledAfter: (received: Mock, expected: Mock) => {
-    if (received.mock.invocationCallOrder < expected.mock.invocationCallOrder) {
-      return {
-        message: () => `Expected "${received.getMockName()}" to have been called after "${expected.getMockName()}".`,
-        pass: false,
-      };
-    }
-
-    return {
-      message: () => "",
-      pass: true,
-    };
-  },
-});
+expect.extend(matchers);
