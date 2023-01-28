@@ -1,6 +1,7 @@
 import { FeedQueueStatus } from "@prisma/client";
 import { Logger } from "pino";
 import { StatusCodes } from "http-status-codes";
+import getConfig from "next/config";
 
 import { ProcessFeedQueueItemHandler } from "./index";
 import { processFeedQueueItemHandlerPayloadSchema } from "./payload.schema";
@@ -66,7 +67,7 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
 
     const feedQueueApiKey = result.data.feedQueueApiKey;
 
-    if (feedQueueApiKey !== process.env.FEED_QUEUE_API_KEY) {
+    if (feedQueueApiKey !== getConfig().serverRuntimeConfig.feedQueueApiKey) {
       logger.error({ requestId, actionType }, "Invalid feed queue API key provided.");
 
       res.status(StatusCodes.FORBIDDEN);

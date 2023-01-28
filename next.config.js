@@ -1,6 +1,9 @@
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  serverRuntimeConfig: {
+    feedQueueApiKey: process.env.FEED_QUEUE_API_KEY,
+  },
 };
 
 module.exports = nextConfig;
