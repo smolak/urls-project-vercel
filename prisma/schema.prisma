@@ -105,7 +105,7 @@ model Feed {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  @@index([userId])
+  @@index([userId, createdAt])
   @@index([userUrlId])
 }
 
