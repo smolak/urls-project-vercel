@@ -16,3 +16,4 @@
     - [] the try again is not to redirect but trigger fetching the data again
     - [] extract component - it is used here and there
     - [] store routes somewhere? The `/` is a magic string
+12. [] Use one icon module (right now I am using more)
