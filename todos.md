@@ -12,3 +12,7 @@
 8. [] Move fixtures from test/.. to appropriate libs
 9. [] When /[username] is entered, a query for user data is performed that requests apiKey - it should not!
 10. [] Follow smart / dumb components pattern. User `container` for smart ones, no suffix for dumb ones (?).
+11. [] Change the try again on the user feeds error component:
+    - [] the try again is not to redirect but trigger fetching the data again
+    - [] extract component - it is used here and there
+    - [] store routes somewhere? The `/` is a magic string
