@@ -11,3 +11,4 @@
 7. [] Perhaps addMany handling in generateModelId middleware would be needed
 8. [] Move fixtures from test/.. to appropriate libs
 9. [] When /[username] is entered, a query for user data is performed that requests apiKey - it should not!
+10. [] Follow smart / dumb components pattern. User `container` for smart ones, no suffix for dumb ones (?).
