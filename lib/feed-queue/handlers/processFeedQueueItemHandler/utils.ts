@@ -1,4 +1,4 @@
-import { FeedQueue, FeedQueueStatus, Prisma, PrismaClient, PrismaPromise, User, UserUrl } from "@prisma/client";
+import { FeedQueue, FeedQueueStatus, Prisma, PrismaClient, User, UserUrl } from "@prisma/client";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
 
 export enum Result {
@@ -12,7 +12,7 @@ export type GetFollowersReturnType = ReadonlyArray<{ id: bigint; followerId: str
 type GetFollowers = (
   prisma: Prisma.TransactionClient,
   data: { followingId: User["id"]; lastAddedFollowId: bigint; take: number }
-) => PrismaPromise<GetFollowersReturnType>;
+) => Prisma.PrismaPromise<GetFollowersReturnType>;
 
 export const getFollowers: GetFollowers = (prisma, { followingId, lastAddedFollowId, take }) => {
   return prisma.follows.findMany({
@@ -125,7 +125,7 @@ export const handleNoMoreTimeCase: HandleNoMoreTimeCase = async (
 type AddFeeds = (
   prisma: Prisma.TransactionClient,
   data: { followers: GetFollowersReturnType; userUrlId: UserUrl["id"]; createdAt: UserUrl["createdAt"] }
-) => PrismaPromise<Prisma.BatchPayload>;
+) => Prisma.PrismaPromise<Prisma.BatchPayload>;
 
 export const addFeeds: AddFeeds = (prisma, { followers, userUrlId, createdAt }) => {
   return prisma.feed.createMany({
