@@ -3,6 +3,7 @@ import { LogoutButton } from "../../auth/LogoutButton";
 import { useSession } from "next-auth/react";
 import { LoadingIndicator } from "./LoadingIndicator";
 import Link from "next/link";
+import { UserFeedList } from "../../feed/ui/UserFeedList";
 
 export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
@@ -19,6 +20,7 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
           <div>
             <Link href="/url/add">Add a URL</Link>
           </div>
+          <UserFeedList />
         </>
       )}
       <main>{children}</main>
