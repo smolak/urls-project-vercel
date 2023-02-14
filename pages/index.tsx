@@ -3,6 +3,9 @@ import { ReactElement } from "react";
 import { LoggedInUserLayout } from "../lib/core/ui/LoggedInUserLayout";
 import { NextPageWithLayout } from "./_app";
 import { SessionProvider } from "next-auth/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -20,9 +23,11 @@ const Home: NextPageWithLayout = () => {
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return (
-    <SessionProvider>
-      <LoggedInUserLayout>{page}</LoggedInUserLayout>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <LoggedInUserLayout>{page}</LoggedInUserLayout>
+      </SessionProvider>
+    </QueryClientProvider>
   );
 };
 
