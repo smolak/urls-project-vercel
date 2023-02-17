@@ -1,7 +1,7 @@
 import { trpc } from "../trpc/utils";
 
 export default function IndexPage() {
-  const hello = trpc.hello.useQuery({ text: "Jacek" });
+  const hello = trpc.hello.useQuery({ name: "Jacek" });
 
   if (!hello.data) {
     return <div>Loading...</div>;
