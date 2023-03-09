@@ -3,10 +3,12 @@ import { User as PrismaUser } from "@prisma/client";
 
 declare module "next-auth" {
   interface SessionUser extends DefaultUser {
+    id: PrismaUser["id"];
     role: PrismaUser["role"];
   }
 
   interface JWT extends NextAuthJWT {
+    id: PrismaUser["id"];
     role: PrismaUser["role"];
   }
 
