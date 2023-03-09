@@ -1,7 +1,6 @@
 import { SessionUser } from "next-auth";
 import { GetServerSideProps } from "next";
-import { getServerSession } from "next-auth/next";
-import { nextAuthOptions } from "../../../pages/api/auth/[...nextauth]";
+import { getServerAuthSession } from "../../../server/auth";
 
 interface AdminPageProps {
   user: SessionUser;
@@ -14,7 +13,7 @@ const normalizeForServerSideProps = (user: SessionUser) => {
 };
 
 export const getServerProps: GetServerSideProps<AdminPageProps> = async (context) => {
-  const session = await getServerSession(context.req, context.res, nextAuthOptions);
+  const session = await getServerAuthSession(context);
 
   if (!session || session.user.role !== "ADMIN") {
     return {
