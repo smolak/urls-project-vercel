@@ -5,6 +5,8 @@ import superjson from "superjson";
 
 import { getServerAuthSession } from "../auth";
 import prisma from "../../prisma";
+import { logger } from "../../logger";
+import { generateRequestId } from "../../lib/request-id/utils/generateRequestId";
 
 type CreateContextOptions = {
   session: Session | null;
@@ -14,6 +16,8 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
+    logger,
+    requestId: generateRequestId(),
   };
 };
 
@@ -35,8 +39,10 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   },
 });
 
-const isAuthenticated = t.middleware(({ next, ctx }) => {
+const isAuthenticated = t.middleware(({ next, ctx, path }) => {
   if (!ctx.session || !ctx.session.user) {
+    ctx.logger.warn({ requestId: ctx.requestId, path }, "Not logged in.");
+
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
