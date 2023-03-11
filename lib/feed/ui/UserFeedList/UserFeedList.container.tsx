@@ -1,10 +1,10 @@
-import { useGetUserFeeds } from "../../hooks/useGetUserFeeds";
 import { LoadingUserFeeds } from "../LoadingUserFeeds";
 import { ErrorLoadingUserFeeds } from "../ErrorLoadingUserFeeds";
 import { UserFeedList } from "./UserFeedList";
+import { api } from "../../../../utils/api";
 
 export const UserFeedListContainer = () => {
-  const { data, isLoading, isError, error } = useGetUserFeeds();
+  const { data, isLoading, isError, error } = api.feed.getUserFeeds.useQuery();
 
   if (isLoading) {
     return <LoadingUserFeeds />;
@@ -14,5 +14,5 @@ export const UserFeedListContainer = () => {
     return <ErrorLoadingUserFeeds error={error} />;
   }
 
-  return <UserFeedList feeds={data.feeds} />;
+  return <UserFeedList feeds={data} />;
 };
