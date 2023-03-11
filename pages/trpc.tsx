@@ -1,7 +1,7 @@
 import { api } from "../utils/api";
 
 export default function IndexPage() {
-  const hello = api.hello.useQuery({ name: "Jacek" });
+  const hello = api.hello.hello.useQuery({ name: "Jacek" });
 
   if (!hello.data) {
     return <div>Loading...</div>;
