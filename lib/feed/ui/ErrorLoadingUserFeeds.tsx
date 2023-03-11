@@ -2,9 +2,10 @@ import { FC } from "react";
 import Link from "next/link";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/solid";
+import { TRPCClientErrorLike } from "@trpc/client";
 
 interface ErrorLoadingUserFeedsProps {
-  error: Error;
+  error: TRPCClientErrorLike<any>;
 }
 
 export const ErrorLoadingUserFeeds: FC<ErrorLoadingUserFeedsProps> = ({ error }) => {
@@ -14,7 +15,7 @@ export const ErrorLoadingUserFeeds: FC<ErrorLoadingUserFeedsProps> = ({ error })
         <span className="inline">Something went wrong 😞</span>{" "}
       </h1>
       <div className="lg:w-3/4 mb-8">
-        {error.stack ? (
+        {error.data.stack ? (
           <Disclosure>
             {({ open }) => (
               <>
@@ -25,8 +26,8 @@ export const ErrorLoadingUserFeeds: FC<ErrorLoadingUserFeedsProps> = ({ error })
                   <ChevronUpIcon className={`${open ? "rotate-180 transform" : ""} h-5 w-5 text-red-500`} />
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                  {error.stack &&
-                    error.stack.split("\n").map((line, i) => (
+                  {error.data.stack &&
+                    (error.data.stack as unknown as string).split("\n").map((line, i) => (
                       <p className="py-0.5" key={i}>
                         {line}
                       </p>
