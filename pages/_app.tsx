@@ -5,7 +5,7 @@ import { ReactElement } from "react";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Session } from "next-auth";
-import { trpc } from "../trpc/utils";
+import { api } from "../utils/api";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactElement;
@@ -31,4 +31,4 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppPropsWith
   );
 }
 
-export default trpc.withTRPC(MyApp);
+export default api.withTRPC(MyApp);
