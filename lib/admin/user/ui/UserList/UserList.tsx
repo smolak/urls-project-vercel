@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { UserListItem } from "./UserListItem";
-import { UserEntry } from "../../routers/user";
+import { UserEntry } from "../../models/UserEntry";
 
 interface UserListProps {
   users: ReadonlyArray<UserEntry>;

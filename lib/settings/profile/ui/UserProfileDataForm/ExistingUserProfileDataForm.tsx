@@ -5,7 +5,7 @@ import copyToClipboard from "copy-to-clipboard";
 
 import { BsKey } from "react-icons/bs";
 import { MdContentCopy } from "react-icons/md";
-import { updateUserProfileDataInputSchema } from "../../../../user-profile-data/routers/user-profile-data";
+import { updateUserProfileDataSchema } from "../../../../user-profile-data/router/procedures/update-user-profile-data.schema";
 import { generateApiKey } from "../../../../user/utils/generateApiKey";
 import { api } from "../../../../../utils/api";
 import { LoadingIndicator } from "../../../../core/ui/LoadingIndicator";
@@ -56,7 +56,7 @@ const Form: FC<FormValues> = ({ username, apiKey }) => {
       apiKey,
     },
     criteriaMode: "all",
-    resolver: zodResolver(updateUserProfileDataInputSchema),
+    resolver: zodResolver(updateUserProfileDataSchema),
   });
   const [generatedApiKey, setGeneratedApiKey] = useState(apiKey);
 

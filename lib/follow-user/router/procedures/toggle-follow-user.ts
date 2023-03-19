@@ -1,57 +1,15 @@
-import z from "zod";
-import { createTRPCRouter, protectedProcedure } from "../../../server/api/trpc";
-import { userIdSchema } from "../../user/schemas/userId.schema";
+import { protectedProcedure } from "../../../../server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { toggleFollowUserSchema } from "./toggle-follow-user.schema";
 import { User } from "@prisma/client";
-
-const isFollowingUserInputSchema = z.object({
-  userId: userIdSchema,
-});
-
-const isFollowingUser = protectedProcedure
-  .input(isFollowingUserInputSchema)
-  .query(async ({ input: { userId: followingId }, ctx: { logger, requestId, session, prisma } }) => {
-    const path = "followUser.isFollowingUser";
-    const followerId = session.user.id;
-
-    logger.info({ requestId, path, followerId, followingId }, "Check if is following a user.");
-
-    try {
-      const maybeFollowing = await prisma.follows.findUnique({
-        where: {
-          followerId_followingId: {
-            followingId,
-            followerId,
-          },
-        },
-      });
-      const isFollowing = maybeFollowing !== null;
-
-      logger.info({ requestId, path, followerId, followingId }, "Following a user checked.");
-
-      return isFollowing;
-    } catch (error) {
-      logger.error({ requestId, path, followerId, followingId, error }, "Failed to check follow status.");
-
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to check follow status. Try again.",
-        cause: error,
-      });
-    }
-  });
-
-const toggleFollowUserInputSchema = z.object({
-  userId: userIdSchema,
-});
 
 type ToggleFollowUserResult = {
   status: "following" | "unfollowed";
   userId: User["id"];
 };
 
-const toggleFollowUser = protectedProcedure
-  .input(toggleFollowUserInputSchema)
+export const toggleFollowUser = protectedProcedure
+  .input(toggleFollowUserSchema)
   .mutation<ToggleFollowUserResult>(
     async ({ input: { userId: followingId }, ctx: { logger, requestId, session, prisma } }) => {
       const path = "followUser.toggleFollowUser";
@@ -154,10 +112,3 @@ const toggleFollowUser = protectedProcedure
       }
     }
   );
-
-export const followUserRouter = createTRPCRouter({
-  isFollowingUser,
-  toggleFollowUser,
-});
-
-export type FollowUserRouter = typeof followUserRouter;

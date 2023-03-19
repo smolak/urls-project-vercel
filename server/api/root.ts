@@ -1,15 +1,10 @@
 import { createTRPCRouter } from "./trpc";
-import { feedRouter } from "../../lib/feed/routers/feed";
-import { followUserRouter } from "../../lib/follow-user/routers/follow-user";
-import { urlRouter } from "../../lib/url/routers/url";
-import { userProfileDataRouter } from "../../lib/user-profile-data/routers/user-profile-data";
-import { userRouter } from "../../lib/admin/user/routers/user";
+import { feedRouter } from "../../lib/feed/router/feed";
+import { followUserRouter } from "../../lib/follow-user/router/follow-user";
+import { urlRouter } from "../../lib/url/router/url";
+import { userProfileDataRouter } from "../../lib/user-profile-data/router/user-profile-data";
+import { userRouter } from "../../lib/admin/user/router/user";
 
-/**
- * This is the primary router for your server.
- *
- * All routers added in /api/routers should be manually added here.
- */
 export const appRouter = createTRPCRouter({
   feed: feedRouter,
   followUser: followUserRouter,

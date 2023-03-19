@@ -1,9 +1,7 @@
-import { adminProtectedProcedure, createTRPCRouter } from "../../../../server/api/trpc";
-import { User } from "@prisma/client";
+import { adminProtectedProcedure } from "../../../../../server/api/trpc";
+import { UserEntry } from "../../models/UserEntry";
 
-export type UserEntry = Pick<User, "id" | "createdAt" | "updatedAt" | "name" | "email" | "role" | "image">;
-
-const getUsers = adminProtectedProcedure.query<ReadonlyArray<UserEntry>>(
+export const getUsers = adminProtectedProcedure.query<ReadonlyArray<UserEntry>>(
   async ({ ctx: { logger, requestId, prisma } }) => {
     const path = "user.getUsers";
 
@@ -29,9 +27,3 @@ const getUsers = adminProtectedProcedure.query<ReadonlyArray<UserEntry>>(
     return users;
   }
 );
-
-export const userRouter = createTRPCRouter({
-  getUsers,
-});
-
-export type UserRouter = typeof userRouter;
