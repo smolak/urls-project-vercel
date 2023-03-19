@@ -2,7 +2,7 @@ import { FC } from "react";
 import { format } from "date-fns";
 import { UserListOptions } from "./UserListOptions";
 import { UserImage } from "../UserImage";
-import { UserEntry } from "../../routers/user";
+import { UserEntry } from "../../models/UserEntry";
 
 export const UserListItem: FC<UserEntry> = ({ id, email, role, name, image, createdAt }) => {
   return (

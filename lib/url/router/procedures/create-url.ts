@@ -1,27 +1,10 @@
-import { createTRPCRouter, protectedProcedure } from "../../../server/api/trpc";
-import z from "zod";
-import { Url, UrlQueue } from "@prisma/client";
-import { sha1 } from "../../crypto/sha1";
-import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../prisma/middlewares/generateModelId";
-import { EventType, triggerEvent } from "../../events-aggregator/triggerEvent";
+import { protectedProcedure } from "../../../../server/api/trpc";
+import { sha1 } from "../../../crypto/sha1";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
+import { EventType, triggerEvent } from "../../../events-aggregator/triggerEvent";
 import { TRPCError } from "@trpc/server";
-import { AdminUrlListVM } from "../../admin/urls/models/AdminUrlList.vm";
-import { CompressedMetadata, decompressMetadata } from "../../metadata/compression";
-
-const createUrlInputSchema = z.object({
-  url: z
-    .string()
-    .trim()
-    .url()
-    .refine(
-      (val) => val.startsWith("https://"),
-      (val) => ({ message: `Only https:// URLs allowed at the moment. Passed URL: ${val}` })
-    )
-    .refine(
-      (val) => val.length <= 500,
-      (val) => ({ message: `Oh NOES! That URL is too long. Detected ${val.length} characters and max 500 is allowed.` })
-    ),
-});
+import { createUrlSchema } from "./create-url.schema";
+import { Url, UrlQueue } from "@prisma/client";
 
 type ExistingUrlResult = {
   url: Url["url"];
@@ -32,8 +15,8 @@ type CreatedUrlQueueItemResult = {
 
 type CreateUrlResult = ExistingUrlResult | CreatedUrlQueueItemResult;
 
-const createUrl = protectedProcedure
-  .input(createUrlInputSchema)
+export const createUrl = protectedProcedure
+  .input(createUrlSchema)
   .mutation<CreateUrlResult>(async ({ input: { url }, ctx: { logger, requestId, session, prisma } }) => {
     const path = "url.createUrl";
     const userId = session.user.id;
@@ -108,47 +91,3 @@ const createUrl = protectedProcedure
       });
     }
   });
-
-type GetUrlsResult = ReadonlyArray<AdminUrlListVM>;
-
-const getUrls = protectedProcedure.query(async ({ ctx: { session, prisma } }) => {
-  if (session.user.role !== "ADMIN") {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-    });
-  }
-
-  const userUrls = await prisma.userUrl.findMany({
-    include: {
-      url: true,
-      user: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-          createdAt: true,
-        },
-      },
-    },
-  });
-
-  const urlList = userUrls.map(({ url, user, ...userUrl }) => {
-    return {
-      user,
-      userUrl,
-      url: {
-        ...url,
-        metadata: decompressMetadata(url.metadata as CompressedMetadata),
-      },
-    };
-  });
-
-  return urlList;
-});
-
-export const urlRouter = createTRPCRouter({
-  createUrl,
-  getUrls,
-});
-
-export type UrlRouter = typeof urlRouter;

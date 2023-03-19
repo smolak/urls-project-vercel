@@ -13,10 +13,8 @@ import { LoadingIndicator } from "../../../../core/ui/LoadingIndicator";
 import { useCheckIfUserProfileDataExists } from "../../../../user-profile-data/hooks/useCheckIfUserProfileDataExists";
 import { useRouter } from "next/router";
 import { Link } from "../../../../shared/ui/Link";
-import {
-  createUserProfileDataInputSchema,
-  usernameCheckInputSchema,
-} from "../../../../user-profile-data/routers/user-profile-data";
+import { createUserProfileDataSchema } from "../../../../user-profile-data/router/procedures/create-user-profile-data.schema";
+import { usernameCheckSchema } from "../../../../user-profile-data/router/procedures/username-check.schema";
 
 interface FormValues {
   username: string;
@@ -99,7 +97,7 @@ const Form = () => {
       apiKey,
     },
     criteriaMode: "all",
-    resolver: zodResolver(createUserProfileDataInputSchema),
+    resolver: zodResolver(createUserProfileDataSchema),
   });
 
   const [usernameIsValid, setUsernameIsValid] = useState<null | boolean>(null);
@@ -122,7 +120,7 @@ const Form = () => {
   };
 
   const checkUsernameAvailability = async (username: string) => {
-    const validationResult = usernameCheckInputSchema.safeParse({ username });
+    const validationResult = usernameCheckSchema.safeParse({ username });
 
     if (validationResult.success) {
       clearErrors("username");
