@@ -18,3 +18,4 @@
     - [] store routes somewhere? The `/` is a magic string
 12. [] Use one icon module (right now I am using more)
 13. Each forbidden status must return JSON, otherwise it will not resolve
+14. Log messages should be unified.
