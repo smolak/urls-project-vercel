@@ -4,17 +4,16 @@ import { LoggedInUserLayout } from "../../lib/core/ui/LoggedInUserLayout";
 import { NextPageWithLayout } from "../_app";
 import { SessionProvider } from "next-auth/react";
 import { useForm, FieldValues } from "react-hook-form";
-import axios from "axios";
+import { api } from "../../utils/api";
 
 const UrlAdd: NextPageWithLayout = () => {
-  const { register, handleSubmit, setFocus } = useForm();
-  const onSubmit = ({ url }: FieldValues) => {
-    axios.post("/api/url", { url }).then(console.log);
-  };
+  const { register, handleSubmit } = useForm();
+  const { mutate: addUrl } = api.url.createUrl.useMutation();
+  const onSubmit = (values: FieldValues) => {
+    const url = values.url as string;
 
-  useEffect(() => {
-    setFocus("url");
-  }, [setFocus]);
+    addUrl({ url });
+  };
 
   return (
     <div>
@@ -26,7 +25,7 @@ const UrlAdd: NextPageWithLayout = () => {
 
       <h1>Add new URL</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("url")} type="url" />
+        <input {...register("url")} type="url" autoFocus={true} />
         <input type="submit" value="Add" />
       </form>
     </div>

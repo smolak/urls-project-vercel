@@ -5,17 +5,18 @@ import { ChangeEvent, useEffect, useState } from "react";
 import clsx from "clsx";
 import copyToClipboard from "copy-to-clipboard";
 import { generateApiKey } from "../../../../user/utils/generateApiKey";
-import { createUserProfileDataPayloadSchema } from "../../../../user-profile-data/handlers/userProfileDataUpsertHandler/payload.schema";
-import { useSaveUserProfileData } from "../../../../user-profile-data/hooks/useSaveUserProfileData";
-import { usernameCheckHandlerPayloadSchema } from "../../../../user-profile-data/handlers/usernameCheckHandler/payload.schema";
+import { api } from "../../../../../utils/api";
 import { CgCheckO, CgUnavailable } from "react-icons/cg";
 import { BsKey } from "react-icons/bs";
 import { MdContentCopy } from "react-icons/md";
 import { LoadingIndicator } from "../../../../core/ui/LoadingIndicator";
 import { useCheckIfUserProfileDataExists } from "../../../../user-profile-data/hooks/useCheckIfUserProfileDataExists";
-import { usernameCheck } from "../../../../user-profile-data/services/usernameCheck";
 import { useRouter } from "next/router";
 import { Link } from "../../../../shared/ui/Link";
+import {
+  createUserProfileDataInputSchema,
+  usernameCheckInputSchema,
+} from "../../../../user-profile-data/routers/user-profile-data";
 
 interface FormValues {
   username: string;
@@ -78,7 +79,12 @@ export const NewUserProfileDataForm = () => {
 
 const Form = () => {
   const { push } = useRouter();
-  const { mutate: saveUserProfileData, isLoading, isSuccess, error } = useSaveUserProfileData();
+  const {
+    mutate: saveUserProfileData,
+    isLoading,
+    isSuccess,
+    error,
+  } = api.userProfileData.saveUserProfileData.useMutation();
 
   // If the data is saved successfully, proceed to homepage
   if (isSuccess) {
@@ -93,13 +99,19 @@ const Form = () => {
       apiKey,
     },
     criteriaMode: "all",
-    resolver: zodResolver(createUserProfileDataPayloadSchema),
+    resolver: zodResolver(createUserProfileDataInputSchema),
   });
 
-  const [isUsernameAvailable, setIsUsernameAvailable] = useState<null | boolean>(null);
   const [usernameIsValid, setUsernameIsValid] = useState<null | boolean>(null);
   const [usernamePlaceholder, setUsernamePlaceholder] = useState("");
   const [generatedApiKey, setGeneratedApiKey] = useState(apiKey);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState<null | boolean>(null);
+
+  const { mutate: usernameCheck } = api.userProfileData.usernameCheck.useMutation({
+    onSuccess: (data) => {
+      setIsUsernameAvailable(data.usernameAvailable);
+    },
+  });
 
   useEffect(() => {
     setUsernamePlaceholder(usernameExamples.sort(() => Math.random() - 0.5)[0]);
@@ -110,15 +122,13 @@ const Form = () => {
   };
 
   const checkUsernameAvailability = async (username: string) => {
-    const validationResult = usernameCheckHandlerPayloadSchema.safeParse({ username });
+    const validationResult = usernameCheckInputSchema.safeParse({ username });
 
     if (validationResult.success) {
       clearErrors("username");
-
-      const { usernameAvailable } = await usernameCheck(username);
-
       setUsernameIsValid(true);
-      setIsUsernameAvailable(usernameAvailable);
+
+      usernameCheck({ username });
     } else {
       setUsernameIsValid(false);
 
@@ -207,9 +217,7 @@ const Form = () => {
         </div>
         <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
           {isLoading && <span className="mr-5 text-sm text-gray-500 font-light">Saving...</span>}
-          {error?.response?.data && (
-            <span className="mr-5 text-sm text-red-600 font-light">{error.response.data.reason}</span>
-          )}
+          {error?.message && <span className="mr-5 text-sm text-red-600 font-light">{error.message}</span>}
           <button
             disabled={isUsernameAvailable === false || isSuccess}
             type="submit"

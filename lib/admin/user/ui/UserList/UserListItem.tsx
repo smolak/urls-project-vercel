@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { format } from "date-fns";
 import { UserListOptions } from "./UserListOptions";
-import { User } from "@prisma/client";
 import { UserImage } from "../UserImage";
+import { UserEntry } from "../../routers/user";
 
-export const UserListItem: FC<User> = ({ id, email, role, name, image, createdAt }) => {
+export const UserListItem: FC<UserEntry> = ({ id, email, role, name, image, createdAt }) => {
   return (
     <div className="border-t border-gray-200 px-3 py-3 sm:grid sm:grid-cols-10 sm:gap-3 sm:px-6 text-sm">
       <div className="flex items-center col-span-3">

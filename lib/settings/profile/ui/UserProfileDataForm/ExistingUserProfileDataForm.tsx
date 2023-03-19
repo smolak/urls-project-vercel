@@ -5,16 +5,15 @@ import copyToClipboard from "copy-to-clipboard";
 
 import { BsKey } from "react-icons/bs";
 import { MdContentCopy } from "react-icons/md";
-import { useSaveUserProfileData } from "../../../../user-profile-data/hooks/useSaveUserProfileData";
-import { updateUserProfileDataPayloadSchema } from "../../../../user-profile-data/handlers/userProfileDataUpsertHandler/payload.schema";
+import { updateUserProfileDataInputSchema } from "../../../../user-profile-data/routers/user-profile-data";
 import { generateApiKey } from "../../../../user/utils/generateApiKey";
-import { useGetPrivateUserProfileData } from "../../../../user-profile-data/hooks/useGetPrivateUserProfileData";
+import { api } from "../../../../../utils/api";
 import { LoadingIndicator } from "../../../../core/ui/LoadingIndicator";
 import { useRouter } from "next/router";
 import { Link } from "../../../../shared/ui/Link";
 
 export const ExistingUserProfileDataForm = () => {
-  const { data, isSuccess, isError, isLoading } = useGetPrivateUserProfileData();
+  const { data, isSuccess, isError, isLoading } = api.userProfileData.getPrivateUserProfileData.useQuery();
   const { route } = useRouter();
 
   return (
@@ -44,7 +43,12 @@ interface FormValues {
 }
 
 const Form: FC<FormValues> = ({ username, apiKey }) => {
-  const { mutate: saveUserProfileData, isLoading, isSuccess, error } = useSaveUserProfileData();
+  const {
+    mutate: saveUserProfileData,
+    isLoading,
+    isSuccess,
+    error,
+  } = api.userProfileData.saveUserProfileData.useMutation();
 
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: {
@@ -52,7 +56,7 @@ const Form: FC<FormValues> = ({ username, apiKey }) => {
       apiKey,
     },
     criteriaMode: "all",
-    resolver: zodResolver(updateUserProfileDataPayloadSchema),
+    resolver: zodResolver(updateUserProfileDataInputSchema),
   });
   const [generatedApiKey, setGeneratedApiKey] = useState(apiKey);
 
@@ -127,9 +131,7 @@ const Form: FC<FormValues> = ({ username, apiKey }) => {
         <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
           {isLoading && <span className="mr-5 text-sm text-gray-500 font-light">Saving...</span>}
           {isSuccess && <span className="mr-5 text-sm text-green-700 font-light">Profile data saved</span>}
-          {error?.response?.data && (
-            <span className="mr-5 text-sm text-red-600 font-light">{error.response.data.reason}</span>
-          )}
+          {error?.message && <span className="mr-5 text-sm text-red-600 font-light">{error.message}</span>}
           <button
             type="submit"
             className="w-[100px] inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

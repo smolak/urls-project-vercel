@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { User } from "@prisma/client";
 import { UserListItem } from "./UserListItem";
+import { UserEntry } from "../../routers/user";
 
 interface UserListProps {
-  users: ReadonlyArray<User>;
+  users: ReadonlyArray<UserEntry>;
 }
 
 export const UserList: FC<UserListProps> = ({ users }) => {

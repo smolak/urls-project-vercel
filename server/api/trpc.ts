@@ -54,6 +54,21 @@ const isAuthenticated = t.middleware(({ next, ctx, path }) => {
   });
 });
 
+const isAdmin = t.middleware(({ next, ctx, path }) => {
+  if (!ctx.session || !ctx.session.user || ctx.session.user.role !== "ADMIN") {
+    ctx.logger.warn({ requestId: ctx.requestId, path }, "Not an admin.");
+
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  });
+});
+
 export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(isAuthenticated);
+export const adminProtectedProcedure = t.procedure.use(isAdmin);
