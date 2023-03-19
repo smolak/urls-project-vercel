@@ -1,9 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  getPrivateUserProfileData,
-  GetPrivateUserProfileDataError,
-  GetPrivateUserProfileDataSuccess,
-} from "../services/getPrivateUserProfileData";
+import { api } from "../../../utils/api";
 
 type ExistsValue = "unknown" | boolean;
 type ExistenceCheck =
@@ -20,14 +15,12 @@ export const useCheckIfUserProfileDataExists = (): ExistenceCheck => {
   // It doesn't matter if it's the private profile data or public private data is fetched.
   // It's about checking if it exists only, as both are coming from the same source
 
-  const { error, isFetched, data } = useQuery<GetPrivateUserProfileDataSuccess, GetPrivateUserProfileDataError>(
-    ["privateUserProfile"],
-    () => getPrivateUserProfileData(),
+  const { error, isFetched, data } = api.userProfileData.getPrivateUserProfileData.useQuery(undefined, {
     // This check is meant to be short, so no retries.
-    { retry: false }
-  );
+    retry: false,
+  });
 
-  const existenceUnknown = error !== null && error?.response?.status !== 404;
+  const existenceUnknown = error !== null && error?.data?.httpStatus !== 404;
 
   if (isFetched === false) {
     return {
