@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import { LoggedInUserLayout } from "../../lib/core/ui/LoggedInUserLayout";
 import { NextPageWithLayout } from "../_app";
 import { SessionProvider } from "next-auth/react";
