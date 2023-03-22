@@ -5,6 +5,6 @@ interface LoadingIndicatorProps {
   size?: number;
 }
 
-export const LoadingIndicator: FC<LoadingIndicatorProps> = ({ title, size = 40 }) => {
-  return <img src="/loader.svg" alt={title} width={size} height={size} />;
+export const LoadingIndicator: FC<LoadingIndicatorProps> = ({ title }) => {
+  return <div className="btn btn-lg btn-ghost loading" title={title} />;
 };
