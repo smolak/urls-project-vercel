@@ -7,11 +7,13 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
   return (
     <div className="card card-compact bg-base-200 shadow-xl">
       <figure>
-        <img src={url.metadata.image} alt={url.metadata.title} />
+        <a href={url.url} title={url.metadata.title} target="_blank">
+          <img src={url.metadata.image} alt={url.metadata.title} />
+        </a>
       </figure>
       <div className="card-body">
         <h2 className="card-title">
-          <a href={url.url} title={url.metadata.title} className="font-bold block">
+          <a href={url.url} title={url.metadata.title} target="_blank" className="font-bold block">
             {url.metadata.title || url.url}
           </a>
         </h2>
