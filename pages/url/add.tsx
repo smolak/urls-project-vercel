@@ -3,18 +3,9 @@ import { ReactElement } from "react";
 import { LoggedInUserLayout } from "../../lib/core/ui/LoggedInUserLayout";
 import { NextPageWithLayout } from "../_app";
 import { SessionProvider } from "next-auth/react";
-import { useForm, FieldValues } from "react-hook-form";
-import { api } from "../../utils/api";
+import { AddUrl } from "../../lib/url/ui/AddUrl";
 
 const UrlAdd: NextPageWithLayout = () => {
-  const { register, handleSubmit } = useForm();
-  const { mutate: addUrl } = api.url.createUrl.useMutation();
-  const onSubmit = (values: FieldValues) => {
-    const url = values.url as string;
-
-    addUrl({ url });
-  };
-
   return (
     <div>
       <Head>
@@ -24,10 +15,7 @@ const UrlAdd: NextPageWithLayout = () => {
       </Head>
 
       <h1>Add new URL</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("url")} type="url" autoFocus={true} />
-        <input type="submit" value="Add" />
-      </form>
+      <AddUrl />
     </div>
   );
 };

@@ -10,6 +10,7 @@ type ExistingUrlResult = {
   url: Url["url"];
 };
 type CreatedUrlQueueItemResult = {
+  url: Url["url"];
   urlQueueId: UrlQueue["id"];
 };
 
@@ -80,7 +81,7 @@ export const createUrl = protectedProcedure
 
       logger.info({ requestId, path, url }, "Success.");
 
-      return { urlQueueId: urlInQueue.id };
+      return { urlQueueId: urlInQueue.id, url };
     } catch (error) {
       logger.error({ requestId, path, error }, "Failed to store the URL.");
 
