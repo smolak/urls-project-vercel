@@ -8,7 +8,7 @@ export interface UserFeedListProps {
 
 export const UserFeedList: FC<UserFeedListProps> = ({ feeds }) => {
   return (
-    <section className="mx-auto max-w-[600px]">
+    <section className="mx-auto max-w-[700px]">
       <ol className="space-y-6">
         {feeds.map((feed) => (
           <li key={feed.id}>
