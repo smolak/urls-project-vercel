@@ -18,11 +18,9 @@ const Login = () => {
 
   useEffect(() => {
     if (session) {
-      if (session.user.role === "NEW_USER") {
-        push("/settings/profile");
-      } else {
-        push("/");
-      }
+      const path = session.user.role === "NEW_USER" ? "/settings/profile" : "/";
+
+      window.location.replace(path);
     }
   }, [session, push]);
 
