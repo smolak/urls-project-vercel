@@ -23,7 +23,11 @@ const Home: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {status === "loading" && <LoadingIndicator title="Checking auth status..." />}
+      {status === "loading" && (
+        <div className="flex flex-col space-y-6 items-center">
+          <LoadingIndicator title="Checking auth status..." />
+        </div>
+      )}
       {status === "unauthenticated" && (
         <div className="hero">
           <div className="hero-content text-center">
