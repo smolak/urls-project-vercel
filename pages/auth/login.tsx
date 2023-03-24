@@ -1,8 +1,9 @@
 import { useSession, signIn } from "next-auth/react";
-import { RiLink, RiGithubFill } from "react-icons/ri";
+import { RiGithubFill } from "react-icons/ri";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect } from "react";
+import { Logo } from "../../lib/shared/ui/Logo";
 
 const providers = [
   {
@@ -36,7 +37,7 @@ const Login = () => {
           <div className="min-h-full max-w-md flex flex-col py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md space-y-8 text-center">
               <div>
-                <RiLink size={64} className="inline" />
+                <Logo iconSize={64} />
                 <h2 className="mt-6 text-3xl font-bold">Login to your account</h2>
               </div>
             </div>
