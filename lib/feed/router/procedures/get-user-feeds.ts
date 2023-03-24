@@ -40,8 +40,8 @@ export const getUserFeeds = protectedProcedure.query<ReadonlyArray<FeedVM>>(
           LEFT JOIN User ON UserUrl.userId = User.id
           LEFT JOIN UserProfileData ON User.id = UserProfileData.userId
           WHERE Feed.userId = ${userId}
-          ORDER BY Feed.createdAt
-          DESC LIMIT 0, ${itemsPerFetch}
+          ORDER BY Feed.createdAt DESC
+          LIMIT 0, ${itemsPerFetch}
       `;
 
       const feeds = feedRawEntries.map((entry) => {
