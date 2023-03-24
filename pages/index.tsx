@@ -15,8 +15,6 @@ const queryClient = new QueryClient();
 const Home: NextPageWithLayout = () => {
   const { status } = useSession();
 
-  console.log({ status });
-
   return (
     <div>
       <Head>
