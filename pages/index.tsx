@@ -41,7 +41,7 @@ const Home: NextPageWithLayout = () => {
         </div>
       )}
       {status === "authenticated" && (
-        <div className="flex flex-col space-y-6 items-center">
+        <div className="flex flex-col space-y-10 items-center py-10">
           <AddUrl />
           <UserFeedList />
         </div>

@@ -10,7 +10,7 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       <div className="min-h-full p-2">
-        <div className="navbar bg-base-200 rounded-box mb-5">
+        <div className="navbar bg-base-200 rounded-box">
           <div className="flex-none w-52">
             <Logo withName />
           </div>
