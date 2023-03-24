@@ -8,6 +8,7 @@ import { UserFeedList } from "../lib/feed/ui/UserFeedList";
 import { AddUrl } from "../lib/url/ui/AddUrl";
 import Link from "next/link";
 import { RiGithubFill } from "react-icons/ri";
+import { LoadingIndicator } from "../lib/core/ui/LoadingIndicator";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const Home: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      {status === "loading" && <LoadingIndicator title="Checking auth status..." />}
       {status === "unauthenticated" && (
         <div className="hero">
           <div className="hero-content text-center">
