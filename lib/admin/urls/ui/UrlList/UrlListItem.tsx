@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { format } from "date-fns";
 import { UrlListItemOptions } from "./UrlListItemOptions";
 import { UserImage } from "../../../user/ui/UserImage";
 import { AdminUrlListItemVM } from "../../models/AdminUrlListItem.vm";
+import { formatDate } from "../../../../shared/utils/formatDate";
 
 export const UrlListItem: FC<AdminUrlListItemVM> = ({ url, user, userUrl }) => {
   return (
@@ -17,9 +17,7 @@ export const UrlListItem: FC<AdminUrlListItemVM> = ({ url, user, userUrl }) => {
         </span>
       </div>
 
-      <span className="flex items-center col-span-2">
-        {format(new Date(userUrl.createdAt), "yyyy-MM-dd'T'HH:mm:ss")}
-      </span>
+      <span className="flex items-center col-span-2">{formatDate(userUrl.createdAt)}</span>
       <span className="flex items-center">
         <div className="w-56 text-right">
           <UrlListItemOptions />
