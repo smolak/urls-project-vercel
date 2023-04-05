@@ -3,16 +3,16 @@ import { FeedVM } from "../../models/Feed.vm";
 import { UserFeedListItem } from "./UserFeedListItem";
 
 export interface UserFeedListProps {
-  feeds: ReadonlyArray<FeedVM>;
+  feed: ReadonlyArray<FeedVM>;
 }
 
-export const UserFeedList: FC<UserFeedListProps> = ({ feeds }) => {
+export const UserFeedList: FC<UserFeedListProps> = ({ feed }) => {
   return (
     <section className="mx-auto max-w-[700px]">
       <ol className="space-y-6">
-        {feeds.map((feed) => (
-          <li key={feed.id}>
-            <UserFeedListItem {...feed} />
+        {feed.map((entry) => (
+          <li key={entry.id}>
+            <UserFeedListItem {...entry} />
           </li>
         ))}
       </ol>

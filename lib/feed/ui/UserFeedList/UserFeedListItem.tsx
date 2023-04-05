@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { FeedVM } from "../../models/Feed.vm";
 import { UserImage } from "../../../user/ui/UserImage";
-import { getUsersLocale } from "../../../shared/utils/getUsersLocale";
 import Link from "next/link";
+import { formatDate } from "../../../shared/utils/formatDate";
 
 export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
   return (
@@ -22,7 +22,7 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
         </h2>
         <p className="text-sm">{url.metadata.description}</p>
         <div className="card-actions justify-end items-center">
-          {Intl.DateTimeFormat(getUsersLocale()).format(createdAt)}
+          {formatDate(createdAt)}
           <Link href={`/${user.username}`}>
             <UserImage {...user} />
           </Link>

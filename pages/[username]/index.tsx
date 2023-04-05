@@ -5,11 +5,24 @@ import { StatusCodes } from "http-status-codes";
 import { PUBLIC_USER_DATA_SELECT_FRAGMENT } from "../../lib/user/models/fragments";
 import { PUBLIC_USER_PROFILE_DATA_SELECT_FRAGMENT } from "../../lib/user-profile-data/models/fragments";
 import { CompressedMetadata, decompressMetadata } from "../../lib/metadata/compression";
-import { Url } from "@prisma/client";
-import { Metadata } from "../../lib/metadata/getMetadata";
+import { Feed, Url, User, UserProfileData, UserUrl } from "@prisma/client";
 import { UserImage } from "../../lib/user/ui/UserImage";
 import { ToggleFollowUser } from "../../lib/follow-user/ui/ToggleFollowUser";
 import { getToken } from "next-auth/jwt";
+import getConfig from "next/config";
+import { FeedVM } from "../../lib/feed/models/Feed.vm";
+import { UserFeedList } from "../../lib/feed/ui/UserFeedList/UserFeedList";
+
+type RawFeedEntry = {
+  feed_id: Feed["id"];
+  feed_createdAt: Feed["createdAt"];
+  user_name: User["name"];
+  user_username: UserProfileData["username"];
+  user_image: User["image"];
+  url_url: Url["url"];
+  url_metadata: CompressedMetadata;
+  userUrl_id: UserUrl["id"];
+};
 
 type Self = {
   id: string;
@@ -27,16 +40,11 @@ type UserProfilePageProps =
           createdAt: string;
         };
       };
-      urls: ReadonlyArray<{
-        id: Url["id"];
-        url: Url["url"];
-        metadata: Metadata;
-        createdAt: string;
-      }>;
+      feed: ReadonlyArray<FeedVM>;
     }
   | {
       userData: null;
-      urls: null;
+      feed: null;
       error: string;
       errorCode: number;
     };
@@ -46,8 +54,8 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
     const canToggleFollow = props.self?.id && props.self.id !== props.userData.user.id;
 
     return (
-      <section className="mx-auto my-3 max-w-[600px]">
-        <div className="flex items-center gap-2 aspect-square w-8 object-cover">
+      <section className="mx-auto my-3 max-w-[700px]">
+        <div className="flex items-center gap-2 mb-3">
           <UserImage {...props.userData.user} />
           <p>@{props.userData.username}</p>
           {canToggleFollow && (
@@ -57,24 +65,7 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
           )}
         </div>
 
-        <ul className="space-y-2">
-          {props.urls.map((url) => (
-            <li key={url.id}>
-              <div className="flex space-between space-x-4 rounded-md bg-white p-4 shadow-sm cursor-pointer hover:bg-slate-50">
-                <div className="w-[510px]">
-                  <h3 className="text-xl">
-                    <a href={url.url} title={url.metadata.title} className="font-bold block">
-                      {url.metadata.title || url.url}
-                    </a>
-                  </h3>
-                  <p className="text-xs mb-2">({url.url})</p>
-                  <img src={url.metadata.image} className="mb-2" />
-                  <p className="text-sm">{url.metadata.description}</p>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <UserFeedList feed={props.feed} />
       </section>
     );
   } else {
@@ -127,38 +118,40 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
         error: `User with username: '${parsingResult.data}' not found.`,
         errorCode: StatusCodes.NOT_FOUND,
         userData: null,
-        urls: null,
+        feed: null,
       },
     };
   }
 
-  const urlsData = await prisma.userUrl.findMany({
-    where: {
-      userId: maybePublicUserData.user.id,
-    },
-    include: {
-      url: {
-        select: {
-          id: true,
-          url: true,
-          metadata: true,
-          createdAt: true,
-        },
-      },
-    },
-    orderBy: {
-      url: {
-        createdAt: "desc",
-      },
-    },
-  });
+  const itemsPerFetch = getConfig().serverRuntimeConfig.userFeedList.itemsPerFetch;
+  const feedRawEntries = await prisma.$queryRaw<ReadonlyArray<RawFeedEntry>>`
+          SELECT User.name AS user_name, User.image AS user_image, UserProfileData.username AS user_username,
+                 Feed.id AS feed_id, Feed.createdAt AS feed_createdAt, Url.url AS url_url, Url.metadata AS url_metadata,
+                 UserUrl.id AS userUrl_id
+          FROM Feed
+          LEFT JOIN UserUrl ON Feed.userUrlId = UserUrl.id
+          LEFT JOIN Url ON UserUrl.urlId = Url.id
+          LEFT JOIN User ON UserUrl.userId = User.id
+          LEFT JOIN UserProfileData ON User.id = UserProfileData.userId
+          WHERE Feed.userId = ${maybePublicUserData.user.id}
+          ORDER BY Feed.createdAt DESC
+          LIMIT 0, ${itemsPerFetch}
+      `;
 
-  const urlsDataSerialized = urlsData.map(({ url }) => {
+  const feed = feedRawEntries.map((entry) => {
     return {
-      id: url.id,
-      url: url.url,
-      createdAt: url.createdAt.toString(),
-      metadata: decompressMetadata(url.metadata as CompressedMetadata),
+      id: entry.feed_id,
+      createdAt: entry.feed_createdAt.toISOString(),
+      user: {
+        name: entry.user_name,
+        image: entry.user_image,
+        username: entry.user_username,
+      },
+      url: {
+        url: entry.url_url,
+        metadata: decompressMetadata(entry.url_metadata),
+      },
+      userUrlId: entry.userUrl_id,
     };
   });
 
@@ -170,5 +163,5 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     },
   };
 
-  return { props: { userData: serializedUserData, urls: urlsDataSerialized, self } };
+  return { props: { userData: serializedUserData, feed, self } };
 };

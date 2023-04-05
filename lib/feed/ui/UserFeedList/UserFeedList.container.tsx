@@ -14,5 +14,5 @@ export const UserFeedListContainer = () => {
     return <ErrorLoadingUserFeeds error={error} />;
   }
 
-  return <UserFeedList feeds={data} />;
+  return <UserFeedList feed={data} />;
 };
