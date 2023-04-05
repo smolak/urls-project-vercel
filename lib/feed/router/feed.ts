@@ -1,8 +1,8 @@
 import { createTRPCRouter } from "../../../server/api/trpc";
-import { getUserFeeds } from "./procedures/get-user-feeds";
+import { getUserFeed } from "./procedures/get-user-feed";
 
 export const feedRouter = createTRPCRouter({
-  getUserFeeds,
+  getUserFeed,
 });
 
 export type FeedRouter = typeof feedRouter;

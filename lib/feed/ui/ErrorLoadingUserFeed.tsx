@@ -8,7 +8,7 @@ interface ErrorLoadingUserFeedsProps {
   error: TRPCClientErrorLike<any>;
 }
 
-export const ErrorLoadingUserFeeds: FC<ErrorLoadingUserFeedsProps> = ({ error }) => {
+export const ErrorLoadingUserFeed: FC<ErrorLoadingUserFeedsProps> = ({ error }) => {
   return (
     <div className="p-5 sm:py-20 sm:px-0">
       <h1 className="text-2xl mb-8 tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl">
