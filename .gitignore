@@ -39,3 +39,4 @@ yarn-error.log*
 
 # try outs folder
 tryouts
+local.d.ts

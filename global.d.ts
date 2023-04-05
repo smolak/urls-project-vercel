@@ -1,6 +1,5 @@
 import { DefaultUser, DefaultSession, JWT as NextAuthJWT } from "next-auth";
 import { User as PrismaUser } from "@prisma/client";
-import "@total-typescript/ts-reset";
 
 declare module "next-auth" {
   interface SessionUser extends DefaultUser {
