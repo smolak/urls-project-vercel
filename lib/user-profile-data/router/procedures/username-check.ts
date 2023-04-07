@@ -1,5 +1,5 @@
 import { protectedProcedure } from "../../../../server/api/trpc";
-import { normalizeUsername } from "../../utils/normalizeUsername";
+import { normalizeUsername } from "../../utils/normalize-username";
 import { usernameCheckSchema } from "./username-check.schema";
 
 export const usernameCheck = protectedProcedure

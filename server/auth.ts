@@ -16,7 +16,7 @@ export const nextAuthOptions: NextAuthOptions = {
     signIn: "/auth/login",
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token }) {
       const { role } = await prisma.user.findFirstOrThrow({
         where: {
           id: token.sub,
@@ -31,7 +31,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
       return token;
     },
-    session({ session, token, user }) {
+    session({ session, token }) {
       if (token) {
         session.user.role = token.role as User["role"];
         session.user.id = token.id as User["id"];

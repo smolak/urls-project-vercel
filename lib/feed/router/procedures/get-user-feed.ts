@@ -1,5 +1,5 @@
 import { protectedProcedure } from "../../../../server/api/trpc";
-import { FeedVM } from "../../models/Feed.vm";
+import { FeedVM } from "../../models/feed.vm";
 import { decompressMetadata } from "../../../metadata/compression";
 import { TRPCError } from "@trpc/server";
 import { getUserFeed as prismaGetUserFeed } from "../../prisma/get-user-feed";

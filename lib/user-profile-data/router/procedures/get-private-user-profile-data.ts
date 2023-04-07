@@ -1,5 +1,5 @@
 import { protectedProcedure } from "../../../../server/api/trpc";
-import { PrivateUserProfileDataVM, toPrivateUserProfileDataVM } from "../../models/PrivateUserProfileData.vm";
+import { PrivateUserProfileDataVM, toPrivateUserProfileDataVM } from "../../models/private-user-profile-data.vm";
 import { TRPCError } from "@trpc/server";
 
 export const getPrivateUserProfileData = protectedProcedure.query<PrivateUserProfileDataVM>(

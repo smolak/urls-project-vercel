@@ -1,5 +1,5 @@
 import { Follows } from "@prisma/client";
-import { generateUserId } from "../../lib/user/utils/generateUserId";
+import { generateUserId } from "../../lib/user/utils/generate-user-id";
 
 export const createFollows = (overwrites: Partial<Follows> = {}): Follows => {
   return {

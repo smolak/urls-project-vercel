@@ -1,5 +1,5 @@
 import { JWT } from "next-auth/jwt";
-import { generateUserId } from "../../lib/user/utils/generateUserId";
+import { generateUserId } from "../../lib/user/utils/generate-user-id";
 import { User } from "@prisma/client";
 
 interface Token extends JWT {

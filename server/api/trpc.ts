@@ -6,7 +6,7 @@ import superjson from "superjson";
 import { getServerAuthSession } from "../auth";
 import prisma from "../../prisma";
 import { logger } from "../../logger";
-import { generateRequestId } from "../../lib/request-id/utils/generateRequestId";
+import { generateRequestId } from "../../lib/request-id/utils/generate-request-id";
 
 type CreateContextOptions = {
   session: Session | null;

@@ -3,7 +3,7 @@ import { RiGithubFill } from "react-icons/ri";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect } from "react";
-import { Logo } from "../../lib/shared/ui/Logo";
+import { Logo } from "../../lib/shared/ui/logo";
 
 const providers = [
   {

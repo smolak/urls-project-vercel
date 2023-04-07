@@ -1,6 +1,6 @@
 import { hash } from "argon2";
 import prisma from "./index";
-import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "./middlewares/generateModelId";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "./middlewares/generate-model-id";
 
 async function main() {
   const encryptedPassword = await hash("password1234");

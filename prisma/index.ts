@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { generateModelId } from "./middlewares/generateModelId";
+import { generateModelId } from "./middlewares/generate-model-id";
 
 let prisma: PrismaClient;
 

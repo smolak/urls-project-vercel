@@ -1,13 +1,13 @@
 import Head from "next/head";
 import { ReactElement } from "react";
-import { LoggedInUserLayout } from "../lib/core/ui/LoggedInUserLayout";
+import { LoggedInUserLayout } from "../lib/core/ui/logged-in-user-layout";
 import { NextPageWithLayout } from "./_app";
 import { SessionProvider, useSession } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { UserFeedList } from "../lib/feed/ui/UserFeedList";
-import { AddUrl } from "../lib/url/ui/AddUrl";
+import { UserFeedList } from "../lib/feed/ui/user-feed-list";
+import { AddUrl } from "../lib/url/ui/add-url";
 import Link from "next/link";
-import { LoadingIndicator } from "../lib/core/ui/LoadingIndicator";
+import { LoadingIndicator } from "../lib/core/ui/loading-indicator";
 
 const queryClient = new QueryClient();
 
