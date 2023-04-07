@@ -1,4 +1,4 @@
-import { Metadata } from "./getMetadata";
+import { Metadata } from "./get-metadata";
 import { CompressedMetadata, compressMapper, compressMetadata, decompressMetadata } from "./compression";
 
 describe("compressMetadata", () => {

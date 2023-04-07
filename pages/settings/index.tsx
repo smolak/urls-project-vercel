@@ -1,4 +1,4 @@
-import { Page, SettingsLayout } from "../../lib/settings/ui/SettingsLayout";
+import { Page, SettingsLayout } from "../../lib/settings/ui/settings-layout";
 import { useSession } from "next-auth/react";
 
 const SettingsProfile = () => {

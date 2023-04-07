@@ -1,15 +1,15 @@
 import { GetServerSideProps, NextPage } from "next";
 import prisma from "../../prisma";
-import { usernameSchema } from "../../lib/user-profile-data/schemas/userProfileData.schema";
+import { usernameSchema } from "../../lib/user-profile-data/schemas/user-profile-data.schema";
 import { StatusCodes } from "http-status-codes";
 import { PUBLIC_USER_DATA_SELECT_FRAGMENT } from "../../lib/user/models/fragments";
 import { PUBLIC_USER_PROFILE_DATA_SELECT_FRAGMENT } from "../../lib/user-profile-data/models/fragments";
 import { decompressMetadata } from "../../lib/metadata/compression";
-import { UserImage } from "../../lib/user/ui/UserImage";
-import { ToggleFollowUser } from "../../lib/follow-user/ui/ToggleFollowUser";
+import { UserImage } from "../../lib/user/ui/user-image";
+import { ToggleFollowUser } from "../../lib/follow-user/ui/toggle-follow-user";
 import { getToken } from "next-auth/jwt";
-import { FeedVM } from "../../lib/feed/models/Feed.vm";
-import { UserFeedList } from "../../lib/feed/ui/UserFeedList/UserFeedList";
+import { FeedVM } from "../../lib/feed/models/feed.vm";
+import { UserFeedList } from "../../lib/feed/ui/user-feed-list/user-feed-list";
 import { getUserFeed } from "../../lib/feed/prisma/get-user-feed";
 
 type Self = {

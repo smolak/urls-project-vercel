@@ -1,5 +1,5 @@
 import { adminProtectedProcedure } from "../../../../../server/api/trpc";
-import { UserEntry } from "../../models/UserEntry";
+import { UserEntry } from "../../models/user-entry";
 
 export const getUsers = adminProtectedProcedure.query<ReadonlyArray<UserEntry>>(
   async ({ ctx: { logger, requestId, prisma } }) => {

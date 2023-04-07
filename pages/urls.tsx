@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import prisma from "../prisma";
 import { decompressMetadata } from "../lib/metadata/compression";
-import { FeedListItem } from "../lib/feed/ui/FeedListItem";
-import { FeedList } from "../lib/feed/ui/FeedList";
+import { FeedListItem } from "../lib/feed/ui/feed-list-item";
+import { FeedList } from "../lib/feed/ui/feed-list";
 
 const UrlsPage: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ userUrls }) => {
   return (

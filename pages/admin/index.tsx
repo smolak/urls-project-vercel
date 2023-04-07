@@ -1,7 +1,7 @@
 import { InferGetServerSidePropsType } from "next";
 import { NextPageWithLayout } from "../_app";
-import { AdminLayout, Page } from "../../lib/pages/admin/AdminLayout";
-import { getServerProps } from "../../lib/pages/admin/getServerProps";
+import { AdminLayout, Page } from "../../lib/pages/admin/admin-layout";
+import { getServerProps } from "../../lib/pages/admin/get-server-props";
 
 const AdminPage: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
   return (

@@ -1,7 +1,7 @@
 import { Feed } from "@prisma/client";
-import { generateFeedId } from "../../lib/feed/utils/generateFeedId";
-import { generateUserId } from "../../lib/user/utils/generateUserId";
-import { generateUserUrlId } from "../../lib/user-url/utils/generateUserUrlId";
+import { generateFeedId } from "../../lib/feed/utils/generate-feed-id";
+import { generateUserId } from "../../lib/user/utils/generate-user-id";
+import { generateUserUrlId } from "../../lib/user-url/utils/generate-user-url-id";
 
 export const createFeed = (overwrites: Partial<Feed> = {}): Feed => ({
   id: generateFeedId(),

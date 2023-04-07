@@ -1,7 +1,7 @@
 import { protectedProcedure } from "../../../../server/api/trpc";
 import { TRPCError } from "@trpc/server";
-import { normalizeUsername } from "../../utils/normalizeUsername";
-import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
+import { normalizeUsername } from "../../utils/normalize-username";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generate-model-id";
 import { createUserProfileDataSchema } from "./create-user-profile-data.schema";
 
 export const saveUserProfileData = protectedProcedure

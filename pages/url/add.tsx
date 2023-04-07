@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { ReactElement } from "react";
-import { LoggedInUserLayout } from "../../lib/core/ui/LoggedInUserLayout";
+import { LoggedInUserLayout } from "../../lib/core/ui/logged-in-user-layout";
 import { NextPageWithLayout } from "../_app";
 import { SessionProvider } from "next-auth/react";
-import { AddUrl } from "../../lib/url/ui/AddUrl";
+import { AddUrl } from "../../lib/url/ui/add-url";
 
 const UrlAdd: NextPageWithLayout = () => {
   return (

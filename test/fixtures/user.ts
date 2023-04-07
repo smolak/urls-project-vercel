@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
-import { generateUserId } from "../../lib/user/utils/generateUserId";
-import { generateId } from "../../lib/shared/utils/generateId";
+import { generateUserId } from "../../lib/user/utils/generate-user-id";
+import { generateId } from "../../lib/shared/utils/generate-id";
 
 export const createUser = (overwrites: Partial<User> = {}): User => ({
   id: generateUserId(),

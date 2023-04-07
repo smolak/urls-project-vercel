@@ -1,6 +1,6 @@
-import { Page, SettingsLayout } from "../../lib/settings/ui/SettingsLayout";
+import { Page, SettingsLayout } from "../../lib/settings/ui/settings-layout";
 import { useSession } from "next-auth/react";
-import { UserProfileDataForm } from "../../lib/settings/profile/ui/UserProfileDataForm";
+import { UserProfileDataForm } from "../../lib/settings/profile/ui/user-profile-data-form";
 
 const SettingsProfile = () => {
   const { data: session, status } = useSession();

@@ -1,7 +1,7 @@
 import { protectedProcedure } from "../../../../server/api/trpc";
 import { sha1 } from "../../../crypto/sha1";
-import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generateModelId";
-import { EventType, triggerEvent } from "../../../events-aggregator/triggerEvent";
+import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generate-model-id";
+import { EventType, triggerEvent } from "../../../events-aggregator/trigger-event";
 import { TRPCError } from "@trpc/server";
 import { createUrlSchema } from "./create-url.schema";
 import { Url, UrlQueue } from "@prisma/client";

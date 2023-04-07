@@ -1,4 +1,4 @@
-import { Metadata } from "./getMetadata";
+import { Metadata } from "./get-metadata";
 
 export interface CompressedMetadata {
   // audio?: string;
