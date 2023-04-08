@@ -55,13 +55,13 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
 
     logger.info({ requestId, actionType }, "Processing feed queue item.");
 
-    const result = processFeedQueueItemHandlerPayloadSchema.safeParse(req.body);
+    const result = processFeedQueueItemHandlerPayloadSchema.safeParse(req.query);
 
     if (!result.success) {
-      logger.error({ requestId, actionType }, "Body validation error.");
+      logger.error({ requestId, actionType }, "Params validation error.");
 
       res.status(StatusCodes.NOT_ACCEPTABLE);
-      res.json({ error: "Body validation error." });
+      res.json({ error: "Params validation error." });
       return;
     }
 
@@ -71,7 +71,7 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
       logger.error({ requestId, actionType }, "Invalid feed queue API key provided.");
 
       res.status(StatusCodes.FORBIDDEN);
-      res.json({ error: "Body validation error." });
+      res.json({ error: "Params validation error." });
       return;
     }
 
