@@ -15,7 +15,25 @@ const urlQueue: UrlQueue = {
   userId: generateUserId(),
 };
 
-export const createUrlQueueItem = (overwrites: Partial<UrlQueue> = {}): UrlQueue => ({
-  ...urlQueue,
-  ...overwrites,
-});
+export const createUrlQueueItem = ({
+  rawUrl,
+  ...remainingOverwrites
+}: Partial<Omit<UrlQueue, "rawUrlHash">> = {}): UrlQueue => {
+  let rawUrlValue;
+  let rawUrlHash;
+
+  if (rawUrl) {
+    rawUrlValue = rawUrl;
+    rawUrlHash = sha1(rawUrl);
+  } else {
+    rawUrlValue = urlQueue.rawUrl;
+    rawUrlHash = urlQueue.rawUrlHash;
+  }
+
+  return {
+    ...urlQueue,
+    ...remainingOverwrites,
+    rawUrl: rawUrlValue,
+    rawUrlHash,
+  };
+};
