@@ -75,6 +75,28 @@ describe("processQueueItemHandler", () => {
     expect(fetchMetadata).toHaveBeenCalledWith(urlQueueItem.rawUrl);
   });
 
+  describe("when metadata contains URL and it differs from the raw URL in url queue item", () => {
+    const url = "https://urlshare.me/about";
+    const metadata = createExampleWebsiteMetadata({ url });
+    const urlQueueEntry = createUrlQueueItem({ rawUrl: url + "#faq" });
+
+    beforeEach(() => {
+      fetchMetadata.mockResolvedValue(metadata);
+      prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueEntry);
+    });
+
+    it("should check if an entry for that URL exist", async () => {
+      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
+      await handler({ urlQueueId: urlQueueEntry.id, requestId });
+
+      expect(prismaMock.url.findUnique).toHaveBeenCalledWith({
+        where: {
+          urlHash: sha1(metadata.url as string), // I know `url` is there
+        },
+      });
+    });
+  });
+
   describe("further processing is wrapped in transaction, either all succeed or none", () => {
     const urlEntity = createUrlEntity();
     const urlQueueItem = createUrlQueueItem();
@@ -94,27 +116,89 @@ describe("processQueueItemHandler", () => {
       prismaMock.userUrl.create.mockResolvedValue(userUrlItem);
     });
 
-    it("Url entity is created", async () => {
-      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
-      await handler({ urlQueueId: urlQueueItem.id, requestId });
+    describe("when the url in metadata differs from the raw one, from queue (e.g. canonical URL is different)", () => {
+      const url = "https://urlshare.me/about";
+      const metadata = createExampleWebsiteMetadata({ url });
+      const urlQueueEntry = createUrlQueueItem({ rawUrl: url + "#faq" });
 
-      expect(prismaMock.$transaction).toHaveBeenCalled();
+      describe("when such url exists already in the DB", () => {
+        const existingUrlEntity = createUrlEntity({ url });
 
-      // Triggering $transaction call. Don't know if it can be done otherwise.
-      // TODO if it can
-      const transactionCallback = getTransactionCallback();
-      await transactionCallback(prismaMock);
+        beforeEach(() => {
+          fetchMetadata.mockResolvedValue(metadata);
+          prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueEntry);
+          prismaMock.url.findUnique.mockResolvedValue(existingUrlEntity);
+        });
 
-      const expectedPayload = {
-        data: {
-          id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-          url: exampleMetadata.url,
-          urlHash: sha1(exampleMetadata.url as string),
-          metadata: compressMetadata(exampleMetadata),
-        },
-      };
+        it("should not create a new URL entry (as it already exists)", async () => {
+          const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
+          await handler({ urlQueueId: urlQueueItem.id, requestId });
 
-      expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
+          expect(prismaMock.$transaction).toHaveBeenCalled();
+
+          // Triggering $transaction call. Don't know if it can be done otherwise.
+          // TODO if it can
+          const transactionCallback = getTransactionCallback();
+          await transactionCallback(prismaMock);
+
+          expect(prismaMock.url.create).not.toHaveBeenCalled();
+        });
+
+        it("should use existing url entry for adding relationship between that url and user that added it", async () => {
+          const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
+          await handler({ urlQueueId: urlQueueItem.id, requestId });
+
+          expect(prismaMock.$transaction).toHaveBeenCalled();
+
+          // Triggering $transaction call. Don't know if it can be done otherwise.
+          // TODO if it can
+          const transactionCallback = getTransactionCallback();
+          await transactionCallback(prismaMock);
+
+          expect(prismaMock.userUrl.create).toHaveBeenCalledWith({
+            data: {
+              id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+              userId: urlQueueItem.userId,
+              urlId: existingUrlEntity.id,
+            },
+          });
+        });
+      });
+    });
+
+    describe("when the url in metadata is the same as the raw one, from queue", () => {
+      const url = "https://urlshare.me/about";
+      const metadata = createExampleWebsiteMetadata({ url });
+      const urlQueueEntry = createUrlQueueItem({ rawUrl: url });
+
+      beforeEach(() => {
+        fetchMetadata.mockResolvedValue(metadata);
+
+        prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueEntry);
+      });
+
+      it("should create Url entity, as it doesn't exist yet", async () => {
+        const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
+        await handler({ urlQueueId: urlQueueItem.id, requestId });
+
+        expect(prismaMock.$transaction).toHaveBeenCalled();
+
+        // Triggering $transaction call. Don't know if it can be done otherwise.
+        // TODO if it can
+        const transactionCallback = getTransactionCallback();
+        await transactionCallback(prismaMock);
+
+        const expectedPayload = {
+          data: {
+            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
+            url: metadata.url,
+            urlHash: sha1(metadata.url as string),
+            metadata: compressMetadata(metadata),
+          },
+        };
+
+        expect(prismaMock.url.create).toHaveBeenCalledWith(expectedPayload);
+      });
     });
 
     describe('if metadata doesn\'t contain "url" property (e.g. it was an image, metadata was not obtained)', () => {
