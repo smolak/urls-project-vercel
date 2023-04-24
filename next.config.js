@@ -6,6 +6,9 @@ const nextConfig = {
     userFeedList: {
       itemsPerFetch: 30,
     },
+    rss: {
+      itemsPerUserChannel: 20,
+    },
   },
 };
 
