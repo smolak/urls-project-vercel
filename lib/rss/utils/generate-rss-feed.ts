@@ -15,7 +15,6 @@ interface RSSChannel {
 }
 
 export function generateRssFeed(channel: RSSChannel): string {
-  const pubDate = new Date().toUTCString();
   const items = channel.items
     .map(
       (item) => `
@@ -36,7 +35,7 @@ export function generateRssFeed(channel: RSSChannel): string {
         <title>${escapeXml(channel.title)}</title>
         <link>${escapeXml(channel.link)}</link>
         <description>${escapeXml(channel.description)}</description>
-        <pubDate>${pubDate}</pubDate>
+        <pubDate>${channel.items[0].pubDate}</pubDate>
         ${items}
       </channel>
     </rss>
