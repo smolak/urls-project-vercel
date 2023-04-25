@@ -1,3 +1,5 @@
+import { escapeXml } from "./excape-xml";
+
 interface RSSItem {
   title: string;
   description: string;
@@ -18,9 +20,9 @@ export function generateRssFeed(channel: RSSChannel): string {
     .map(
       (item) => `
     <item>
-      <title>${item.title}</title>
-      <description>${item.description}</description>
-      <link>${item.link}</link>
+      <title>${escapeXml(item.title)}</title>
+      <description>${escapeXml(item.description)}</description>
+      <link>${escapeXml(item.link)}</link>
       <pubDate>${item.pubDate}</pubDate>
     </item>
   `
@@ -31,9 +33,9 @@ export function generateRssFeed(channel: RSSChannel): string {
     <?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0">
       <channel>
-        <title>${channel.title}</title>
-        <link>${channel.link}</link>
-        <description>${channel.description}</description>
+        <title>${escapeXml(channel.title)}</title>
+        <link>${escapeXml(channel.link)}</link>
+        <description>${escapeXml(channel.description)}</description>
         <pubDate>${pubDate}</pubDate>
         ${items}
       </channel>
