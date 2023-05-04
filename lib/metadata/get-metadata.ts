@@ -1,4 +1,24 @@
-import _getMetadata from "metadata-scraper";
+const browserless = require("browserless")();
+const getHTML = require("html-get");
+const metascraper = require("metascraper")([
+  require("metascraper-audio")(),
+  require("metascraper-author")(),
+  require("metascraper-date")(),
+  require("metascraper-description")(),
+  require("metascraper-image")(),
+  require("metascraper-lang")(),
+  require("metascraper-logo")(),
+  require("metascraper-logo-favicon")(),
+  require("metascraper-media-provider")(),
+  require("metascraper-publisher")(),
+  require("metascraper-title")(),
+  require("metascraper-url")(),
+  require("metascraper-video")(),
+  require("metascraper-instagram")(),
+  require("metascraper-spotify")(),
+  require("metascraper-twitter")(),
+  require("metascraper-youtube")(),
+]);
 
 type URL = string;
 
@@ -26,13 +46,43 @@ export interface Metadata {
   video?: string;
 }
 
+const getContent = async (url: string) => {
+  // create a browser context inside the main Chromium process
+  const browserContext = browserless.createContext();
+  const promise = getHTML(url, { prerender: true, getBrowserless: () => browserContext });
+
+  // close browser resources before return the result
+  // @ts-ignore
+  promise.then(() => browserContext).then((browser) => browser.destroyContext());
+
+  return promise;
+};
+
 export type GetMetadata = (url: URL, html?: string) => Promise<Metadata>;
 
-export const getMetadata: GetMetadata = async (url, html) => {
-  const options = {
-    url,
-    html,
-  };
-
-  return (await _getMetadata(options)) as unknown as Promise<Metadata>;
+const metascraperMetadataMapper: Record<string, keyof Metadata> = {
+  audio: "audio",
+  author: "author",
+  date: "published",
+  description: "description",
+  image: "image",
+  lang: "language",
+  logo: "icon",
+  publisher: "provider",
+  title: "title",
+  url: "url",
+  video: "video",
 };
+
+export const getMetadata: GetMetadata = (url) =>
+  getContent(url)
+    .then(metascraper)
+    .then((data) => {
+      return Object.entries(data as Record<string, string>).reduce((metadata, [key, val]) => {
+        return {
+          ...metadata,
+          [metascraperMetadataMapper[key]]: val,
+        } as Metadata;
+      }, {});
+    })
+    .finally(() => browserless.close());
