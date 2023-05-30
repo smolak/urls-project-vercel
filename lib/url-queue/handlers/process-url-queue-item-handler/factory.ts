@@ -1,11 +1,13 @@
-import prisma from "../../../../prisma";
-import { compressMetadata } from "../../../metadata/compression";
-import { sha1 } from "../../../crypto/sha1";
-import { Prisma, Url } from "@prisma/client";
-import { ProcessUrlQueueItemHandler } from "./index";
 import { Logger } from "pino";
-import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generate-model-id";
+import { StatusCodes } from "http-status-codes";
+import getConfig from "next/config";
+
+import { ProcessUrlQueueItemHandler } from "./index";
 import { FetchMetadata } from "../../../metadata/fetch-metadata";
+import { generateRequestId } from "../../../request-id/utils/generate-request-id";
+import { processUrlQueueItemHandlerQuerySchema } from "./query.schema";
+import { processUrlQueueItemHandlerBodySchema } from "./body.schema";
+import { actionType, processUrlQueueItem } from "./process-url-queue-item";
 
 interface Params {
   fetchMetadata: FetchMetadata;
@@ -14,96 +16,53 @@ interface Params {
 
 export type ProcessUrlQueueItemHandlerFactory = (params: Params) => ProcessUrlQueueItemHandler;
 
-const actionType = "processUrlQueueItemHandler";
+export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactory = ({ fetchMetadata, logger }) => {
+  return async (req, res) => {
+    const requestId = generateRequestId();
 
-export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactory = function ({
-  fetchMetadata,
-  logger,
-}) {
-  return async ({ urlQueueId, requestId }) => {
-    logger.info({ requestId, actionType, urlQueueId }, "Processing URL queue item.");
+    logger.info({ requestId, actionType }, "Processing URL queue item.");
+
+    const queryResult = processUrlQueueItemHandlerQuerySchema.safeParse(req.query);
+
+    if (!queryResult.success) {
+      logger.error({ requestId, actionType }, "Query params validation error.");
+
+      res.status(StatusCodes.NOT_ACCEPTABLE);
+      res.json({ error: "Query params validation error." });
+      return;
+    }
+
+    const urlQueueApiKey = queryResult.data.urlQueueApiKey;
+
+    if (urlQueueApiKey !== getConfig().serverRuntimeConfig.urlQueueApiKey) {
+      logger.error({ requestId, actionType }, "Invalid feed queue API key provided.");
+
+      res.status(StatusCodes.FORBIDDEN);
+      res.json({ error: "Query params validation error." });
+      return;
+    }
+
+    const bodyResult = processUrlQueueItemHandlerBodySchema.safeParse(req.body);
+
+    if (!bodyResult.success) {
+      logger.error({ requestId, actionType }, "Body validation error.");
+
+      res.status(StatusCodes.NOT_ACCEPTABLE);
+      return;
+    }
+
+    const urlQueueId = bodyResult.data.urlQueueId;
 
     try {
-      const item = await prisma.urlQueue.findFirstOrThrow({
-        where: {
-          id: urlQueueId,
-          status: {
-            in: ["NEW", "FAILED"],
-          },
-        },
-      });
+      const urlEntryCreated = await processUrlQueueItem({ urlQueueId, fetchMetadata, logger, requestId });
 
-      await prisma.urlQueue.update({
-        data: {
-          attemptCount: item.attemptCount + 1,
-        },
-        where: {
-          id: urlQueueId,
-        },
-      });
-
-      const metadata = await fetchMetadata(item.rawUrl);
-
-      logger.info({ requestId, actionType, metadata }, "Metadata fetched.");
-
-      const url = metadata.url || item.rawUrl;
-      const urlHash = sha1(url);
-      const compressedMetadata = compressMetadata(metadata);
-
-      let urlEntry: Url | null = null;
-
-      if (metadata.url !== item.rawUrl) {
-        urlEntry = await prisma.url.findUnique({
-          where: { urlHash },
-        });
-      }
-
-      return await prisma.$transaction(async (prisma) => {
-        if (!urlEntry) {
-          urlEntry = await prisma.url.create({
-            data: {
-              id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-              url,
-              urlHash,
-              metadata: compressedMetadata as Prisma.JsonObject,
-            },
-          });
-        }
-
-        const userUrl = await prisma.userUrl.create({
-          data: {
-            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-            userId: item.userId,
-            urlId: urlEntry.id,
-          },
-        });
-
-        await prisma.feedQueue.create({
-          data: {
-            id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
-            userId: item.userId,
-            userUrlId: userUrl.id,
-          },
-        });
-
-        await prisma.urlQueue.update({
-          data: {
-            metadata: compressedMetadata as Prisma.JsonObject,
-            status: "ACCEPTED",
-          },
-          where: {
-            id: urlQueueId,
-          },
-        });
-
-        logger.info({ requestId, actionType, createdUrl: urlEntry }, "Processing finished, URL created.");
-
-        return urlEntry;
-      });
+      res.status(StatusCodes.CREATED);
+      res.json({ url: urlEntryCreated });
     } catch (error) {
       logger.error({ requestId, actionType, error }, "Failed to process URL queue item.");
 
-      throw error;
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      res.json({ error: "Failed to process URL queue item." });
     }
   };
 };
