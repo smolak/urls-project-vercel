@@ -1,7 +1,6 @@
 import { protectedProcedure } from "../../../../server/api/trpc";
 import { sha1 } from "../../../crypto/sha1";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generate-model-id";
-import { EventType, triggerEvent } from "../../../events-aggregator/trigger-event";
 import { TRPCError } from "@trpc/server";
 import { createUrlSchema } from "./create-url.schema";
 import { Url, UrlQueue } from "@prisma/client";
@@ -70,16 +69,6 @@ export const createUrl = protectedProcedure
       });
 
       logger.info({ requestId, path, url }, "URL added to queue.");
-
-      await triggerEvent({
-        type: EventType.URL_QUEUE_CREATED,
-        data: {
-          urlQueueId: urlInQueue["id"],
-          requestId,
-        },
-      });
-
-      logger.info({ requestId, path, url }, "Success.");
 
       return { urlQueueId: urlInQueue.id, url };
     } catch (error) {
