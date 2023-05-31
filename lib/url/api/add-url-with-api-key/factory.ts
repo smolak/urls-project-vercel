@@ -2,7 +2,6 @@ import { StatusCodes } from "http-status-codes";
 import { addUrlWithApiKeyHandlerBodyPayloadSchema } from "./body-payload.schema";
 import { sha1 } from "../../../crypto/sha1";
 import prisma from "../../../../prisma";
-import { EventType, TriggerEvent } from "../../../events-aggregator/trigger-event";
 import { AddUrlWithApiKeyHandler } from "./index";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generate-model-id";
 import { Logger } from "pino";
@@ -11,15 +10,14 @@ import { apiKeySchema } from "../../../user-profile-data/schemas/user-profile-da
 
 interface Params {
   logger: Logger;
-  triggerEvent: TriggerEvent;
 }
 
-type AddUllWithApiKeyFactory = ({ logger, triggerEvent }: Params) => AddUrlWithApiKeyHandler;
+type AddUllWithApiKeyFactory = ({ logger }: Params) => AddUrlWithApiKeyHandler;
 
 const actionType = "addUrlWithApiKeyHandler";
 
 export const addUrlWithApiKeyFactory: AddUllWithApiKeyFactory =
-  ({ logger, triggerEvent }) =>
+  ({ logger }) =>
   async (req, res) => {
     const requestId = generateRequestId();
     logger.info({ requestId, actionType }, "Creating URL with ApiKey initiated.");
@@ -91,7 +89,7 @@ export const addUrlWithApiKeyFactory: AddUllWithApiKeyFactory =
 
       // If there isn't one
       // TODO: IDEA#5
-      const urlInQueue = await prisma.urlQueue.create({
+      await prisma.urlQueue.create({
         data: {
           id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
           rawUrl: url,
@@ -101,16 +99,6 @@ export const addUrlWithApiKeyFactory: AddUllWithApiKeyFactory =
       });
 
       logger.info({ requestId, actionType, url }, "URL added to queue.");
-
-      await triggerEvent({
-        type: EventType.URL_QUEUE_CREATED,
-        data: {
-          urlQueueId: urlInQueue["id"],
-          requestId,
-        },
-      });
-
-      logger.info({ requestId }, "Success.");
 
       res.status(StatusCodes.CREATED);
       res.json({ success: true });
