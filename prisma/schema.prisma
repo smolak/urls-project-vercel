@@ -68,6 +68,8 @@ model UrlQueue {
   userId       String
 
   @@index([userId])
+  // This index is specific for parsing the queue
+  @@index([status(sort: Desc), createdAt(sort: Desc), attemptCount(sort: Desc)])
 }
 
 model Url {
