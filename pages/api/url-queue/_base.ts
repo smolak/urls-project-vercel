@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { StatusCodes } from "http-status-codes";
 import { processUrlQueueItemHandler } from "../../../lib/url-queue/handlers/process-url-queue-item-handler";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
   switch (method) {
