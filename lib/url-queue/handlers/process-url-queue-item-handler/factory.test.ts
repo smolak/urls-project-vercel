@@ -16,6 +16,7 @@ import { createUserUrl } from "../../../../test/fixtures/user-url";
 import { ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR } from "../../../../prisma/middlewares/generate-model-id";
 import { compressMetadata } from "../../../metadata/compression";
 import { StatusCodes } from "http-status-codes";
+import { UrlQueueStatus } from "@prisma/client";
 
 const fetchMetadata = vi.fn();
 
@@ -38,7 +39,7 @@ describe("processQueueItemHandler", () => {
 
     vi.resetAllMocks();
 
-    prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(createUrlQueueItem());
+    prismaMock.urlQueue.findFirst.mockResolvedValue(createUrlQueueItem());
     fetchMetadata.mockResolvedValue(createExampleWebsiteMetadata());
 
     reqMock.query = { urlQueueApiKey };
@@ -50,21 +51,41 @@ describe("processQueueItemHandler", () => {
 
     await handler(reqMock, resMock);
 
-    const processableStatuses = ["NEW", "FAILED"];
+    const processableStatuses = [UrlQueueStatus.NEW, UrlQueueStatus.FAILED];
 
-    expect(prismaMock.urlQueue.findFirstOrThrow).toHaveBeenCalledWith({
+    expect(prismaMock.urlQueue.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        attemptCount: true,
+        rawUrl: true,
+        userId: true,
+      },
       where: {
-        id: urlQueueId,
         status: {
           in: processableStatuses,
         },
       },
+      orderBy: [{ status: "desc" }, { createdAt: "desc" }, { attemptCount: "desc" }],
+    });
+  });
+
+  describe("when no such item is found", () => {
+    beforeEach(() => {
+      prismaMock.urlQueue.findFirst.mockResolvedValue(null);
+    });
+
+    it("should respond with NO_CONTENT status", async () => {
+      const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
+
+      await handler(reqMock, resMock);
+
+      expect(resMock.status).toHaveBeenCalledWith(StatusCodes.NO_CONTENT);
     });
   });
 
   it("found item gets updated in terms of attempt count", async () => {
     const urlQueueItem = createUrlQueueItem({ id: urlQueueId });
-    prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueItem);
+    prismaMock.urlQueue.findFirst.mockResolvedValue(urlQueueItem);
 
     const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
     await handler(reqMock, resMock);
@@ -126,7 +147,7 @@ describe("processQueueItemHandler", () => {
     beforeEach(() => {
       fetchMetadata.mockResolvedValue(exampleMetadata);
 
-      prismaMock.urlQueue.findFirstOrThrow.mockResolvedValue(urlQueueItem);
+      prismaMock.urlQueue.findFirst.mockResolvedValue(urlQueueItem);
       prismaMock.url.create.mockResolvedValue(urlEntity);
       prismaMock.userUrl.create.mockResolvedValue(userUrlItem);
     });
@@ -326,7 +347,7 @@ describe("processQueueItemHandler", () => {
     it("respond with INTERNAL_SERVER_ERROR and explanation", async () => {
       // trigger any type of error that might occur in the handler
       const error = new Error("Item not found.");
-      prismaMock.urlQueue.findFirstOrThrow.mockRejectedValue(error);
+      prismaMock.urlQueue.findFirst.mockRejectedValue(error);
       const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
 
       await handler(reqMock, resMock);
