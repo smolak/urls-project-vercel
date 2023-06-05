@@ -23,7 +23,10 @@ export const fetchMetadata: FetchMetadata = async (url) => {
   let metadata: Metadata = {};
 
   if (isAWebsite) {
-    metadata = await getMetadata(url);
+    const response = await fetch(url);
+    const htmlContent = await response.text();
+
+    metadata = await getMetadata(url, htmlContent);
   }
 
   metadata.contentType = contentType;
