@@ -4,7 +4,6 @@ import { StatusCodes } from "http-status-codes";
 import getConfig from "next/config";
 
 import { ProcessFeedQueueItemHandler } from "./index";
-import { processFeedQueueItemHandlerPayloadSchema } from "./payload.schema";
 import { generateRequestId } from "../../../request-id/utils/generate-request-id";
 import prisma from "../../../../prisma";
 import {
@@ -18,6 +17,8 @@ import {
   handleNoMoreTimeCase,
   Result,
 } from "./utils";
+import { authorizationHeaderSchema } from "../../../auth/schemas/authorization-header.schema";
+import { getAuthToken } from "../../../auth/api/utils/get-auth-token";
 
 type Params = {
   logger: Logger;
@@ -55,23 +56,23 @@ export const processFeedQueueItemHandlerFactory: ProcessFeedQueueItemHandlerFact
 
     logger.info({ requestId, actionType }, "Processing feed queue item.");
 
-    const result = processFeedQueueItemHandlerPayloadSchema.safeParse(req.query);
+    const authHeaderResult = authorizationHeaderSchema.safeParse(req.headers.authorization);
 
-    if (!result.success) {
-      logger.error({ requestId, actionType }, "Params validation error.");
+    if (!authHeaderResult.success) {
+      logger.error({ requestId, actionType }, "Authorization header validation error.");
 
-      res.status(StatusCodes.NOT_ACCEPTABLE);
-      res.json({ error: "Params validation error." });
+      res.status(StatusCodes.UNAUTHORIZED);
+      res.json({ error: "Authorization error." });
       return;
     }
 
-    const feedQueueApiKey = result.data.feedQueueApiKey;
+    const feedQueueApiKey = getAuthToken(authHeaderResult.data);
 
     if (feedQueueApiKey !== getConfig().serverRuntimeConfig.feedQueueApiKey) {
       logger.error({ requestId, actionType }, "Invalid feed queue API key provided.");
 
       res.status(StatusCodes.FORBIDDEN);
-      res.json({ error: "Params validation error." });
+      res.json({ error: "Authorization error." });
       return;
     }
 
