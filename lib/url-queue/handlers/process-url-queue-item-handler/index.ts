@@ -4,9 +4,7 @@ import { fetchMetadata } from "../../../metadata/fetch-metadata";
 import { logger } from "../../../../logger";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export type ProcessUrlQueueItemSuccessResponse = {
-  url: Url;
-};
+export type ProcessUrlQueueItemSuccessResponse = { url: Url };
 export type ProcessUrlQueueItemFailureResponse = { error: string };
 export type ProcessUrlQueueItemResponse = ProcessUrlQueueItemSuccessResponse | ProcessUrlQueueItemFailureResponse;
 

@@ -49,6 +49,7 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
         logger.info({ requestId, actionType }, "Queue is empty.");
 
         res.status(StatusCodes.NO_CONTENT);
+        res.end();
         return;
       }
 
