@@ -6,7 +6,6 @@ import { ProcessUrlQueueItemHandler } from "./index";
 import { FetchMetadata } from "../../../metadata/fetch-metadata";
 import { generateRequestId } from "../../../request-id/utils/generate-request-id";
 import { processUrlQueueItemHandlerQuerySchema } from "./query.schema";
-import { processUrlQueueItemHandlerBodySchema } from "./body.schema";
 import { actionType, processUrlQueueItem } from "./process-url-queue-item";
 
 interface Params {
@@ -42,19 +41,15 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
       return;
     }
 
-    const bodyResult = processUrlQueueItemHandlerBodySchema.safeParse(req.body);
-
-    if (!bodyResult.success) {
-      logger.error({ requestId, actionType }, "Body validation error.");
-
-      res.status(StatusCodes.NOT_ACCEPTABLE);
-      return;
-    }
-
-    const urlQueueId = bodyResult.data.urlQueueId;
-
     try {
-      const urlEntryCreated = await processUrlQueueItem({ urlQueueId, fetchMetadata, logger, requestId });
+      const urlEntryCreated = await processUrlQueueItem({ fetchMetadata, logger, requestId });
+
+      if (urlEntryCreated === null) {
+        logger.info({ requestId, actionType }, "Queue is empty.");
+
+        res.status(StatusCodes.NO_CONTENT);
+        return;
+      }
 
       res.status(StatusCodes.CREATED);
       res.json({ url: urlEntryCreated });
