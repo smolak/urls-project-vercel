@@ -42,7 +42,7 @@ describe("processQueueItemHandler", () => {
     prismaMock.urlQueue.findFirst.mockResolvedValue(createUrlQueueItem());
     fetchMetadata.mockResolvedValue(createExampleWebsiteMetadata());
 
-    reqMock.query = { urlQueueApiKey };
+    reqMock.headers = { authorization: `Bearer ${urlQueueApiKey}` };
     reqMock.body = { urlQueueId };
   });
 

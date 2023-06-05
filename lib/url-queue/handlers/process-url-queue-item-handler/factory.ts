@@ -5,8 +5,9 @@ import getConfig from "next/config";
 import { ProcessUrlQueueItemHandler } from "./index";
 import { FetchMetadata } from "../../../metadata/fetch-metadata";
 import { generateRequestId } from "../../../request-id/utils/generate-request-id";
-import { processUrlQueueItemHandlerQuerySchema } from "./query.schema";
+import { authorizationHeaderSchema } from "../../../auth/schemas/authorization-header.schema";
 import { actionType, processUrlQueueItem } from "./process-url-queue-item";
+import { getAuthToken } from "../../../auth/api/utils/get-auth-token";
 
 interface Params {
   fetchMetadata: FetchMetadata;
@@ -21,23 +22,23 @@ export const processUrlQueueItemHandlerFactory: ProcessUrlQueueItemHandlerFactor
 
     logger.info({ requestId, actionType }, "Processing URL queue item.");
 
-    const queryResult = processUrlQueueItemHandlerQuerySchema.safeParse(req.query);
+    const authHeaderResult = authorizationHeaderSchema.safeParse(req.headers.authorization);
 
-    if (!queryResult.success) {
-      logger.error({ requestId, actionType }, "Query params validation error.");
+    if (!authHeaderResult.success) {
+      logger.error({ requestId, actionType }, "Authorization header validation error.");
 
-      res.status(StatusCodes.NOT_ACCEPTABLE);
-      res.json({ error: "Query params validation error." });
+      res.status(StatusCodes.UNAUTHORIZED);
+      res.json({ error: "Authorization error." });
       return;
     }
 
-    const urlQueueApiKey = queryResult.data.urlQueueApiKey;
+    const urlQueueApiKey = getAuthToken(authHeaderResult.data);
 
     if (urlQueueApiKey !== getConfig().serverRuntimeConfig.urlQueueApiKey) {
-      logger.error({ requestId, actionType }, "Invalid feed queue API key provided.");
+      logger.error({ requestId, actionType }, "Invalid url queue API key provided.");
 
       res.status(StatusCodes.FORBIDDEN);
-      res.json({ error: "Query params validation error." });
+      res.json({ error: "Authorization error." });
       return;
     }
 
