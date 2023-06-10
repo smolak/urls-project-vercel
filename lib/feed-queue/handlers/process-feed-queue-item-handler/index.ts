@@ -2,9 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { logger } from "../../../../logger";
 import { processFeedQueueItemHandlerFactory } from "./factory";
 
-export type ProcessFeedQueueItemSuccessResponse = {
-  feedsAdded: number;
-};
+export type ProcessFeedQueueItemSuccessResponse = { feedsAdded: number };
 export type ProcessFeedQueueItemFailureResponse = { error: string };
 export type ProcessFeedQueueItemResponse = ProcessFeedQueueItemSuccessResponse | ProcessFeedQueueItemFailureResponse;
 
