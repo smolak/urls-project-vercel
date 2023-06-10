@@ -8,6 +8,10 @@ const baseUrl = "https://urlshare.me";
 const path = "/whatever";
 const url = baseUrl + path;
 
+function createFetchResponse(data: unknown) {
+  return { text: () => new Promise((resolve) => resolve(data)) };
+}
+
 describe("fetchMetadata", () => {
   beforeEach(() => {
     nock.disableNetConnect();
@@ -23,7 +27,7 @@ describe("fetchMetadata", () => {
       nock(baseUrl).head(path).reply(200, undefined, {
         "content-type": "text/html",
       });
-      nock(baseUrl).get(path).reply(200, htmlContentOfMyProfileOnLN);
+      global.fetch = vi.fn().mockResolvedValue(createFetchResponse(htmlContentOfMyProfileOnLN));
     });
 
     it("should respond with metadata for a website, containing all properties", async () => {
