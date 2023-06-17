@@ -21,3 +21,18 @@
    later on by the owner of the URL
 8. Potential selling point: returning a list of most followed users with at least 'n' added URLs in the past month.
 9. Measure how long it takes to add e.g. 1000 urls to FeedQueue or how many I can add in a second, etc.
+10. Categories:
+    1. Possible categories:
+        1. Personal: This category can be used for URLs related to personal interests, hobbies, or private resources. 
+        2. Work: Users can use this category to store URLs relevant to their professional life, such as work-related tools, documents, or industry-specific websites. 
+        3. Education: This category can be used to store URLs related to educational resources, online courses, research materials, or academic websites. 
+        4. News: Users can categorize URLs related to news websites, blogs, or any sources they frequently visit for the latest information. 
+        5. Entertainment: This category can include URLs related to movies, TV shows, music, games, or any other form of entertainment. 
+        6. Social Media: Users can store URLs for their favorite social media platforms, profiles, or any other relevant links. 
+        7. Shopping: This category can be used for URLs related to online shopping websites, e-commerce platforms, or specific products users want to keep track of. 
+        8. Travel: Users can store URLs related to travel planning, booking websites, destination guides, or travel blogs. 
+        9. Health and Fitness: This category can include URLs for health-related articles, fitness resources, workout routines, or nutritional information. 
+        10. Technology: Users can categorize URLs related to technology news, gadget reviews, software downloads, or programming resources.
+    2. For the plugin - when the URL exists and is added to some categories, suggest those categories
+    3. What if an existing URL is already added to different, not overlapping categories?
+    4. 
