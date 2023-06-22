@@ -82,7 +82,7 @@ const Form = () => {
     isLoading,
     isSuccess,
     error,
-  } = api.userProfileData.saveUserProfileData.useMutation();
+  } = api.userProfileData.createUserProfileData.useMutation();
 
   // If the data is saved successfully, proceed to homepage
   if (isSuccess) {

@@ -1,10 +1,12 @@
 import { createTRPCRouter } from "../../../server/api/trpc";
 import { getPrivateUserProfileData } from "./procedures/get-private-user-profile-data";
 import { usernameCheck } from "./procedures/username-check";
-import { saveUserProfileData } from "./procedures/save-user-profile-data";
+import { updateUserProfileData } from "./procedures/update-user-profile-data";
+import { createUserProfileData } from "./procedures/create-user-profile-data";
 
 export const userProfileDataRouter = createTRPCRouter({
   getPrivateUserProfileData,
   usernameCheck,
-  saveUserProfileData,
+  updateUserProfileData,
+  createUserProfileData,
 });
