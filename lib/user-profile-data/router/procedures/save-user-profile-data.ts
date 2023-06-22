@@ -29,9 +29,9 @@ export const saveUserProfileData = protectedProcedure
 
     // Existing user profile data indicates that username is supposed to be already set.
     // That means that if input payload contains username, it should reject such request.
-    const accountIsFreshlyCreated = maybeUserProfileData?.username;
+    const accountExists = maybeUserProfileData?.username;
 
-    if (accountIsFreshlyCreated) {
+    if (accountExists) {
       const { username, ...updateData } = input;
       const userProfileData = await prisma.userProfileData.update({
         where: {
