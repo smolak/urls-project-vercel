@@ -48,7 +48,7 @@ const Form: FC<FormValues> = ({ username, apiKey }) => {
     isLoading,
     isSuccess,
     error,
-  } = api.userProfileData.saveUserProfileData.useMutation();
+  } = api.userProfileData.updateUserProfileData.useMutation();
 
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: {
