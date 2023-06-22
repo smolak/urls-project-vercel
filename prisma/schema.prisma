@@ -185,6 +185,7 @@ model UserProfileData {
   apiKey             String
   username           String   @unique @db.Char(20)
   usernameNormalized String   @unique @db.Char(20)
+  image              String?
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId             String   @unique
   following          Int      @default(0) @db.UnsignedInt
