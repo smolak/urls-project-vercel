@@ -14,6 +14,7 @@ export const createUserProfileData = (overwrites: Partial<UserProfileData> = {})
     apiKey: generateId(),
     username,
     usernameNormalized: normalizeUsername(username),
+    image: "https://s.gravatar.com/avatar/b4b8160fad763019bb200ba1380b9f34?s=80",
     userId: generateUserId(),
     following: 0,
     followers: 0,
