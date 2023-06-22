@@ -59,13 +59,16 @@ export const saveUserProfileData = protectedProcedure
     const { apiKey, username } = result.data;
 
     const userProfileData = await prisma.$transaction(async (prisma) => {
-      await prisma.user.update({
+      const { image } = await prisma.user.update({
         where: {
           id: userId,
         },
         data: {
           role: "USER",
         },
+        select: {
+          image: true
+        }
       });
 
       return await prisma.userProfileData.create({
@@ -75,6 +78,7 @@ export const saveUserProfileData = protectedProcedure
           usernameNormalized: normalizeUsername(username),
           id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
           userId,
+          image
         },
       });
     });
