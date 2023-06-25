@@ -12,20 +12,20 @@ export const getUrls = protectedProcedure.query(async ({ ctx: { session, prisma 
   const userUrls = await prisma.userUrl.findMany({
     include: {
       url: true,
-      user: {
+      userProfileData: {
         select: {
           id: true,
-          name: true,
           image: true,
+          username: true,
           createdAt: true,
         },
       },
     },
   });
 
-  const urlList = userUrls.map(({ url, user, ...userUrl }) => {
+  const urlList = userUrls.map(({ url, userProfileData, ...userUrl }) => {
     return {
-      user,
+      userProfileData,
       userUrl,
       url: {
         ...url,

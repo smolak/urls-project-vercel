@@ -15,7 +15,7 @@ const Home: NextPageWithLayout = () => {
   const { status } = useSession();
 
   return (
-    <div>
+    <>
       <Head>
         <title>Homepage</title>
         <meta name="description" content="URLs project (beta)" />
@@ -46,7 +46,7 @@ const Home: NextPageWithLayout = () => {
           <UserFeedList />
         </div>
       )}
-    </div>
+    </>
   );
 };
 

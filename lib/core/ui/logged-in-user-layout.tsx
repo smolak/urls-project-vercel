@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Logo } from "../../shared/ui/logo";
-import { RiGithubFill } from "react-icons/ri";
+import { Footer } from "./footer";
 
 export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
@@ -51,20 +51,11 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
           </div>
         </div>
 
-        <main>{children}</main>
+        <div className="grid grid-cols-12 gap-16">
+          <main className="col-start-3 col-span-8">{children}</main>
+        </div>
       </div>
-
-      <footer className="footer items-center p-4 bg-neutral text-neutral-content">
-        <div className="items-center grid-flow-col">
-          <Logo iconSize={36} />
-          <p>Copyright © 2023 - All right reserved</p>
-        </div>
-        <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-          <a href="https://github.com/smolak/urls-project-vercel" target="_blank">
-            <RiGithubFill className="inline" size={36} />
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 };

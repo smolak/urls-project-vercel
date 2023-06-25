@@ -23,7 +23,6 @@ export const getUserFeed = protectedProcedure.query<ReadonlyArray<FeedVM>>(
           id: entry.feed_id,
           createdAt: entry.feed_createdAt,
           user: {
-            name: entry.user_name,
             image: entry.user_image,
             username: entry.user_username,
           },

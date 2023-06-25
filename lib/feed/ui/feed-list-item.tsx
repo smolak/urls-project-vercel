@@ -1,9 +1,7 @@
-import { Url, User, UserUrl } from "@prisma/client";
+import { Url, UserProfileData, UserUrl } from "@prisma/client";
 import { Metadata } from "../../metadata/get-metadata";
 import { FC } from "react";
 import { UserImage } from "../../user/ui/user-image";
-
-type UserData = Pick<User, "id" | "name" | "image">;
 
 interface UrlData extends Pick<Url, "id" | "url"> {
   metadata: Metadata;
@@ -12,15 +10,15 @@ interface UrlData extends Pick<Url, "id" | "url"> {
 export interface FeedListItem {
   id: UserUrl["id"];
   createdAt: string;
-  user: UserData;
+  userProfileData: Pick<UserProfileData, "username" | "image">;
   url: UrlData;
 }
 
-export const FeedListItem: FC<FeedListItem> = ({ id, createdAt, user, url }) => {
+export const FeedListItem: FC<FeedListItem> = ({ id, createdAt, userProfileData: { username, image }, url }) => {
   return (
     <div className="flex space-between space-x-4 rounded-md bg-white p-4 shadow-sm cursor-pointer hover:bg-slate-50">
       <div className="aspect-square w-8 object-cover">
-        <UserImage {...user} />
+        <UserImage username={username} image={image} />
       </div>
       <div className="w-[510px]">
         <h3 className="text-xl">

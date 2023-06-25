@@ -27,12 +27,13 @@ export const ToggleFollowUser: FC<ToggleFollowUserProps> = ({ userId }) => {
 
   return (
     <div>
-      {!isDoneChecking && <LoadingIndicator title="Checking follow status" />}
-      {isDoneChecking && (
+      {(!isDoneChecking || isToggling) && <LoadingIndicator title="Checking follow status" />}
+      {isDoneChecking && !isToggling && (
         <button
           onClick={() => toggle({ userId })}
           disabled={isToggling}
-          className="flex items-center inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
+          className="flex items-center inline-block rounded-lg bg-indigo-600 px-2 py-1 text-base font-semibold
+          text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700 gap-1"
         >
           {isFollowing ? (
             <>
