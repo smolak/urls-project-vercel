@@ -85,14 +85,14 @@ model Url {
 }
 
 model UserUrl {
-  id        String     @id
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  url       Url        @relation(fields: [urlId], references: [id], onDelete: Cascade)
-  urlId     String
-  feeds     Feed[]
-  feedQueue FeedQueue?
-  createdAt DateTime   @default(now())
+  id              String          @id
+  userProfileData UserProfileData @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId          String
+  url             Url             @relation(fields: [urlId], references: [id], onDelete: Cascade)
+  urlId           String
+  feeds           Feed[]
+  feedQueue       FeedQueue?
+  createdAt       DateTime        @default(now())
 
   @@index([userId])
   @@index([urlId])
@@ -159,7 +159,6 @@ model User {
   accounts        Account[]
   sessions        Session[]
   urlsInQueue     UrlQueue[]
-  urls            UserUrl[]
   userProfileData UserProfileData?
   feedUrls        Feed[]
   feedsInQueue    FeedQueue[]
@@ -179,17 +178,18 @@ model Follows {
 }
 
 model UserProfileData {
-  id                 String   @id
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                 String    @id
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
   apiKey             String
-  username           String   @unique @db.Char(20)
-  usernameNormalized String   @unique @db.Char(20)
+  username           String    @unique @db.Char(20)
+  usernameNormalized String    @unique @db.Char(20)
   image              String?
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId             String   @unique
-  following          Int      @default(0) @db.UnsignedInt
-  followers          Int      @default(0) @db.UnsignedInt
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String    @unique
+  userUrls           UserUrl[]
+  following          Int       @default(0) @db.UnsignedInt
+  followers          Int       @default(0) @db.UnsignedInt
 
   @@index([userId])
   @@index([apiKey])

@@ -6,5 +6,5 @@ interface LoadingIndicatorProps {
 }
 
 export const LoadingIndicator: FC<LoadingIndicatorProps> = ({ title }) => {
-  return <div className="btn btn-lg btn-ghost loading" title={title} />;
+  return <div className="btn btn-sm btn-ghost loading cursor-progress" title={title} />;
 };

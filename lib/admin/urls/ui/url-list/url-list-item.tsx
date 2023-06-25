@@ -4,16 +4,18 @@ import { UserImage } from "../../../user/ui/user-image";
 import { AdminUrlListItemVM } from "../../models/admin-url-list-item.vm";
 import { formatDate } from "../../../../shared/utils/format-date";
 
-export const UrlListItem: FC<AdminUrlListItemVM> = ({ url, user, userUrl }) => {
+export const UrlListItem: FC<AdminUrlListItemVM> = ({ url, userProfileData, userUrl }) => {
+  const { username, image, id } = userProfileData;
+
   return (
     <div className="border-t border-gray-200 px-3 py-3 sm:grid sm:grid-cols-10 sm:gap-3 sm:px-6 text-sm">
       <span className="flex items-center col-span-3">{url.url}</span>
       <div className="flex items-center col-span-3">
-        <UserImage name={user.name || ""} image={user.image} />
+        <UserImage name={username} image={image} />
         <span className="ml-4">
-          {user.name}
+          {username}
           <br />
-          <span className="text-xs text-gray-400">{user.id}</span>
+          <span className="text-xs text-gray-400">{id}</span>
         </span>
       </div>
 

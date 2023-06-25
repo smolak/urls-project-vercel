@@ -5,7 +5,6 @@ export type FeedVM = {
   id: Feed["id"];
   createdAt: Feed["createdAt"];
   user: {
-    name: User["name"];
     image: User["image"];
     username: UserProfileData["username"];
   };

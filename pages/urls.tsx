@@ -26,10 +26,9 @@ export const getServerSideProps: GetServerSideProps<UrlsProps> = async () => {
         createdAt: "desc",
       },
       include: {
-        user: {
+        userProfileData: {
           select: {
-            id: true,
-            name: true,
+            username: true,
             image: true,
           },
         },
@@ -43,14 +42,14 @@ export const getServerSideProps: GetServerSideProps<UrlsProps> = async () => {
       },
     })
     .then((data) =>
-      data.map(({ id, createdAt, user, url }) => ({
+      data.map(({ id, createdAt, userProfileData, url }) => ({
         id,
         createdAt: createdAt.toISOString(),
         url: {
           ...url,
           metadata: decompressMetadata(url.metadata as Object),
         },
-        user,
+        userProfileData,
       }))
     );
 
