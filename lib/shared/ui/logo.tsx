@@ -1,28 +1,40 @@
-import { RiLink } from "react-icons/ri";
 import Link from "next/link";
-import { IconBaseProps } from "react-icons";
 import { FC } from "react";
+import { Link2, LucideProps } from "lucide-react";
+import { cn } from "../../utils";
 
-interface LogoProps {
-  iconSize?: IconBaseProps["size"];
+type LogoProps = {
   withName?: boolean;
   asLink?: boolean;
-}
+};
 
-export const Logo: FC<LogoProps> = ({ iconSize, withName = false, asLink = true }) => {
+type LogoContentProps = Pick<LogoProps, "withName">;
+
+export const LogoIcon = ({ className, ...rest }: LucideProps) => (
+  <Link2 {...rest} className={cn(className, "-rotate-45")} />
+);
+
+const LogoContent = ({ withName }: LogoContentProps) => {
+  return (
+    <>
+      <LogoIcon strokeWidth={2.25} size={25} />
+      {withName && <span className="font-bold">urlshare.me</span>}
+    </>
+  );
+};
+
+export const Logo: FC<LogoProps> = ({ withName = false, asLink = true }) => {
   if (asLink) {
     return (
-      <Link href="/" className="btn btn-ghost normal-case text-xl flex space-x-2">
-        <RiLink size={iconSize} />
-        {withName && <span className="font-extralight">urlshare.me</span>}
+      <Link href="/" className="flex items-center space-x-2">
+        <LogoContent withName={withName} />
       </Link>
     );
   }
 
   return (
-    <>
-      <RiLink size={iconSize} />
-      {withName && <span className="font-extralight">urlshare.me</span>}
-    </>
+    <div className="flex items-center space-x-2">
+      <LogoContent withName={withName} />
+    </div>
   );
 };

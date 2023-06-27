@@ -27,7 +27,7 @@ export const ToggleFollowUser: FC<ToggleFollowUserProps> = ({ userId }) => {
 
   return (
     <div>
-      {(!isDoneChecking || isToggling) && <LoadingIndicator title="Checking follow status" />}
+      {(!isDoneChecking || isToggling) && <LoadingIndicator label="Checking follow status" />}
       {isDoneChecking && !isToggling && (
         <button
           onClick={() => toggle({ userId })}

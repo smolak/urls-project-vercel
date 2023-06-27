@@ -51,7 +51,7 @@ export const NewUserProfileDataForm = () => {
         {isChecking && (
           <div className="flex justify-center items-center p-10">
             <p>Checking data...</p>
-            <LoadingIndicator title="Loading user profile data..." />
+            <LoadingIndicator label="Loading user profile data..." />
           </div>
         )}
         {exists === "unknown" && (

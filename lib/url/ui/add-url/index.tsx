@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { api } from "../../../../utils/api";
 import clsx from "clsx";
 import { FiCheckCircle } from "react-icons/fi";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Plus } from "lucide-react";
 
 export const AddUrl = () => {
   const { register, handleSubmit, resetField, setFocus } = useForm();
@@ -29,25 +32,18 @@ export const AddUrl = () => {
   };
 
   return (
-    <div className="flex flex-col space-y-4 w-1/3">
+    <div className="w-full">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-control">
-          <div className="input-group">
-            <input
-              {...register("url")}
-              type="url"
-              disabled={isLoading}
-              className="input input-bordered w-full"
-              placeholder="https://..."
-            />
-            <button type="submit" disabled={isLoading} className={clsx("btn btn-square", { loading: isLoading })}>
-              {!isLoading && "Add"}
-            </button>
-          </div>
+        <div className="flex w-full items-center space-x-2 justify-center">
+          <Input {...register("url")} type="url" disabled={isLoading} placeholder="https://..." className="max-w-md" />
+          <Button type="submit" disabled={isLoading} className={clsx("space-x-1 h-10", { loading: isLoading })}>
+            <Plus size={18} />
+            <span>Add</span>
+          </Button>
         </div>
       </form>
       {addedUrl !== "" && (
-        <div className="alert alert-success shadow-lg" onClick={() => setAddedUrl("")}>
+        <div className="" onClick={() => setAddedUrl("")}>
           <div>
             <FiCheckCircle />
             <span>URL added. It will be live soon.</span>

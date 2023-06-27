@@ -3,14 +3,14 @@ import { RiGithubFill } from "react-icons/ri";
 
 export const Footer = () => {
   return (
-    <footer className="footer items-center p-4 bg-neutral text-neutral-content">
-      <div className="items-center grid-flow-col">
-        <Logo iconSize={36} />
+    <footer className="container flex justify-between text-secondary items-center text-sm h-16 border-t">
+      <div className="flex items-center gap-2">
+        <Logo />
         <p>Copyright © 2023 - All right reserved</p>
       </div>
-      <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+      <div className="flex items-center">
         <a href="https://github.com/smolak/urls-project-vercel" target="_blank">
-          <RiGithubFill className="inline" size={36} />
+          <RiGithubFill size={30} className="inline" />
         </a>
       </div>
     </footer>

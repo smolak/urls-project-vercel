@@ -3,58 +3,96 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Logo } from "../../shared/ui/logo";
 import { Footer } from "./footer";
+import { useRouter } from "next/router";
+import clsx from "clsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
+import { Avatar, AvatarImage } from "../../components/ui/avatar";
+import { LoadingIndicator } from "./loading-indicator";
+import { LogOut, User2 } from "lucide-react";
 
 export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
+  const { pathname } = useRouter();
 
   return (
     <>
-      <div className="min-h-full p-2">
-        <div className="navbar bg-base-200 rounded-box">
-          <div className="flex-none w-52">
+      <div className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
+        <div className="container flex items-center h-16">
+          <div className="flex items-center space-x-8">
             <Logo withName />
+            <nav>
+              <ol className="flex items-center space-x-6 text-sm font-medium">
+                <li>
+                  <Link
+                    href="/"
+                    className={clsx(
+                      pathname === "/" ? "text-primary" : "text-secondary",
+                      "transition-colors hover:text-slate-800"
+                    )}
+                  >
+                    Homepage
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/about"
+                    className={clsx(
+                      pathname === "/about" ? "text-primary" : "text-secondary",
+                      "transition-colors hover:text-slate-800"
+                    )}
+                  >
+                    About
+                  </Link>
+                </li>
+              </ol>
+            </nav>
           </div>
-          <div className="flex-auto"></div>
-          <div className="flex-none justify-end w-52">
-            {status === "loading" && <div className="btn btn-ghost loading" />}
+
+          <div className="flex flex-1 justify-end items-center">
+            {status === "loading" && <LoadingIndicator label="Checking session..." />}
             {status === "unauthenticated" && (
-              <Link className="btn" href="/auth/login">
+              <Link className="" href="/auth/login">
                 Login
               </Link>
             )}
             {status === "authenticated" && (
-              <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                  <div className="w-10 rounded-full">
-                    <img src={session.user.image as string} alt={session.user.name as string} />
-                  </div>
-                </label>
-                <ul
-                  tabIndex={0}
-                  className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-52"
-                >
-                  <li>
-                    <Link href="/settings/profile" className="justify-between">
-                      Profile
-                      <span className="badge">New</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/settings">Settings</Link>
-                  </li>
-                  <li>
-                    <a onClick={() => signOut()}>Logout</a>
-                  </li>
-                </ul>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Avatar className="hover:outline hover:outline-slate-400 outline-1 border-2 border-white h-11 w-11">
+                    <AvatarImage src={session.user.image as string} alt={session.user.name as string} />
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="gap-2">
+                    <User2 size={12} />
+                    <Link href="/settings/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="gap-2">
+                    <LogOut size={12} />
+                    <a className="cursor-pointer" onClick={() => signOut()}>
+                      Logout
+                    </a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
         </div>
-
-        <div className="grid grid-cols-12 gap-16">
-          <main className="col-start-3 col-span-8">{children}</main>
-        </div>
       </div>
+
+      <div className="container py-10">
+        <main className="">{children}</main>
+      </div>
+
       <Footer />
     </>
   );
