@@ -1,10 +1,10 @@
 import { FC } from "react";
+import { Loader2 } from "lucide-react";
 
 interface LoadingIndicatorProps {
-  title: string;
-  size?: number;
+  label: string;
 }
 
-export const LoadingIndicator: FC<LoadingIndicatorProps> = ({ title }) => {
-  return <div className="btn btn-sm btn-ghost loading cursor-progress" title={title} />;
+export const LoadingIndicator: FC<LoadingIndicatorProps> = ({ label }) => {
+  return <Loader2 className="cursor-progress rotate" aria-label={label} />;
 };

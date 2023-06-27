@@ -24,7 +24,7 @@ const Home: NextPageWithLayout = () => {
 
       {status === "loading" && (
         <div className="flex flex-col space-y-6 items-center">
-          <LoadingIndicator title="Checking auth status..." />
+          <LoadingIndicator label="Checking auth status..." />
         </div>
       )}
       {status === "unauthenticated" && (
@@ -41,9 +41,16 @@ const Home: NextPageWithLayout = () => {
         </div>
       )}
       {status === "authenticated" && (
-        <div className="flex flex-col space-y-10 items-center py-10">
-          <AddUrl />
-          <UserFeedList />
+        // <div className="max-w-[700px] mx-auto flex flex-col gap-10">
+        <div className="grid grid-cols-9 gap-10">
+          <div className="col-span-2">Stuff will appear here</div>
+          <div className="col-span-5 flex flex-col gap-10">
+            <AddUrl />
+            <main>
+              <UserFeedList />
+            </main>
+          </div>
+          <div className="col-span-2">Here as well</div>
         </div>
       )}
     </>

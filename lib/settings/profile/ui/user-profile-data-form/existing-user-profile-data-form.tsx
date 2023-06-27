@@ -21,7 +21,7 @@ export const ExistingUserProfileDataForm = () => {
       <div className="overflow-hidden bg-white shadow sm:rounded-lg min-h-[395px]">
         {isLoading && (
           <div className="flex justify-center items-center p-10">
-            <LoadingIndicator title="Loading user profile data..." />
+            <LoadingIndicator label="Loading user profile data..." />
           </div>
         )}
         {isSuccess && <Form {...data} />}

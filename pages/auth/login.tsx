@@ -37,7 +37,7 @@ const Login = () => {
           <div className="min-h-full max-w-md flex flex-col py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md space-y-8 text-center">
               <div>
-                <Logo iconSize={64} />
+                <Logo />
                 <h2 className="mt-6 text-3xl font-bold">Login to your account</h2>
               </div>
             </div>
