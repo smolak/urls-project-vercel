@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { UserIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import { UserProfileData } from "@prisma/client";
+import { User } from "lucide-react";
+import { cn } from "../../utils";
 
 interface UserImageProps {
   username: UserProfileData["username"];
@@ -16,19 +16,23 @@ imageClasses.set("small", "h-10 w-10");
 
 const placeholderClasses = new Map<UserImageProps["size"], string>();
 placeholderClasses.set("big", "h-[60px] w-[60px]");
-placeholderClasses.set("small", "h-8 w-8");
+placeholderClasses.set("small", "h-10 w-10");
 
 export const UserImage: FC<UserImageProps> = ({ username, image, size = "small", className }) => {
   return image ? (
     <img
-      className={clsx(imageClasses.get(size), "rounded-full p-0.5 hover:ring", className)}
+      className={cn(imageClasses.get(size), "rounded-full p-0.5 hover:ring-1 ring-slate-400", className)}
       src={image}
       alt={username || ""}
     />
   ) : (
     <span className={placeholderClasses.get(size)}>
-      <UserIcon
-        className={clsx(placeholderClasses.get(size), "rounded-full text-gray-400 hover:ring p-1", className)}
+      <User
+        className={cn(
+          placeholderClasses.get(size),
+          "rounded-full text-gray-400 hover:ring-1 ring-slate-400 p-1",
+          className
+        )}
       />
     </span>
   );

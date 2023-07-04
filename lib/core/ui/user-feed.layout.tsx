@@ -14,8 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
-import { Avatar, AvatarImage } from "../../components/ui/avatar";
 import { LogOut, User2 } from "lucide-react";
+import { UserImage } from "../../user/ui/user-image";
 
 type UserFeedLayoutProps = {
   feed: ReactNode;
@@ -70,9 +70,7 @@ export const UserFeedLayout: FC<UserFeedLayoutProps> = ({ feed, userProfileCard 
             {status === "authenticated" && (
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <Avatar className="hover:outline hover:outline-slate-400 outline-1 border-2 border-white h-11 w-11">
-                    <AvatarImage src={session.user.image as string} alt={session.user.name as string} />
-                  </Avatar>
+                  <UserImage username={session.user.name as string} image={session.user.image as string} size="small" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My account</DropdownMenuLabel>

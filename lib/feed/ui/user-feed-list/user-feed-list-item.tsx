@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avat
 import { Calendar, Image as ImageIcon } from "lucide-react";
 import { isImage, isWebsite } from "../../../metadata/urils";
 import { LogoIcon } from "../../../shared/ui/logo";
+import { UserImage } from "../../../user/ui/user-image";
 
 export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
   const isAnImage = isImage(url.metadata);
@@ -52,9 +53,7 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
       </CardContent>
       <CardFooter className="justify-end">
         <Link href={`/${user.username}`}>
-          <Avatar className="hover:outline hover:outline-slate-400 outline-1 border-2 border-white h-11 w-11">
-            <AvatarImage src={user.image as string} alt={user.username} />
-          </Avatar>
+          <UserImage username={user.username} image={user.image as string} size="small" />
         </Link>
       </CardFooter>
     </Card>
