@@ -6,5 +6,5 @@ interface LoadingIndicatorProps {
 }
 
 export const LoadingIndicator: FC<LoadingIndicatorProps> = ({ label }) => {
-  return <Loader2 className="cursor-progress rotate" aria-label={label} />;
+  return <Loader2 className="cursor-progress animate-spin" aria-label={label} />;
 };
