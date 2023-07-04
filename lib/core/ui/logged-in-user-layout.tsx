@@ -57,11 +57,6 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
 
           <div className="flex flex-1 justify-end items-center">
             {status === "loading" && <LoadingIndicator label="Checking session..." />}
-            {status === "unauthenticated" && (
-              <Link className="" href="/auth/login">
-                Login
-              </Link>
-            )}
             {status === "authenticated" && (
               <DropdownMenu>
                 <DropdownMenuTrigger>

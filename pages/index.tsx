@@ -8,6 +8,8 @@ import { UserFeedList } from "../lib/feed/ui/user-feed-list";
 import { AddUrl } from "../lib/url/ui/add-url";
 import Link from "next/link";
 import { LoadingIndicator } from "../lib/core/ui/loading-indicator";
+import { buttonVariants } from "../lib/components/ui/button";
+import { cn } from "../lib/utils";
 
 const queryClient = new QueryClient();
 
@@ -28,20 +30,17 @@ const Home: NextPageWithLayout = () => {
         </div>
       )}
       {status === "unauthenticated" && (
-        <div className="hero py-20">
-          <div className="hero-content text-center">
-            <div className="max-w-md">
-              <h1 className="text-5xl font-bold">Hello there</h1>
-              <p className="py-6">This is still an alpha version, things might not work as expected.</p>
-              <Link className="btn btn-primary" href="/auth/login">
-                Login
-              </Link>
-            </div>
+        <section className="py-20 text-center grid place-content-center">
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold">Hello there</h1>
+            <p className="py-6">This is still an alpha version, things might not work as expected.</p>
+            <Link className={cn(buttonVariants({ variant: "link" }), "text-lg")} href="/auth/login">
+              Login
+            </Link>
           </div>
-        </div>
+        </section>
       )}
       {status === "authenticated" && (
-        // <div className="max-w-[700px] mx-auto flex flex-col gap-10">
         <div className="grid grid-cols-9 gap-10">
           <div className="col-span-2">Stuff will appear here</div>
           <div className="col-span-5 flex flex-col gap-10">
