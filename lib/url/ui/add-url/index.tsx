@@ -1,11 +1,11 @@
 import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { api } from "../../../../utils/api";
-import clsx from "clsx";
 import { FiCheckCircle } from "react-icons/fi";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { Plus } from "lucide-react";
+import { cn } from "../../../utils";
 
 export const AddUrl = () => {
   const { register, handleSubmit, resetField, setFocus } = useForm();
@@ -36,7 +36,7 @@ export const AddUrl = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex w-full items-center justify-center space-x-2">
           <Input {...register("url")} type="url" disabled={isLoading} placeholder="https://..." className="max-w-md" />
-          <Button type="submit" disabled={isLoading} className={clsx("h-10 space-x-1", { loading: isLoading })}>
+          <Button type="submit" disabled={isLoading} className={cn("h-10 space-x-1", { loading: isLoading })}>
             <Plus size={18} />
             <span>Add</span>
           </Button>

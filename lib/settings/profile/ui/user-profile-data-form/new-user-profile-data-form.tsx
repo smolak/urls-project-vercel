@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import debounce from "debounce";
 import { ChangeEvent, useEffect, useState } from "react";
-import clsx from "clsx";
 import copyToClipboard from "copy-to-clipboard";
 import { generateApiKey } from "../../../../user/utils/generate-api-key";
 import { api } from "../../../../../utils/api";
@@ -20,6 +19,7 @@ import { AtSign, Copy, KeyRound, RefreshCcw, UserCheck2, UserX2 } from "lucide-r
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
 import { Separator } from "../../../../components/ui/separator";
+import { cn } from "../../../../utils";
 
 interface FormValues {
   username: string;
@@ -150,7 +150,7 @@ const UserProfileDataForm = () => {
     await checkUsernameAvailability(e.target.value);
   }, 500);
 
-  const usernameDescriptionClassNames = clsx({
+  const usernameDescriptionClassNames = cn({
     "text-green-700": usernameIsValid === true,
     "text-red-600": usernameIsValid === false,
   });

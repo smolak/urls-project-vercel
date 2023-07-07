@@ -1,10 +1,10 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { FC, PropsWithChildren, Fragment } from "react";
 import { BellIcon, Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import { SessionUser } from "next-auth";
 import { signOut } from "next-auth/react";
 import { UserImage } from "../../admin/user/ui/user-image";
+import { cn } from "../../utils";
 
 export enum Page {
   DASHBOARD,
@@ -52,7 +52,7 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user, page 
                           <a
                             key={item.name}
                             href={item.href}
-                            className={clsx(
+                            className={cn(
                               item.page === page
                                 ? "bg-gray-900 text-white"
                                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
@@ -97,7 +97,7 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user, page 
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => {
-                                  const className = clsx(
+                                  const className = cn(
                                     active ? "bg-gray-100" : "",
                                     "block px-4 py-2 text-sm text-gray-700"
                                   );
@@ -144,7 +144,7 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children, title, user, page 
                       key={item.name}
                       as="a"
                       href={item.href}
-                      className={clsx(
+                      className={cn(
                         item.page === page
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",

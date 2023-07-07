@@ -4,7 +4,6 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Logo } from "../../shared/ui/logo";
 import Link from "next/link";
-import clsx from "clsx";
 import { LoadingIndicator } from "./loading-indicator";
 import {
   DropdownMenu,
@@ -16,6 +15,7 @@ import {
 } from "../../components/ui/dropdown-menu";
 import { LogOut, User2 } from "lucide-react";
 import { UserImage } from "../../user/ui/user-image";
+import { cn } from "../../utils";
 
 type UserFeedLayoutProps = {
   feed: ReactNode;
@@ -37,7 +37,7 @@ export const UserFeedLayout: FC<UserFeedLayoutProps> = ({ feed, userProfileCard 
                 <li>
                   <Link
                     href="/"
-                    className={clsx(
+                    className={cn(
                       pathname === "/" ? "text-primary" : "text-secondary",
                       "transition-colors hover:text-slate-800"
                     )}
@@ -48,7 +48,7 @@ export const UserFeedLayout: FC<UserFeedLayoutProps> = ({ feed, userProfileCard 
                 <li>
                   <Link
                     href="/about"
-                    className={clsx(
+                    className={cn(
                       pathname === "/about" ? "text-primary" : "text-secondary",
                       "transition-colors hover:text-slate-800"
                     )}

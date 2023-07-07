@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Logo } from "../../shared/ui/logo";
 import { Footer } from "./footer";
 import { useRouter } from "next/router";
-import clsx from "clsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +15,7 @@ import {
 import { LoadingIndicator } from "./loading-indicator";
 import { LogOut, User2 } from "lucide-react";
 import { UserImage } from "../../user/ui/user-image";
+import { cn } from "../../utils";
 
 export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
@@ -32,7 +32,7 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
                 <li>
                   <Link
                     href="/"
-                    className={clsx(
+                    className={cn(
                       pathname === "/" ? "text-primary" : "text-secondary",
                       "transition-colors hover:text-slate-800"
                     )}
@@ -43,7 +43,7 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
                 <li>
                   <Link
                     href="/about"
-                    className={clsx(
+                    className={cn(
                       pathname === "/about" ? "text-primary" : "text-secondary",
                       "transition-colors hover:text-slate-800"
                     )}
