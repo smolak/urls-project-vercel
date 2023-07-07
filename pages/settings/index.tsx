@@ -1,4 +1,4 @@
-import { Page, SettingsLayout } from "../../lib/settings/ui/settings-layout";
+import { SettingsLayout } from "../../lib/settings/ui/settings-layout";
 import { useSession } from "next-auth/react";
 
 const SettingsProfile = () => {
@@ -6,7 +6,7 @@ const SettingsProfile = () => {
 
   return (
     status === "authenticated" && (
-      <SettingsLayout title="Settings" user={session.user} page={Page.SETTINGS}>
+      <SettingsLayout title="Settings" user={session.user}>
         To be added...
       </SettingsLayout>
     )
