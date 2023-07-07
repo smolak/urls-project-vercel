@@ -6,13 +6,13 @@ export function UserListOptions() {
   return (
     <Menu as="div" className="relative inline-block">
       <Menu.Button
-        className="inline-flex justify-center rounded-md px-4 py-2 text-sm font-medium
-        text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white
-        bg-indigo-600 hover:bg-indigo-700
+        className="inline-flex justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm
+        font-medium text-white hover:bg-indigo-700 focus:outline-none
+        focus-visible:ring-2 focus-visible:ring-white
         focus-visible:ring-opacity-75"
       >
         Options
-        <ChevronDownIcon className="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100" aria-hidden="true" />
+        <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5 text-violet-200 hover:text-violet-100" aria-hidden="true" />
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -23,7 +23,7 @@ export function UserListOptions() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-10 right-0 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
             <Menu.Item>
               {({ active }) => (

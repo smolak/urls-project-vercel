@@ -34,12 +34,12 @@ const Login = () => {
         <Head>
           <title>Login</title>
         </Head>
-        <div className="flex justify-center items-center">
-          <div className="min-h-full max-w-md flex flex-col py-20 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-center">
+          <div className="flex min-h-full max-w-md flex-col px-4 py-20 sm:px-6 lg:px-8">
             <div className="max-w-md space-y-8 text-center">
               <h2 className="text-3xl font-bold">Login to your account</h2>
             </div>
-            <div className="mt-8 space-y-6 flex justify-center">
+            <div className="mt-8 flex justify-center space-y-6">
               {providers.map(({ displayName, name, Icon }) => (
                 <Button type="submit" className="gap-2" key={name} onClick={handleOAuthSignIn(name)}>
                   <Icon size={20} aria-hidden="true" />

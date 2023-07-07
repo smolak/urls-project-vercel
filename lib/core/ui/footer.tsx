@@ -3,7 +3,7 @@ import { RiGithubFill } from "react-icons/ri";
 
 export const Footer = () => {
   return (
-    <footer className="container flex justify-between text-secondary items-center text-sm h-16 border-t">
+    <footer className="text-secondary container flex h-16 items-center justify-between border-t text-sm">
       <div className="flex items-center gap-2">
         <Logo />
         <p>Copyright © 2023 - All right reserved</p>

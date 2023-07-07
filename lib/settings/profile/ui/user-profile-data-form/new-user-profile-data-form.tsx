@@ -51,22 +51,22 @@ export const NewUserProfileDataForm = () => {
    */
 
   return (
-    <div className="container mx-auto my-5 px-4 max-w-2xl">
+    <div className="container mx-auto my-5 max-w-2xl px-4">
       {isChecking && (
-        <div className="flex justify-center items-center">
+        <div className="flex items-center justify-center">
           <p>Checking data...</p>
           <LoadingIndicator label="Loading user profile data..." />
         </div>
       )}
       {exists === "unknown" && (
-        <div className="flex justify-center items-center p-10">
+        <div className="flex items-center justify-center p-10">
           <p>
             Couldn&apos;t check the data. <Link href={route}>Try again</Link>.
           </p>
         </div>
       )}
       {exists === true && (
-        <div className="flex justify-center items-center p-10">
+        <div className="flex items-center justify-center p-10">
           <p>
             It looks like your user status doesn&apos;t allow you to manage your profile yet. Log out and login again,
             and you will be able to do so.
@@ -172,7 +172,7 @@ const UserProfileDataForm = () => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <div className="relative mt-1 flex rounded-md shadow-sm">
-                  <span className="absolute h-full inline-flex items-center rounded-l-md px-3 text-sm text-gray-500">
+                  <span className="absolute inline-flex h-full items-center rounded-l-md px-3 text-sm text-gray-500">
                     <AtSign size={14} />
                   </span>
                   <FormControl className="block w-full flex-1">
@@ -210,7 +210,7 @@ const UserProfileDataForm = () => {
               <FormItem>
                 <FormLabel>API key</FormLabel>
                 <div className="relative mt-1 flex rounded-md shadow-sm">
-                  <span className="absolute h-full inline-flex items-center rounded-l-md px-3 text-sm text-gray-500">
+                  <span className="absolute inline-flex h-full items-center rounded-l-md px-3 text-sm text-gray-500">
                     <KeyRound size={14} />
                   </span>
                   <FormControl className="block w-full flex-1">
@@ -219,12 +219,12 @@ const UserProfileDataForm = () => {
                   <RefreshCcw
                     size={14}
                     onClick={() => setGeneratedApiKey(generateApiKey())}
-                    className="absolute right-10 top-3.5 text-lg text-gray-400 hover:text-gray-700 cursor-copy"
+                    className="absolute right-10 top-3.5 cursor-copy text-lg text-gray-400 hover:text-gray-700"
                   />
                   <Copy
                     size={14}
                     onClick={() => copyToClipboard(generatedApiKey)}
-                    className="absolute right-3.5 top-3.5 text-lg text-gray-400 hover:text-gray-700 cursor-copy"
+                    className="absolute right-3.5 top-3.5 cursor-copy text-lg text-gray-400 hover:text-gray-700"
                   />
                 </div>
                 <FormDescription>Can only be generated.</FormDescription>
@@ -232,14 +232,14 @@ const UserProfileDataForm = () => {
             )}
           />
 
-          <div className="flex gap-10 items-center">
+          <div className="flex items-center gap-10">
             <Button type="submit" disabled={isUsernameAvailable === false || isSuccess}>
               Save and finish
             </Button>
             <div>
-              {isLoading && <span className="mr-5 text-sm text-gray-500 font-light">Saving...</span>}
-              {isSuccess && <span className="mr-5 text-sm text-green-700 font-light">Profile data saved</span>}
-              {error?.message && <span className="mr-5 text-sm text-red-600 font-light">{error.message}</span>}
+              {isLoading && <span className="mr-5 text-sm font-light text-gray-500">Saving...</span>}
+              {isSuccess && <span className="mr-5 text-sm font-light text-green-700">Profile data saved</span>}
+              {error?.message && <span className="mr-5 text-sm font-light text-red-600">{error.message}</span>}
             </div>
           </div>
         </form>

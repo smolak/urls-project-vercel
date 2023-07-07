@@ -23,15 +23,15 @@ export const ExistingUserProfileDataForm = () => {
   const { route } = useRouter();
 
   return (
-    <div className="container mx-auto my-5 px-4 max-w-2xl">
+    <div className="container mx-auto my-5 max-w-2xl px-4">
       {isLoading && (
-        <div className="flex justify-center items-center p-10">
+        <div className="flex items-center justify-center p-10">
           <LoadingIndicator label="Loading user profile data..." />
         </div>
       )}
       {isSuccess && <UserProfileDataForm {...data} />}
       {isError && (
-        <div className="flex justify-center items-center p-10">
+        <div className="flex items-center justify-center p-10">
           <p>
             Something went wrong, <Link href={route}>try again</Link>.
           </p>
@@ -68,7 +68,7 @@ const UserProfileDataForm: FC<FormValues> = ({ username, apiKey }) => {
         <FormItem>
           <FormLabel>Username</FormLabel>
           <div className="relative mt-1 flex rounded-md shadow-sm">
-            <span className="absolute h-full inline-flex items-center rounded-l-md px-3 text-sm text-gray-500">
+            <span className="absolute inline-flex h-full items-center rounded-l-md px-3 text-sm text-gray-500">
               <AtSign size={14} />
             </span>
             <FormControl className="block w-full flex-1">
@@ -85,7 +85,7 @@ const UserProfileDataForm: FC<FormValues> = ({ username, apiKey }) => {
             <FormItem>
               <FormLabel>API key</FormLabel>
               <div className="relative mt-1 flex rounded-md shadow-sm">
-                <span className="absolute h-full inline-flex items-center rounded-l-md px-3 text-sm text-gray-500">
+                <span className="absolute inline-flex h-full items-center rounded-l-md px-3 text-sm text-gray-500">
                   <KeyRound size={14} />
                 </span>
                 <FormControl className="block w-full flex-1">
@@ -94,24 +94,24 @@ const UserProfileDataForm: FC<FormValues> = ({ username, apiKey }) => {
                 <RefreshCcw
                   size={14}
                   onClick={() => setGeneratedApiKey(generateApiKey())}
-                  className="absolute right-10 top-3.5 text-lg text-gray-400 hover:text-gray-700 cursor-copy"
+                  className="absolute right-10 top-3.5 cursor-copy text-lg text-gray-400 hover:text-gray-700"
                 />
                 <Copy
                   size={14}
                   onClick={() => copyToClipboard(generatedApiKey)}
-                  className="absolute right-3.5 top-3.5 text-lg text-gray-400 hover:text-gray-700 cursor-copy"
+                  className="absolute right-3.5 top-3.5 cursor-copy text-lg text-gray-400 hover:text-gray-700"
                 />
               </div>
               <FormDescription>Can only be generated.</FormDescription>
             </FormItem>
           )}
         />
-        <div className="flex gap-10 items-center">
+        <div className="flex items-center gap-10">
           <Button type="submit">Save</Button>
           <div>
-            {isLoading && <span className="mr-5 text-sm text-gray-500 font-light">Saving...</span>}
-            {isSuccess && <span className="mr-5 text-sm text-green-700 font-light">Profile data saved</span>}
-            {error?.message && <span className="mr-5 text-sm text-red-600 font-light">{error.message}</span>}
+            {isLoading && <span className="mr-5 text-sm font-light text-gray-500">Saving...</span>}
+            {isSuccess && <span className="mr-5 text-sm font-light text-green-700">Profile data saved</span>}
+            {error?.message && <span className="mr-5 text-sm font-light text-red-600">{error.message}</span>}
           </div>
         </div>
       </form>

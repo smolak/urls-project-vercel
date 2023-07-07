@@ -8,9 +8,9 @@ interface UserListProps {
 
 export const UserList: FC<UserListProps> = ({ users }) => {
   return (
-    <div className="bg-white sm:rounded-lg border border-gray-300 text-gray-900">
-      <div className="bg-gray-100 sm:rounded-lg px-3 py-3 sm:grid sm:grid-cols-10 sm:gap-3 sm:px-6 font-bold">
-        <span className="pl-12 col-span-3">Name</span>
+    <div className="border border-gray-300 bg-white text-gray-900 sm:rounded-lg">
+      <div className="bg-gray-100 px-3 py-3 font-bold sm:grid sm:grid-cols-10 sm:gap-3 sm:rounded-lg sm:px-6">
+        <span className="col-span-3 pl-12">Name</span>
         <span className="col-span-3">Email</span>
         <span>Role</span>
         <span className="col-span-2">Created at</span>

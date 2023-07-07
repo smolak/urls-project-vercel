@@ -23,8 +23,8 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <>
-      <div className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
-        <div className="container flex items-center h-16">
+      <div className="supports-backdrop-blur:bg-background/60 bg-background/95 sticky top-0 z-40 w-full border-b backdrop-blur">
+        <div className="container flex h-16 items-center">
           <div className="flex items-center space-x-8">
             <Logo withName />
             <nav>
@@ -55,7 +55,7 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
             </nav>
           </div>
 
-          <div className="flex flex-1 justify-end items-center">
+          <div className="flex flex-1 items-center justify-end">
             {status === "loading" && <LoadingIndicator label="Checking session..." />}
             {status === "authenticated" && (
               <DropdownMenu>

@@ -13,9 +13,9 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileDat
   const { id, username, image, following, followers } = publicUserProfileData;
 
   return (
-    <Card className="bg-white sticky top-32">
+    <Card className="sticky top-32 bg-white">
       <CardHeader className="p-2">
-        <CardTitle className="flex gap-3 justify-center pt-6">
+        <CardTitle className="flex justify-center gap-3 pt-6">
           <UserImage username={username} image={image} size="big" className="absolute -top-9 hover:ring-0" />
           <span className="text-lg">@{username}</span>
           {canFollow && <ToggleFollowUser userId={id} />}

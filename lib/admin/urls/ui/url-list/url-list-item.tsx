@@ -8,9 +8,9 @@ export const UrlListItem: FC<AdminUrlListItemVM> = ({ url, userProfileData, user
   const { username, image, id } = userProfileData;
 
   return (
-    <div className="border-t border-gray-200 px-3 py-3 sm:grid sm:grid-cols-10 sm:gap-3 sm:px-6 text-sm">
-      <span className="flex items-center col-span-3">{url.url}</span>
-      <div className="flex items-center col-span-3">
+    <div className="border-t border-gray-200 px-3 py-3 text-sm sm:grid sm:grid-cols-10 sm:gap-3 sm:px-6">
+      <span className="col-span-3 flex items-center">{url.url}</span>
+      <div className="col-span-3 flex items-center">
         <UserImage name={username} image={image} />
         <span className="ml-4">
           {username}
@@ -19,7 +19,7 @@ export const UrlListItem: FC<AdminUrlListItemVM> = ({ url, userProfileData, user
         </span>
       </div>
 
-      <span className="flex items-center col-span-2">{formatDate(userUrl.createdAt)}</span>
+      <span className="col-span-2 flex items-center">{formatDate(userUrl.createdAt)}</span>
       <span className="flex items-center">
         <div className="w-56 text-right">
           <UrlListItemOptions />

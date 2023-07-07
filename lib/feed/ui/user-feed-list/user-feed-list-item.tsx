@@ -15,11 +15,11 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
 
   return (
     <Card className="overflow-hidden shadow hover:bg-slate-50">
-      <CardHeader className="group gap-2 cursor-pointer">
-        <CardTitle className="flex gap-3 items-center">
+      <CardHeader className="group cursor-pointer gap-2">
+        <CardTitle className="flex items-center gap-3">
           {isAnImage && <ImageIcon strokeWidth={1} size={40} className="text-slate-400" aria-label="Image icon" />}
           {isAWebsite && (
-            <Avatar className="w-9 h-9">
+            <Avatar className="h-9 w-9">
               <AvatarImage src={url.metadata.icon} />
               <AvatarFallback />
             </Avatar>
@@ -31,12 +31,12 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
             href={url.url}
             title={url.metadata.title}
             target="_blank"
-            className="group-hover:underline decoration-slate-200 leading-7"
+            className="leading-7 decoration-slate-200 group-hover:underline"
           >
             {url.metadata.title || url.url}
           </a>
         </CardTitle>
-        <span className="text-secondary text-xs pl-12 flex flex-row items-center gap-2">
+        <span className="text-secondary flex flex-row items-center gap-2 pl-12 text-xs">
           <Calendar size={13} />
           <span>{createdAt.toLocaleString()}</span>
         </span>

@@ -21,7 +21,7 @@ placeholderClasses.set("small", "h-10 w-10");
 export const UserImage: FC<UserImageProps> = ({ username, image, size = "small", className }) => {
   return image ? (
     <img
-      className={cn(imageClasses.get(size), "rounded-full p-0.5 hover:ring-1 ring-slate-400", className)}
+      className={cn(imageClasses.get(size), "rounded-full p-0.5 ring-slate-400 hover:ring-1", className)}
       src={image}
       alt={username || ""}
     />
@@ -30,7 +30,7 @@ export const UserImage: FC<UserImageProps> = ({ username, image, size = "small",
       <User
         className={cn(
           placeholderClasses.get(size),
-          "rounded-full text-gray-400 hover:ring-1 ring-slate-400 p-1",
+          "rounded-full p-1 text-gray-400 ring-slate-400 hover:ring-1",
           className
         )}
       />

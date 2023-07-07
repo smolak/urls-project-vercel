@@ -6,8 +6,8 @@ import { Footer } from "./footer";
 export const LoginPageLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
-      <div className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
-        <div className="container flex items-center h-16">
+      <div className="supports-backdrop-blur:bg-background/60 bg-background/95 sticky top-0 z-40 w-full border-b backdrop-blur">
+        <div className="container flex h-16 items-center">
           <div className="flex items-center space-x-8">
             <Logo withName />
             <nav>

@@ -25,12 +25,12 @@ const Home: NextPageWithLayout = () => {
       </Head>
 
       {status === "loading" && (
-        <div className="flex flex-col space-y-6 items-center">
+        <div className="flex flex-col items-center space-y-6">
           <LoadingIndicator label="Checking auth status..." />
         </div>
       )}
       {status === "unauthenticated" && (
-        <section className="py-20 text-center grid place-content-center">
+        <section className="grid place-content-center py-20 text-center">
           <div className="max-w-md">
             <h1 className="text-5xl font-bold">Hello there</h1>
             <p className="py-6">This is still an alpha version, things might not work as expected.</p>
