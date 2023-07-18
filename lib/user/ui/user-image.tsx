@@ -12,7 +12,7 @@ interface UserImageProps {
 
 const imageClasses = new Map<UserImageProps["size"], string>();
 imageClasses.set("big", "h-[70px] w-[70px]");
-imageClasses.set("small", "h-10 w-10");
+imageClasses.set("small", "h-11 w-11");
 
 const placeholderClasses = new Map<UserImageProps["size"], string>();
 placeholderClasses.set("big", "h-[60px] w-[60px]");

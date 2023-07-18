@@ -3,6 +3,7 @@ import { ToggleFollowUser } from "../../follow-user/ui/toggle-follow-user";
 import { PublicUserProfileDataVM } from "../models/public-user-profile-data.vm";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { UserImage } from "../../user/ui/user-image";
+import Link from "next/link";
 
 interface UserProfileCardProps {
   publicUserProfileData: PublicUserProfileDataVM;
@@ -14,35 +15,43 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileDat
 
   return (
     <Card className="sticky top-32 bg-white">
-      <CardHeader className="p-2">
-        <CardTitle className="flex justify-center gap-3 pt-6">
+      <CardHeader className="mb-2 p-2">
+        <CardTitle className="flex justify-center gap-3 pt-7">
           <UserImage username={username} image={image} size="big" className="absolute -top-9 hover:ring-0" />
-          <span className="text-lg">@{username}</span>
-          {canFollow && <ToggleFollowUser userId={id} />}
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-lg">@{username}</span>
+            {canFollow && <ToggleFollowUser userId={id} />}
+          </div>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 grid-rows-2 gap-x-16 gap-y-5 text-center text-sm">
-          <div>
-            <span className="font-extrabold">TBA</span>
-            <br />
-            <span className="text-xs text-gray-400">URLs</span>
-          </div>
+        <div className="grid grid-cols-2 grid-rows-2 gap-x-14 gap-y-4 text-center text-sm">
+          <Link href={`/${username}`}>
+            <div className="rounded p-1 hover:bg-slate-100">
+              <span className="font-extrabold">TBA</span>
+              <br />
+              <span className="text-xs text-gray-400">URLs</span>
+            </div>
+          </Link>
           <div>
             <span className="font-extrabold">TBA</span>
             <br />
             <span className="text-xs text-gray-400">Likes</span>
           </div>
-          <div>
-            <span className="font-bold">{following}</span>
-            <br />
-            <span className="text-xs text-gray-400">following</span>
-          </div>
-          <div>
-            <span className="font-bold">{followers}</span>
-            <br />
-            <span className="text-xs text-gray-400">followers</span>
-          </div>
+          <Link href={`/${username}/following`}>
+            <div className="rounded p-1 hover:bg-slate-100">
+              <span className="font-bold">{following}</span>
+              <br />
+              <span className="text-xs text-gray-400">following</span>
+            </div>
+          </Link>
+          <Link href={`/${username}/followers`}>
+            <div className="rounded p-1 hover:bg-slate-100">
+              <span className="font-bold">{followers}</span>
+              <br />
+              <span className="text-xs text-gray-400">followers</span>
+            </div>
+          </Link>
         </div>
       </CardContent>
     </Card>

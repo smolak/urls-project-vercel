@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import { LoadingIndicator } from "./loading-indicator";
-import { LogOut, User2 } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { UserImage } from "../../user/ui/user-image";
 import { cn } from "../../utils";
 
@@ -66,7 +66,7 @@ export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
                   <DropdownMenuLabel>My account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="gap-2">
-                    <User2 size={12} />
+                    <User size={12} />
                     <Link href="/settings/profile">Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="gap-2">
