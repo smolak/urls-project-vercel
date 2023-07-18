@@ -1,8 +1,10 @@
 import { User } from "@prisma/client";
 import { FC, useEffect, useState } from "react";
-import { RiUserFollowLine, RiUserUnfollowLine } from "react-icons/ri";
 import { LoadingIndicator } from "../../core/ui/loading-indicator";
 import { api } from "../../../utils/api";
+import { Button } from "../../components/ui/button";
+import { UserMinus, UserPlus } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 
 interface ToggleFollowUserProps {
   userId: User["id"];
@@ -27,26 +29,41 @@ export const ToggleFollowUser: FC<ToggleFollowUserProps> = ({ userId }) => {
 
   return (
     <div>
-      {(!isDoneChecking || isToggling) && <LoadingIndicator label="Checking follow status" />}
-      {isDoneChecking && !isToggling && (
-        <button
-          onClick={() => toggle({ userId })}
-          disabled={isToggling}
-          className="inline-block flex items-center gap-1 rounded-lg bg-indigo-600 px-2 py-1 text-base
-          font-semibold text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
-        >
+      {!isDoneChecking && <LoadingIndicator label="Checking follow status" />}
+      {isDoneChecking && (
+        <>
           {isFollowing ? (
-            <>
-              <span>Unfollow</span>
-              <RiUserFollowLine className="text-indigo-200" aria-hidden="true" />
-            </>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    className="flex items-center gap-2"
+                    variant="outline"
+                    onClick={() => toggle({ userId })}
+                    disabled={isToggling}
+                  >
+                    Following
+                    {isToggling ? (
+                      <LoadingIndicator size={14} label="Unfollowing..." />
+                    ) : (
+                      <UserMinus size={14} aria-hidden="true" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Unfollow</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ) : (
-            <>
-              <span>Follow</span>
-              <RiUserUnfollowLine display="inline" className="text-indigo-200" aria-hidden="true" />
-            </>
+            <Button className="flex items-center gap-2" onClick={() => toggle({ userId })} disabled={isToggling}>
+              Follow
+              {isToggling ? (
+                <LoadingIndicator size={14} label="Following..." />
+              ) : (
+                <UserPlus size={14} aria-hidden="true" />
+              )}
+            </Button>
           )}
-        </button>
+        </>
       )}
     </div>
   );

@@ -1,10 +1,10 @@
 import { FC, ReactNode } from "react";
-import { Footer } from "./footer";
+
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Logo } from "../../shared/ui/logo";
 import Link from "next/link";
-import { LoadingIndicator } from "./loading-indicator";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,13 +16,15 @@ import {
 import { LogOut, User } from "lucide-react";
 import { UserImage } from "../../user/ui/user-image";
 import { cn } from "../../utils";
+import { LoadingIndicator } from "../../core/ui/loading-indicator";
+import { Footer } from "../../core/ui/footer";
 
-type UserFeedLayoutProps = {
+type FollowingFollowersLayoutProps = {
   mainContent: ReactNode;
   rightColumnContent: ReactNode;
 };
 
-export const UserFeedLayout: FC<UserFeedLayoutProps> = ({ mainContent, rightColumnContent }) => {
+export const FollowingFollowersLayout: FC<FollowingFollowersLayoutProps> = ({ mainContent, rightColumnContent }) => {
   const { data: session, status } = useSession();
   const { pathname } = useRouter();
 
@@ -62,11 +64,7 @@ export const UserFeedLayout: FC<UserFeedLayoutProps> = ({ mainContent, rightColu
 
           <div className="flex flex-1 items-center justify-end">
             {status === "loading" && <LoadingIndicator label="Checking session..." />}
-            {status === "unauthenticated" && (
-              <Link className="" href="/auth/login">
-                Login
-              </Link>
-            )}
+            {status === "unauthenticated" && <Link href="/auth/login">Login</Link>}
             {status === "authenticated" && (
               <DropdownMenu>
                 <DropdownMenuTrigger>

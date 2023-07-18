@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
-import { LogOut, User2 } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { Footer } from "../../core/ui/footer";
 import { UserImage } from "../../user/ui/user-image";
 
@@ -52,7 +52,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ children, title, user 
                 <DropdownMenuLabel>My account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="gap-2">
-                  <User2 size={12} />
+                  <User size={12} />
                   <Link href="/settings/profile">Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="gap-2">

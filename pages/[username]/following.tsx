@@ -3,21 +3,18 @@ import prisma from "../../prisma";
 import { usernameSchema } from "../../lib/user-profile-data/schemas/user-profile-data.schema";
 import { StatusCodes } from "http-status-codes";
 import { PUBLIC_USER_PROFILE_DATA_SELECT_FRAGMENT } from "../../lib/user-profile-data/models/fragments";
-import { decompressMetadata } from "../../lib/metadata/compression";
-import { getToken } from "next-auth/jwt";
-import { FeedVM } from "../../lib/feed/models/feed.vm";
-import { UserFeedList } from "../../lib/feed/ui/user-feed-list/user-feed-list";
-import { getUserFeed } from "../../lib/feed/prisma/get-user-feed";
-import { UserFeedLayout } from "../../lib/core/ui/user-feed.layout";
 import { UserProfileCard } from "../../lib/user-profile-data/ui/user-profile-card";
+import { FollowingRawEntries, getFollowing } from "../../lib/follow-user/queries/get-following";
+import { getToken } from "next-auth/jwt";
+import { FollowingFollowersLayout } from "../../lib/user-profile-data/layouts/following-followers.layout";
+import { FollowingList } from "../../lib/user-profile-data/ui/following-list";
+import { User } from "@prisma/client";
 
-type Self = {
-  id: string;
-} | null;
+type ViewerId = User["id"] | null;
 
-type UserProfilePageProps =
+type FollowingPageProps =
   | {
-      self: Self;
+      viewerId: ViewerId;
       userData: {
         id: string;
         username: string;
@@ -26,7 +23,7 @@ type UserProfilePageProps =
         following: number;
         createdAt: string;
       };
-      feed: ReadonlyArray<FeedVM>;
+      profiles: FollowingRawEntries;
     }
   | {
       userData: null;
@@ -35,14 +32,15 @@ type UserProfilePageProps =
       errorCode: number;
     };
 
-const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
+const FollowingPage: NextPage<FollowingPageProps> = (props) => {
   if (props.userData) {
-    const { self, userData, feed } = props;
-    const canFollow = (self?.id && self.id !== userData.id) || false;
+    const { viewerId, userData, profiles } = props;
+    const canFollow = viewerId !== null && viewerId !== userData.id;
+    const myProfile = userData.id === viewerId;
 
     return (
-      <UserFeedLayout
-        mainContent={<UserFeedList feed={feed} />}
+      <FollowingFollowersLayout
+        mainContent={<FollowingList profiles={profiles} username={userData.username} myProfile={myProfile} />}
         rightColumnContent={<UserProfileCard publicUserProfileData={userData} canFollow={canFollow} />}
       />
     );
@@ -55,11 +53,10 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
   }
 };
 
-export default UserProfilePage;
+export default FollowingPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-  const username = query.username;
-  const parsingResult = usernameSchema.safeParse(username);
+  const parsingResult = usernameSchema.safeParse(query.username);
 
   if (!parsingResult.success) {
     res.statusCode = StatusCodes.NOT_FOUND;
@@ -70,15 +67,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
   }
 
   const token = await getToken({ req });
-  const self = token
-    ? {
-        id: token.sub as string,
-      }
-    : null;
+  const viewerId = token ? (token.sub as string) : null;
+  const username = parsingResult.data;
 
   const maybePublicUserData = await prisma.userProfileData.findUnique({
     where: {
-      username: parsingResult.data,
+      username,
     },
     select: {
       ...PUBLIC_USER_PROFILE_DATA_SELECT_FRAGMENT,
@@ -91,31 +85,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 
     return {
       props: {
-        error: `User with username: '${parsingResult.data}' not found.`,
+        error: `User with username: '${username}' not found.`,
         errorCode: StatusCodes.NOT_FOUND,
         userData: null,
         feed: null,
       },
     };
   }
-
-  const feedRawEntries = await getUserFeed(maybePublicUserData.userId);
-
-  const feed = feedRawEntries.map((entry) => {
-    return {
-      id: entry.feed_id,
-      createdAt: entry.feed_createdAt.toISOString(),
-      user: {
-        image: entry.user_image,
-        username: entry.user_username,
-      },
-      url: {
-        url: entry.url_url,
-        metadata: decompressMetadata(entry.url_metadata),
-      },
-      userUrlId: entry.userUrl_id,
-    };
-  });
 
   const { userId, createdAt, ...userData } = maybePublicUserData;
   const serializedUserData = {
@@ -124,5 +100,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     createdAt: createdAt?.toISOString(),
   };
 
-  return { props: { userData: serializedUserData, feed, self } };
+  const following = await getFollowing(maybePublicUserData.userId, viewerId);
+
+  return { props: { userData: serializedUserData, profiles: following, viewerId } };
 };
