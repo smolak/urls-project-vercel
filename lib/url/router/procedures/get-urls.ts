@@ -1,14 +1,7 @@
 import { protectedProcedure } from "../../../../server/api/trpc";
-import { TRPCError } from "@trpc/server";
 import { CompressedMetadata, decompressMetadata } from "../../../metadata/compression";
 
-export const getUrls = protectedProcedure.query(async ({ ctx: { session, prisma } }) => {
-  if (session.user.role !== "ADMIN") {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-    });
-  }
-
+export const getUrls = protectedProcedure.query(async ({ ctx: { prisma } }) => {
   const userUrls = await prisma.userUrl.findMany({
     include: {
       url: true,
