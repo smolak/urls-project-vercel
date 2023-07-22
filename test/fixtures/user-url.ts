@@ -8,5 +8,6 @@ export const createUserUrl = (overwrites: Partial<UserUrl> = {}): UserUrl => ({
   userId: generateUserId(),
   urlId: generateUrlId(),
   createdAt: new Date(),
+  likes: 0,
   ...overwrites,
 });

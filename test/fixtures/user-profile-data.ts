@@ -18,6 +18,7 @@ export const createUserProfileData = (overwrites: Partial<UserProfileData> = {})
     userId: generateUserId(),
     following: 0,
     followers: 0,
+    likes: 0,
     ...overwrites,
   };
 };
