@@ -140,8 +140,6 @@ enum UserRole {
   NEW_USER
   // Once setting up user data for new user, the role will become this, to distinguish one from the other
   USER
-  // They rule here
-  ADMIN
 }
 
 model User {
