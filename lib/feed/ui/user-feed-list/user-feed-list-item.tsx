@@ -3,7 +3,7 @@ import { FeedVM } from "../../models/feed.vm";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
-import { Calendar, Image as ImageIcon } from "lucide-react";
+import { Calendar, Heart, Image as ImageIcon } from "lucide-react";
 import { isImage, isWebsite } from "../../../metadata/urils";
 import { LogoIcon } from "../../../shared/ui/logo";
 import { UserImage } from "../../../user/ui/user-image";
@@ -14,7 +14,7 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
   const isSomethingElse = !isAnImage && !isAWebsite;
 
   return (
-    <Card className="overflow-hidden shadow hover:bg-slate-50">
+    <Card className="overflow-hidden shadow hover:shadow-lg">
       <CardHeader className="group cursor-pointer gap-2">
         <CardTitle className="flex items-center gap-3">
           {isAnImage && <ImageIcon strokeWidth={1} size={40} className="text-slate-400" aria-label="Image icon" />}
@@ -51,7 +51,13 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
         )}
         <CardDescription>{url.metadata.description}</CardDescription>
       </CardContent>
-      <CardFooter className="justify-end">
+      <CardFooter className="flex justify-between">
+        <div>
+          <button className="flex items-center gap-1.5 rounded-xl p-2 text-sm hover:bg-red-50">
+            {url.liked ? <Heart fill="#dc2626" color="#dc2626" size={18} /> : <Heart size={18} />}
+            {url.likes}
+          </button>
+        </div>
         <Link href={`/${user.username}`}>
           <UserImage username={user.username} image={user.image as string} size="small" />
         </Link>

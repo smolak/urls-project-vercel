@@ -3,9 +3,8 @@ import prisma from "../../prisma";
 import { usernameSchema } from "../../lib/user-profile-data/schemas/user-profile-data.schema";
 import { StatusCodes } from "http-status-codes";
 import { PUBLIC_USER_PROFILE_DATA_SELECT_FRAGMENT } from "../../lib/user-profile-data/models/fragments";
-import { decompressMetadata } from "../../lib/metadata/compression";
 import { getToken } from "next-auth/jwt";
-import { FeedVM } from "../../lib/feed/models/feed.vm";
+import { FeedVM, toFeedVM } from "../../lib/feed/models/feed.vm";
 import { UserFeedList } from "../../lib/feed/ui/user-feed-list/user-feed-list";
 import { getUserFeed } from "../../lib/feed/prisma/get-user-feed";
 import { UserFeedLayout } from "../../lib/core/ui/user-feed.layout";
@@ -103,17 +102,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 
   const feed = feedRawEntries.map((entry) => {
     return {
-      id: entry.feed_id,
+      ...toFeedVM(entry),
       createdAt: entry.feed_createdAt.toISOString(),
-      user: {
-        image: entry.user_image,
-        username: entry.user_username,
-      },
-      url: {
-        url: entry.url_url,
-        metadata: decompressMetadata(entry.url_metadata),
-      },
-      userUrlId: entry.userUrl_id,
     };
   });
 
