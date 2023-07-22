@@ -90,6 +90,7 @@ model UserUrl {
   userId          String
   url             Url             @relation(fields: [urlId], references: [id], onDelete: Cascade)
   urlId           String
+  likes           Int             @default(0) @db.UnsignedInt
   feeds           Feed[]
   feedQueue       FeedQueue?
   createdAt       DateTime        @default(now())
@@ -104,6 +105,7 @@ model Feed {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userUrlId String
   userUrl   UserUrl  @relation(fields: [userUrlId], references: [id], onDelete: Cascade)
+  liked     Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
