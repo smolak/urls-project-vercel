@@ -19,6 +19,7 @@ export const createUserProfileData = (overwrites: Partial<UserProfileData> = {})
     following: 0,
     followers: 0,
     likes: 0,
+    liked: BigInt(0),
     ...overwrites,
   };
 };
