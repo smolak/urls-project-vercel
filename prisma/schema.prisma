@@ -190,6 +190,7 @@ model UserProfileData {
   userUrls           UserUrl[]
   following          Int       @default(0) @db.UnsignedInt
   followers          Int       @default(0) @db.UnsignedInt
+  likes              Int       @default(0) @db.UnsignedInt
 
   @@index([userId])
   @@index([apiKey])
