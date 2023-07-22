@@ -21,6 +21,7 @@ type FollowersPageProps =
         image: string;
         followers: number;
         following: number;
+        likes: number;
         createdAt: string;
       };
       profiles: FollowersRawEntries;

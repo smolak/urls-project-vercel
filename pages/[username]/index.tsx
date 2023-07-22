@@ -23,6 +23,7 @@ type UserProfilePageProps =
         image: string;
         followers: number;
         following: number;
+        likes: number;
         createdAt: string;
       };
       feed: ReadonlyArray<FeedVM>;

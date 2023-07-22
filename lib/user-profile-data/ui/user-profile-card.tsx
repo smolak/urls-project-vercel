@@ -11,7 +11,7 @@ interface UserProfileCardProps {
 }
 
 export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileData, canFollow = false }) => {
-  const { id, username, image, following, followers } = publicUserProfileData;
+  const { id, username, image, following, followers, likes } = publicUserProfileData;
 
   return (
     <Card className="sticky top-32 bg-white">
@@ -34,7 +34,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileDat
             </div>
           </Link>
           <div>
-            <span className="font-extrabold">TBA</span>
+            <span className="font-extrabold">{likes}</span>
             <br />
             <span className="text-xs text-gray-400">Likes</span>
           </div>
