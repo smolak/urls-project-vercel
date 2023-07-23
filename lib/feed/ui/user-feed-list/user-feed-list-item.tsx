@@ -3,12 +3,13 @@ import { FeedVM } from "../../models/feed.vm";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
-import { Calendar, Heart, Image as ImageIcon } from "lucide-react";
+import { Calendar, Image as ImageIcon } from "lucide-react";
 import { isImage, isWebsite } from "../../../metadata/urils";
 import { LogoIcon } from "../../../shared/ui/logo";
 import { UserImage } from "../../../user/ui/user-image";
+import { ToggleLikeUrl } from "./toggle-like-url";
 
-export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
+export const UserFeedListItem: FC<FeedVM> = ({ id, user, url, createdAt }) => {
   const isAnImage = isImage(url.metadata);
   const isAWebsite = isWebsite(url.metadata);
   const isSomethingElse = !isAnImage && !isAWebsite;
@@ -53,10 +54,7 @@ export const UserFeedListItem: FC<FeedVM> = ({ user, url, createdAt }) => {
       </CardContent>
       <CardFooter className="flex justify-between">
         <div>
-          <button className="flex items-center gap-1.5 rounded-xl p-2 text-sm hover:bg-red-50">
-            {url.liked ? <Heart fill="#dc2626" color="#dc2626" size={18} /> : <Heart size={18} />}
-            {url.likes}
-          </button>
+          <ToggleLikeUrl feedId={id} liked={url.liked} likes={url.likes} />
         </div>
         <Link href={`/${user.username}`}>
           <UserImage username={user.username} image={user.image as string} size="small" />
