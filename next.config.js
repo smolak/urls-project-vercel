@@ -11,6 +11,11 @@ const nextConfig = {
       itemsPerUserChannel: 20,
     },
   },
+  modularizeImports: {
+    "lucide-react": {
+      transform: "lucide-react/dist/esm/icons/{{ kebabCase member }}",
+    },
+  },
 };
 
 module.exports = nextConfig;
