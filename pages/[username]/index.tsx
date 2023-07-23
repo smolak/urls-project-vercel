@@ -108,12 +108,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     };
   });
 
-  const { userId, createdAt, likes, ...userData } = maybePublicUserData;
+  const { userId, createdAt, ...userData } = maybePublicUserData;
   const serializedUserData = {
     ...userData,
     id: userId,
     createdAt: createdAt?.toISOString(),
-    likes: Number(likes),
   };
 
   return { props: { userData: serializedUserData, feed, self } };
