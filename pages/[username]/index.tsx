@@ -8,7 +8,6 @@ import { FeedVM, toFeedVM } from "../../lib/feed/models/feed.vm";
 import { UserFeedList } from "../../lib/feed/ui/user-feed-list/user-feed-list";
 import { getUserFeed } from "../../lib/feed/prisma/get-user-feed";
 import { UserFeedLayout } from "../../lib/core/ui/user-feed.layout";
-import { UserProfileCard } from "../../lib/user-profile-data/ui/user-profile-card";
 
 type Self = {
   id: string;
@@ -41,10 +40,7 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
     const canFollow = (self?.id && self.id !== userData.id) || false;
 
     return (
-      <UserFeedLayout
-        mainContent={<UserFeedList feed={feed} />}
-        rightColumnContent={<UserProfileCard publicUserProfileData={userData} canFollow={canFollow} />}
-      />
+      <UserFeedLayout mainContent={<UserFeedList feed={feed} />} rightColumnContent={<div>check something</div>} />
     );
   } else {
     return (
