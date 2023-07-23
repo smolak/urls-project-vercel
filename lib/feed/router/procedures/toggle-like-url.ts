@@ -52,54 +52,56 @@ export const toggleLikeUrl = protectedProcedure
         if (!maybeFeed.liked) {
           // Liking
           const likes = await prisma.$transaction(async (prisma) => {
-            // Increment total likes count for the URL owner
-            await prisma.userProfileData.update({
-              data: {
-                liked: {
-                  increment: 1,
+            const [{ likes }] = await Promise.all([
+              // Increment likes on the URL
+              prisma.userUrl.update({
+                data: {
+                  likes: {
+                    increment: 1,
+                  },
                 },
-              },
-              where: {
-                userId: idOfProfileOwningTheUrl,
-              },
-            });
-
-            // Increment my likes count, of the things that I liked
-            await prisma.userProfileData.update({
-              data: {
-                likes: {
-                  increment: 1,
+                where: {
+                  id: maybeFeed.userUrlId,
                 },
-              },
-              where: {
-                userId,
-              },
-            });
-
-            // Increment likes on the URL
-            const { likes } = await prisma.userUrl.update({
-              data: {
-                likes: {
-                  increment: 1,
+                select: {
+                  likes: true,
                 },
-              },
-              where: {
-                id: maybeFeed.userUrlId,
-              },
-              select: {
-                likes: true,
-              },
-            });
+              }),
 
-            // Like the URL
-            await prisma.feed.update({
-              data: {
-                liked: true,
-              },
-              where: {
-                id: feedId,
-              },
-            });
+              // Increment total likes count for the URL owner
+              prisma.userProfileData.update({
+                data: {
+                  liked: {
+                    increment: 1,
+                  },
+                },
+                where: {
+                  userId: idOfProfileOwningTheUrl,
+                },
+              }),
+
+              // Increment my likes count, of the things that I liked
+              prisma.userProfileData.update({
+                data: {
+                  likes: {
+                    increment: 1,
+                  },
+                },
+                where: {
+                  userId,
+                },
+              }),
+
+              // Like the URL
+              prisma.feed.update({
+                data: {
+                  liked: true,
+                },
+                where: {
+                  id: feedId,
+                },
+              }),
+            ]);
 
             return likes;
           });
@@ -111,54 +113,56 @@ export const toggleLikeUrl = protectedProcedure
 
         // Unliking
         const likes = await prisma.$transaction(async (prisma) => {
-          // Decrement total liked count for the URL owner
-          await prisma.userProfileData.update({
-            data: {
-              liked: {
-                decrement: 1,
+          const [{ likes }] = await Promise.all([
+            // Decrement likes on the URL
+            prisma.userUrl.update({
+              data: {
+                likes: {
+                  decrement: 1,
+                },
               },
-            },
-            where: {
-              userId: idOfProfileOwningTheUrl,
-            },
-          });
-
-          // Decrement my likes count, of the things that I liked
-          await prisma.userProfileData.update({
-            data: {
-              likes: {
-                decrement: 1,
+              where: {
+                id: maybeFeed.userUrlId,
               },
-            },
-            where: {
-              userId,
-            },
-          });
-
-          // Decrement likes on the URL
-          const { likes } = await prisma.userUrl.update({
-            data: {
-              likes: {
-                decrement: 1,
+              select: {
+                likes: true,
               },
-            },
-            where: {
-              id: maybeFeed.userUrlId,
-            },
-            select: {
-              likes: true,
-            },
-          });
+            }),
 
-          // Unlike the URL
-          await prisma.feed.update({
-            data: {
-              liked: false,
-            },
-            where: {
-              id: feedId,
-            },
-          });
+            // Decrement total liked count for the URL owner
+            prisma.userProfileData.update({
+              data: {
+                liked: {
+                  decrement: 1,
+                },
+              },
+              where: {
+                userId: idOfProfileOwningTheUrl,
+              },
+            }),
+
+            // Decrement my likes count, of the things that I liked
+            prisma.userProfileData.update({
+              data: {
+                likes: {
+                  decrement: 1,
+                },
+              },
+              where: {
+                userId,
+              },
+            }),
+
+            // Unlike the URL
+            prisma.feed.update({
+              data: {
+                liked: false,
+              },
+              where: {
+                id: feedId,
+              },
+            }),
+          ]);
 
           return likes;
         });
