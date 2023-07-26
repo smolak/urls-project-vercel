@@ -11,13 +11,6 @@ const nextConfig = {
       itemsPerUserChannel: 20,
     },
   },
-  modularizeImports: {
-    "lucide-react": {
-      transform: "lucide-react/{{member}}",
-      skipDefaultConversion: true,
-      preventFullImport: true,
-    },
-  },
 };
 
 module.exports = nextConfig;
