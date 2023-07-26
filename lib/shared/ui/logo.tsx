@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FC } from "react";
+import { FC, RefAttributes } from "react";
 import { Link2, LucideProps } from "lucide-react";
 import { cn } from "../../utils";
 
@@ -10,7 +10,7 @@ type LogoProps = {
 
 type LogoContentProps = Pick<LogoProps, "withName">;
 
-export const LogoIcon = ({ className, ...rest }: LucideProps) => (
+export const LogoIcon = ({ className, ...rest }: LucideProps & RefAttributes<SVGSVGElement>) => (
   <Link2 {...rest} className={cn(className, "-rotate-45")} />
 );
 
