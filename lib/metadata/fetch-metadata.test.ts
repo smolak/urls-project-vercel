@@ -88,7 +88,7 @@ describe("fetchMetadata", () => {
       nock(baseUrl).head(path).reply(200);
     });
 
-    it("should use an empty string to allow verification and as a default value", async () => {
+    it("should use an empty string", async () => {
       const metadata = await fetchMetadata(url);
 
       expect(metadata).toEqual({
