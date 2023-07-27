@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 import { Calendar, Image as ImageIcon } from "lucide-react";
-import { isImage, isWebsite } from "../../../metadata/urils";
+import { isImage, isWebsite } from "../../../metadata/utils";
 import { LogoIcon } from "../../../shared/ui/logo";
 import { UserImage } from "../../../user/ui/user-image";
 import { ToggleLikeUrl } from "./toggle-like-url";
