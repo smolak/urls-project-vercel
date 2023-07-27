@@ -1,5 +1,5 @@
-import { Metadata } from "../../lib/metadata/get-metadata";
 import { MetaData } from "metadata-scraper";
+import { Metadata } from "../../lib/metadata/types";
 
 export const createExampleWebsiteMetadata = (overwrites: Partial<Metadata> = {}): Metadata => ({
   audio: "Audio info",

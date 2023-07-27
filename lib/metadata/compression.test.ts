@@ -1,5 +1,5 @@
-import { Metadata } from "./get-metadata";
 import { CompressedMetadata, compressMapper, compressMetadata, decompressMetadata } from "./compression";
+import { Metadata } from "./types";
 
 describe("compressMetadata", () => {
   it("should shorten the keys in order to save object's space", () => {
