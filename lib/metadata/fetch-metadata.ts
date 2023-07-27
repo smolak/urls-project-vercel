@@ -1,6 +1,7 @@
-import { getMetadata, Metadata } from "./get-metadata";
+import { getMetadata } from "./get-metadata";
 import { IncomingHttpHeaders } from "http";
 import https from "node:https";
+import { Metadata } from "./types";
 
 export type FetchMetadata = (url: string) => Promise<Metadata>;
 

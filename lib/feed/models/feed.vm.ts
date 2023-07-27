@@ -1,7 +1,7 @@
 import { Feed, Url, User, UserProfileData, UserUrl } from "@prisma/client";
-import { Metadata } from "../../metadata/get-metadata";
 import { RawFeedEntry } from "../prisma/get-user-feed";
 import { decompressMetadata } from "../../metadata/compression";
+import { Metadata } from "../../metadata/types";
 
 export const toFeedVM = (entry: RawFeedEntry): FeedVM => {
   return {

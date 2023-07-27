@@ -1,8 +1,9 @@
 import nock from "nock";
 import { fetchMetadata } from "./fetch-metadata";
 import { htmlContentOfMyProfileOnLN } from "../../test/fixtures/html-content-of-my-profile-on-ln";
-import { Metadata } from "./get-metadata";
 import { afterEach } from "vitest";
+import { tweetExampleMetadata } from "../../test/fixtures/tweet-example-metadata";
+import { Metadata } from "./types";
 
 const baseUrl = "https://urlshare.me";
 const path = "/whatever";
@@ -20,6 +21,20 @@ describe("fetchMetadata", () => {
   afterEach(() => {
     nock.cleanAll();
     nock.enableNetConnect();
+  });
+
+  describe("when the url is a Twitter Tweet / X Xeet (?)", () => {
+    const twitterTweet = "https://twitter.com/ValaAfshar/status/1684664268547837952";
+
+    beforeEach(() => {
+      global.fetch = vi.fn().mockResolvedValue(createFetchResponse(tweetExampleMetadata));
+    });
+
+    it.only("should call Twitter's CDN API url for metadata", async () => {
+      const metadata = await fetchMetadata(twitterTweet);
+
+      console.log(metadata);
+    });
   });
 
   describe("when the url points to a website", () => {

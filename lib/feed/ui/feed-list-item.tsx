@@ -1,7 +1,7 @@
 import { Url, UserProfileData, UserUrl } from "@prisma/client";
-import { Metadata } from "../../metadata/get-metadata";
 import { FC } from "react";
 import { UserImage } from "../../user/ui/user-image";
+import { Metadata } from "../../metadata/types";
 
 interface UrlData extends Pick<Url, "id" | "url"> {
   metadata: Metadata;
