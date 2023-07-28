@@ -2,8 +2,9 @@ import nock from "nock";
 import { fetchMetadata } from "./fetch-metadata";
 import { htmlContentOfMyProfileOnLN } from "../../test/fixtures/html-content-of-my-profile-on-ln";
 import { afterEach } from "vitest";
-import { tweetExampleMetadata } from "../../test/fixtures/tweet-example-metadata";
 import { Metadata } from "./types";
+import { getTweetId, TWITTER_METADATA_URL } from "./twitter-metadata";
+import { tweetExampleMetadata } from "../../test/fixtures/tweet-example-metadata";
 
 const baseUrl = "https://urlshare.me";
 const path = "/whatever";
@@ -24,16 +25,18 @@ describe("fetchMetadata", () => {
   });
 
   describe("when the url is a Twitter Tweet / X Xeet (?)", () => {
-    const twitterTweet = "https://twitter.com/ValaAfshar/status/1684664268547837952";
+    const tweetUrl = "https://twitter.com/ValaAfshar/status/1684664268547837952";
 
-    beforeEach(() => {
-      global.fetch = vi.fn().mockResolvedValue(createFetchResponse(tweetExampleMetadata));
-    });
+    it("should call Twitter's CDN API url for metadata", async () => {
+      const url = new URL(TWITTER_METADATA_URL);
+      const scope = nock(url.origin)
+        .get(url.pathname)
+        .query({ id: getTweetId(tweetUrl) })
+        .reply(200, tweetExampleMetadata);
 
-    it.only("should call Twitter's CDN API url for metadata", async () => {
-      const metadata = await fetchMetadata(twitterTweet);
+      await fetchMetadata(tweetUrl);
 
-      console.log(metadata);
+      scope.done();
     });
   });
 

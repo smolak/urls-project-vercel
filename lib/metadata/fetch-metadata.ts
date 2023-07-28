@@ -2,10 +2,15 @@ import { getMetadata } from "./get-metadata";
 import { IncomingHttpHeaders } from "http";
 import https from "node:https";
 import { Metadata } from "./types";
+import { getTweetMetadata, isTweetUrl } from "./twitter-metadata";
 
 export type FetchMetadata = (url: string) => Promise<Metadata>;
 
 export const fetchMetadata: FetchMetadata = async (url) => {
+  if (isTweetUrl(url)) {
+    return await getTweetMetadata(url);
+  }
+
   const result = await new Promise<IncomingHttpHeaders>((resolve, reject) => {
     https
       .request(url, { method: "HEAD" })
