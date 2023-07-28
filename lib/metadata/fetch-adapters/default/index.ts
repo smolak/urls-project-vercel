@@ -1,30 +1,17 @@
 import { FetchMetadata } from "../../fetch-metadata";
-import { IncomingHttpHeaders } from "http";
-import https from "node:https";
 import { Metadata } from "../../types";
 import { getMetadata } from "./get-metadata";
+import axios from "axios";
 
 export const defaultMetadataFetchAdapter: FetchMetadata = async (url) => {
-  const result = await new Promise<IncomingHttpHeaders>((resolve, reject) => {
-    https
-      .request(url, { method: "HEAD" })
-      .on("response", (data) => {
-        resolve(data.headers);
-      })
-      .on("error", (error) => {
-        reject(error);
-      })
-      .end();
-  });
-
-  const contentType = result["content-type"] || "";
+  const { headers } = await axios.head(url);
+  const contentType = headers["content-type"] || "";
   const isAWebsite = contentType.includes("text/html");
 
   let metadata: Metadata = {};
 
   if (isAWebsite) {
-    const response = await fetch(url);
-    const htmlContent = await response.text();
+    const { data: htmlContent } = await axios.get(url);
 
     metadata = await getMetadata(url, htmlContent);
   }
