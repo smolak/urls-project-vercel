@@ -2,7 +2,7 @@ import { Metadata } from "./types";
 import { TweetMetadata } from "./tweet-metadata.schema";
 import axios from "axios";
 
-const TWITTER_METADATA_URL = "https://cdn.syndication.twimg.com/tweet-result";
+export const TWITTER_METADATA_URL = "https://cdn.syndication.twimg.com/tweet-result";
 
 export const isTweetUrl = (url: string) => {
   const maybeTweetUrl = new URL(url);
