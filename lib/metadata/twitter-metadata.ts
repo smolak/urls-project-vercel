@@ -35,6 +35,7 @@ export const toMetadata = (tweetUrl: string, tweetDetails: TweetMetadata): Metad
     author: tweetDetails.user.screen_name,
     contentType: "text/html",
     description: tweetDetails.text,
+    icon: tweetDetails.user.profile_image_url_https,
     image: tweetDetails.mediaDetails?.[0].media_url_https,
     keywords: tweetDetails.entities.hashtags.map(({ text }) => text),
     language: tweetDetails.lang,
