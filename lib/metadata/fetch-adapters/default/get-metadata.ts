@@ -1,5 +1,5 @@
 import _getMetadata from "metadata-scraper";
-import { Metadata } from "./types";
+import { Metadata } from "../../types";
 
 type URL = string;
 

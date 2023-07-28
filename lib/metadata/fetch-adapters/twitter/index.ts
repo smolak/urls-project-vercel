@@ -1,6 +1,7 @@
-import { Metadata } from "./types";
+import { Metadata } from "../../types";
 import { TweetMetadata } from "./tweet-metadata.schema";
 import axios from "axios";
+import { FetchMetadata } from "../../fetch-metadata";
 
 export const TWITTER_METADATA_URL = "https://cdn.syndication.twimg.com/tweet-result";
 
@@ -48,7 +49,7 @@ export const toMetadata = (tweetUrl: string, tweetDetails: TweetMetadata): Metad
   };
 };
 
-export const getTweetMetadata = async (tweetUrl: string): Promise<Metadata> => {
+export const twitterMetadataFetchAdapter: FetchMetadata = async (tweetUrl: string) => {
   const tweetDetails = await fetchTweetDetails(getTweetId(tweetUrl));
 
   return toMetadata(tweetUrl, tweetDetails);

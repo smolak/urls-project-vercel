@@ -1,6 +1,6 @@
 import _getMetadata from "metadata-scraper";
 import { getMetadata } from "./get-metadata";
-import { createExampleMetadataScraperResult } from "../../test/fixtures/example-metadata";
+import { createExampleMetadataScraperResult } from "../../../../test/fixtures/example-metadata";
 
 vi.mock("metadata-scraper");
 const _getMetadataMock = vi.mocked(_getMetadata);
