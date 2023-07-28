@@ -32,7 +32,7 @@ export const UserFeedListItem: FC<FeedVM> = ({ id, user, url, createdAt }) => {
             href={url.url}
             title={url.metadata.title}
             target="_blank"
-            className="leading-7 decoration-slate-200 group-hover:underline"
+            className="overflow-hidden text-ellipsis leading-7 decoration-slate-200 group-hover:underline"
           >
             {url.metadata.title || url.url}
           </a>
@@ -45,8 +45,13 @@ export const UserFeedListItem: FC<FeedVM> = ({ id, user, url, createdAt }) => {
       <CardContent className="flex flex-col gap-5">
         {url.metadata.image && (
           <figure>
-            <a href={url.url} title={url.metadata.title} target="_blank" className="flex place-content-center">
-              <img src={url.metadata.image} alt={url.metadata.title} />
+            <a
+              href={url.url}
+              title={url.metadata.title}
+              target="_blank"
+              className="flex max-h-96 place-content-center overflow-hidden"
+            >
+              <img src={url.metadata.image} alt={url.metadata.title} className="object-cover" />
             </a>
           </figure>
         )}
