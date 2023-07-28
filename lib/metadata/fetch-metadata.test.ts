@@ -3,7 +3,7 @@ import { fetchMetadata } from "./fetch-metadata";
 import { htmlContentOfMyProfileOnLN } from "../../test/fixtures/html-content-of-my-profile-on-ln";
 import { afterEach } from "vitest";
 import { Metadata } from "./types";
-import { getTweetId, TWITTER_METADATA_URL } from "./twitter-metadata";
+import { getTweetId, TWITTER_METADATA_URL } from "./fetch-adapters/twitter";
 import { tweetExampleMetadata } from "../../test/fixtures/tweet-example-metadata";
 
 const baseUrl = "https://urlshare.me";

@@ -1,7 +1,7 @@
 import { afterEach, expect } from "vitest";
-import { getTweetId, getTweetMetadata, isTweetUrl, toMetadata } from "./twitter-metadata";
+import { getTweetId, twitterMetadataFetchAdapter, isTweetUrl, toMetadata } from "./index";
 import nock from "nock";
-import { tweetExampleMetadata } from "../../test/fixtures/tweet-example-metadata";
+import { tweetExampleMetadata } from "../../../../test/fixtures/tweet-example-metadata";
 import { tweetMetadataSchema } from "./tweet-metadata.schema";
 
 describe("isTweetUrl", () => {
@@ -37,7 +37,7 @@ describe("getTweetId", () => {
   });
 });
 
-describe("getTweetMetadata", () => {
+describe("twitterMetadataFetchAdapter", () => {
   beforeEach(() => {
     nock.disableNetConnect();
   });
@@ -57,7 +57,7 @@ describe("getTweetMetadata", () => {
       .query({ id: tweetId })
       .reply(200, tweetExampleMetadata);
 
-    const result = await getTweetMetadata(tweetUrl);
+    const result = await twitterMetadataFetchAdapter(tweetUrl);
 
     expect(result).toEqual(expectedMetadata);
   });
