@@ -9,8 +9,8 @@ export const ErrorLoadingUserFeed = () => {
           <span>✅</span> We log those things are aware of the problem.
         </p>
         <p className="mb-2 flex gap-2">
-          <span>💡</span> You can try refreshing the page, and if the problem is still there, wait a bit, we will handle
-          it ASAP.
+          <span>💡</span> Try refreshing the page. If that won&apos;t work, be patient, we&apos;re most likely working
+          on that already.
         </p>
       </div>
     </section>
