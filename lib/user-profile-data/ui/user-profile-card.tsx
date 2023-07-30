@@ -4,6 +4,7 @@ import { PublicUserProfileDataVM } from "../models/public-user-profile-data.vm";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { UserImage } from "../../user/ui/user-image";
 import Link from "next/link";
+import { RssIcon } from "lucide-react";
 
 interface UserProfileCardProps {
   publicUserProfileData: PublicUserProfileDataVM;
@@ -24,7 +25,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileDat
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-6">
         <div className="grid grid-cols-2 grid-rows-2 gap-x-14 gap-y-4 text-center text-sm">
           <Link href={`/${username}`}>
             <div className="rounded p-1 hover:bg-slate-100">
@@ -51,6 +52,11 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileDat
               <br />
               <span className="text-xs text-gray-400">followers</span>
             </div>
+          </Link>
+        </div>
+        <div className="flex place-content-center">
+          <Link href={`${username}/rss.xml`}>
+            <RssIcon size={16} />
           </Link>
         </div>
       </CardContent>
