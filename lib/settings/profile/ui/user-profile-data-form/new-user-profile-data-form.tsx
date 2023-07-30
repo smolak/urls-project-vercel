@@ -51,7 +51,7 @@ export const NewUserProfileDataForm = () => {
    */
 
   return (
-    <div className="container mx-auto my-5 max-w-2xl px-4">
+    <div className="container mx-auto my-5 max-w-2xl px-0 sm:px-4">
       {isChecking && (
         <div className="flex items-center justify-center">
           <p>Checking data...</p>
@@ -156,7 +156,7 @@ const UserProfileDataForm = () => {
   });
 
   return (
-    <section className="flex flex-col gap-10">
+    <section className="flex flex-col gap-4 sm:gap-10">
       <div>
         <h3 className="text-xl font-medium leading-6 text-gray-900">Welcome to urlshare.me</h3>
         <p className="mt-1 max-w-2xl text-sm text-gray-500">There are couple of things you need to do first.</p>
