@@ -1,87 +1,11 @@
 import { FC, PropsWithChildren } from "react";
-import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
-import { Logo } from "../../shared/ui/logo";
 import { Footer } from "./footer";
-import { useRouter } from "next/router";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
-import { LoadingIndicator } from "./loading-indicator";
-import { LogOut, User } from "lucide-react";
-import { UserImage } from "../../user/ui/user-image";
-import { cn } from "../../utils";
+import { MainHeader } from "../../shared/ui/main-header";
 
 export const LoggedInUserLayout: FC<PropsWithChildren> = ({ children }) => {
-  const { data: session, status } = useSession();
-  const { pathname } = useRouter();
-
   return (
     <>
-      <div className="supports-backdrop-blur:bg-background/60 bg-background/95 sticky top-0 z-40 w-full border-b backdrop-blur">
-        <div className="container flex h-16 items-center">
-          <div className="flex items-center space-x-8">
-            <Logo withName />
-            <nav>
-              <ol className="flex items-center space-x-6 text-sm font-medium">
-                <li>
-                  <Link
-                    href="/"
-                    className={cn(
-                      pathname === "/" ? "text-primary" : "text-secondary",
-                      "transition-colors hover:text-slate-800"
-                    )}
-                  >
-                    Homepage
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about"
-                    className={cn(
-                      pathname === "/about" ? "text-primary" : "text-secondary",
-                      "transition-colors hover:text-slate-800"
-                    )}
-                  >
-                    About
-                  </Link>
-                </li>
-              </ol>
-            </nav>
-          </div>
-
-          <div className="flex flex-1 items-center justify-end">
-            {status === "loading" && <LoadingIndicator label="Checking session..." />}
-            {status === "authenticated" && (
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <UserImage username={session.user.name as string} image={session.user.image as string} size="small" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="gap-2">
-                    <User size={12} />
-                    <Link href="/settings/profile">Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2">
-                    <LogOut size={12} />
-                    <a className="cursor-pointer" onClick={() => signOut()}>
-                      Logout
-                    </a>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-          </div>
-        </div>
-      </div>
-
+      <MainHeader />
       <div className="container py-10">
         <main className="">{children}</main>
       </div>
