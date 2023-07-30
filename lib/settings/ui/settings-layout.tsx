@@ -14,12 +14,12 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({ children, title }) => 
     <>
       <MainHeader />
 
-      <div className="container py-3">
+      <section className="container px-4 py-3 sm:px-8">
         <header>
           <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
         </header>
         <main className="">{children}</main>
-      </div>
+      </section>
 
       <Footer />
     </>

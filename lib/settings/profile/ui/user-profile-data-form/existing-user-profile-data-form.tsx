@@ -23,7 +23,7 @@ export const ExistingUserProfileDataForm = () => {
   const { route } = useRouter();
 
   return (
-    <div className="container mx-auto my-5 max-w-2xl px-4">
+    <div className="container mx-auto my-5 max-w-2xl px-0 sm:px-4">
       {isLoading && (
         <div className="flex items-center justify-center p-10">
           <LoadingIndicator label="Loading user profile data..." />
@@ -64,7 +64,7 @@ const UserProfileDataForm: FC<FormValues> = ({ username, apiKey }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-10">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 sm:gap-10">
         <FormItem>
           <FormLabel>Username</FormLabel>
           <div className="relative mt-1 flex rounded-md shadow-sm">
