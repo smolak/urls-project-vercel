@@ -18,7 +18,7 @@ const LogoContent = ({ withName }: LogoContentProps) => {
   return (
     <>
       <LogoIcon strokeWidth={2.25} size={25} />
-      {withName && <span className="font-bold">urlshare.me</span>}
+      {withName && <span className="hidden font-bold sm:inline-block">urlshare.me</span>}
     </>
   );
 };
