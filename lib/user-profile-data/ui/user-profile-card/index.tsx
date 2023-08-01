@@ -34,7 +34,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileDat
             href={`/${username}`}
             className={cn("rounded-md px-2 py-1", pathname === "/[username]" && "bg-slate-100")}
           >
-            <DataElement name="URLs" value={123} />
+            <DataElement name="URLs" value="..." />
           </Link>
           <div className={cn("rounded-md px-2 py-1", pathname === "/[username]/likes" && "bg-slate-100")}>
             <DataElement name="Likes" value={likes} />
