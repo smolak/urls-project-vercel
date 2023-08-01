@@ -11,7 +11,7 @@ type FollowingFollowersListProps = {
 
 export const FollowingList: FC<FollowingFollowersListProps> = ({ username, profiles, myProfile }) => {
   return (
-    <section className="min-h-[350px]">
+    <section className="lg:min-h-[350px]">
       <h1 className="mb-5 text-lg font-bold">{myProfile ? "Profiles I follow" : `Profiles ${username} follows`}</h1>
       <ol className="flex flex-col gap-1.5">
         {profiles.map((profile) => {
