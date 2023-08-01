@@ -35,7 +35,14 @@ export const AddUrl = () => {
     <div className="w-full">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex w-full items-center justify-center space-x-2">
-          <Input {...register("url")} type="url" disabled={isLoading} placeholder="https://..." className="max-w-md" />
+          <Input
+            {...register("url")}
+            type="url"
+            inputMode="url"
+            disabled={isLoading}
+            placeholder="https://..."
+            className="max-w-md"
+          />
           <Button type="submit" disabled={isLoading} className={cn("h-10 space-x-1", { loading: isLoading })}>
             <Plus size={18} />
             <span>Add</span>

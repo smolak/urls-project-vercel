@@ -10,7 +10,7 @@ type FollowersListProps = {
 
 export const FollowersList: FC<FollowersListProps> = ({ username, profiles, myProfile }) => {
   return (
-    <section>
+    <section className="min-h-[350px]">
       <h1 className="mb-5 text-lg font-bold">
         {myProfile ? "Profiles following me" : `Profiles following ${username}`}
       </h1>
