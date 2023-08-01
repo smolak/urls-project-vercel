@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { UserProfileData } from "@prisma/client";
 import { ProfileListItem, ProfileListItemProps } from "./profile-list-item";
+import Link from "next/link";
 
 type FollowersListProps = {
   username: UserProfileData["username"];
@@ -18,7 +19,9 @@ export const FollowersList: FC<FollowersListProps> = ({ username, profiles, myPr
         {profiles.map((profile) => {
           return (
             <li key={profile.username}>
-              <ProfileListItem {...profile} />
+              <Link href={`/${profile.username}`}>
+                <ProfileListItem {...profile} />
+              </Link>
             </li>
           );
         })}

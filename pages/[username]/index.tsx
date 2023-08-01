@@ -40,8 +40,9 @@ type UserProfilePageProps =
 const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
   if (props.userData) {
     const { self, userData, feed } = props;
-    const myProfile = self?.id && self.id === userData.id;
-    const canFollow = !myProfile || false;
+    const iAmLoggedIn = Boolean(self?.id);
+    const myProfile = Boolean(self?.id && self.id === userData.id);
+    const canFollow = !myProfile && iAmLoggedIn;
 
     return (
       <UserFeedLayout

@@ -55,6 +55,17 @@ export const MainHeader: FC = () => {
 
         <aside className="flex flex-1 items-center justify-end">
           {status === "loading" && <LoadingIndicator label="Checking session..." />}
+          {status === "unauthenticated" && (
+            <Link
+              href="/auth/login"
+              className={cn(
+                pathname === "/" ? "text-primary" : "text-secondary",
+                "text-sm transition-colors hover:text-slate-800"
+              )}
+            >
+              Login
+            </Link>
+          )}
           {status === "authenticated" && (
             <DropdownMenu>
               <DropdownMenuTrigger>
