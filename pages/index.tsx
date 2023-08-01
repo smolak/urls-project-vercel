@@ -41,15 +41,11 @@ const Home: NextPageWithLayout = () => {
         </section>
       )}
       {status === "authenticated" && (
-        <div className="grid grid-cols-9 gap-10">
-          <div className="col-span-2">Stuff will appear here</div>
-          <div className="col-span-5 flex flex-col gap-10">
+        <div className="flex flex-col gap-4 sm:gap-10">
+          <aside>
             <AddUrl />
-            <main>
-              <UserFeedList />
-            </main>
-          </div>
-          <div className="col-span-2">Here as well</div>
+          </aside>
+          <UserFeedList />
         </div>
       )}
     </>

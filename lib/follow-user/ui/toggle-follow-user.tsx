@@ -27,44 +27,39 @@ export const ToggleFollowUser: FC<ToggleFollowUserProps> = ({ userId }) => {
     },
   });
 
-  return (
-    <div>
-      {!isDoneChecking && <LoadingIndicator label="Checking follow status" />}
-      {isDoneChecking && (
-        <>
-          {isFollowing ? (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    className="flex items-center gap-2"
-                    variant="outline"
-                    onClick={() => toggle({ userId })}
-                    disabled={isToggling}
-                  >
-                    Following
-                    {isToggling ? (
-                      <LoadingIndicator size={14} label="Unfollowing..." />
-                    ) : (
-                      <UserMinus size={14} aria-hidden="true" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">Unfollow</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : (
-            <Button className="flex items-center gap-2" onClick={() => toggle({ userId })} disabled={isToggling}>
-              Follow
+  if (!isDoneChecking) {
+    return <LoadingIndicator label="Checking follow status" />;
+  }
+
+  if (isFollowing) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Button
+              className="flex items-center gap-2"
+              variant="outline"
+              onClick={() => toggle({ userId })}
+              disabled={isToggling}
+            >
+              Following
               {isToggling ? (
-                <LoadingIndicator size={14} label="Following..." />
+                <LoadingIndicator size={14} label="Unfollowing..." />
               ) : (
-                <UserPlus size={14} aria-hidden="true" />
+                <UserMinus size={14} aria-hidden="true" />
               )}
             </Button>
-          )}
-        </>
-      )}
-    </div>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">Unfollow</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  return (
+    <Button className="flex items-center gap-2" onClick={() => toggle({ userId })} disabled={isToggling}>
+      Follow
+      {isToggling ? <LoadingIndicator size={14} label="Following..." /> : <UserPlus size={14} aria-hidden="true" />}
+    </Button>
   );
 };

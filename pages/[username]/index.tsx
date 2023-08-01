@@ -9,6 +9,8 @@ import { UserFeedList } from "../../lib/feed/ui/user-feed-list/user-feed-list";
 import { getUserFeed } from "../../lib/feed/prisma/get-user-feed";
 import { UserFeedLayout } from "../../lib/core/ui/user-feed.layout";
 import { UserProfileCard } from "../../lib/user-profile-data/ui/user-profile-card";
+import Link from "next/link";
+import { RssIcon } from "lucide-react";
 
 type Self = {
   id: string;
@@ -38,11 +40,22 @@ type UserProfilePageProps =
 const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
   if (props.userData) {
     const { self, userData, feed } = props;
-    const canFollow = (self?.id && self.id !== userData.id) || false;
+    const myProfile = self?.id && self.id === userData.id;
+    const canFollow = !myProfile || false;
 
     return (
       <UserFeedLayout
-        mainContent={<UserFeedList feed={feed} />}
+        mainContent={
+          <section>
+            <div className="mb-5 flex items-center justify-between">
+              <h1 className="text-lg font-bold">{myProfile ? "My URLs" : `URLs added by ${userData.username}`}</h1>
+              <Link href={`${userData.username}/rss.xml`} className="-mt-3 p-3">
+                <RssIcon size={16} />
+              </Link>
+            </div>
+            <UserFeedList feed={feed} />
+          </section>
+        }
         rightColumnContent={<UserProfileCard publicUserProfileData={userData} canFollow={canFollow} />}
       />
     );
