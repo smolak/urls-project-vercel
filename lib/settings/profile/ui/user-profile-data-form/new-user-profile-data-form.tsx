@@ -94,15 +94,6 @@ const UserProfileDataForm = () => {
 
   const apiKey = generateApiKey();
 
-  const { register, clearErrors, trigger, handleSubmit } = useForm<FormValues>({
-    defaultValues: {
-      username: "",
-      apiKey,
-    },
-    criteriaMode: "all",
-    resolver: zodResolver(createUserProfileDataSchema),
-  });
-
   const form = useForm<CreateUserProfileDataSchema>({
     resolver: zodResolver(createUserProfileDataSchema),
     defaultValues: {
@@ -135,14 +126,14 @@ const UserProfileDataForm = () => {
     const validationResult = usernameCheckSchema.safeParse({ username });
 
     if (validationResult.success) {
-      clearErrors("username");
+      form.clearErrors("username");
       setUsernameIsValid(true);
 
       usernameCheck({ username });
     } else {
       setUsernameIsValid(false);
 
-      await trigger("username");
+      await form.trigger("username");
     }
   };
 
@@ -164,7 +155,7 @@ const UserProfileDataForm = () => {
       </div>
 
       <Form {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-10">
           <FormField
             control={form.control}
             name="username"
