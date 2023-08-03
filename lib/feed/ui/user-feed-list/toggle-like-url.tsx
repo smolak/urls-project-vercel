@@ -28,6 +28,9 @@ export const ToggleLikeUrl: FC<ToggleLikeUrlProps> = ({ feedId, liked, likes }) 
       }
     },
     onError() {
+      const originalLikesCount = isLiked ? likesCount + 1 : likesCount - 1;
+
+      setLikesCount(originalLikesCount);
       toast({
         title: `Could not ${isLiked ? "un" : ""}like 😞`,
         description: "Sorry for the inconvenience. Try again.",
