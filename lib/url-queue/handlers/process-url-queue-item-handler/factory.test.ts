@@ -199,6 +199,29 @@ describe("processQueueItemHandler", () => {
             },
           });
         });
+
+        it("should increment the number of urls for the user that added it", async () => {
+          const handler = processUrlQueueItemHandlerFactory({ fetchMetadata, logger });
+          await handler(reqMock, resMock);
+
+          expect(prismaMock.$transaction).toHaveBeenCalled();
+
+          // Triggering $transaction call. Don't know if it can be done otherwise.
+          // TODO if it can
+          const transactionCallback = getTransactionCallback();
+          await transactionCallback(prismaMock);
+
+          expect(prismaMock.userProfileData.update).toHaveBeenCalledWith({
+            data: {
+              urlsCount: {
+                increment: 1,
+              },
+            },
+            where: {
+              userId: urlQueueItem.userId,
+            },
+          });
+        });
       });
     });
 

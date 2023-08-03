@@ -43,6 +43,17 @@ export const createUrl = protectedProcedure
             },
           });
 
+          await prisma.userProfileData.update({
+            data: {
+              urlsCount: {
+                increment: 1,
+              },
+            },
+            where: {
+              userId,
+            },
+          });
+
           await prisma.feedQueue.create({
             data: {
               id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,

@@ -83,6 +83,17 @@ export const processUrlQueueItem: ProcessUrlQueueItem = async ({ fetchMetadata, 
       },
     });
 
+    await prisma.userProfileData.update({
+      data: {
+        urlsCount: {
+          increment: 1,
+        },
+      },
+      where: {
+        userId: urlQueueItem.userId,
+      },
+    });
+
     await prisma.feedQueue.create({
       data: {
         id: ID_PLACEHOLDER_REPLACED_BY_ID_GENERATOR,
