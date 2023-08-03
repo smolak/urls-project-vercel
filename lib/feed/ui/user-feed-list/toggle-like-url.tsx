@@ -1,8 +1,8 @@
 import { Heart } from "lucide-react";
 import { FC, useState } from "react";
 import { api } from "../../../../utils/api";
-import { LoadingIndicator } from "../../../core/ui/loading-indicator";
 import { Feed } from "@prisma/client";
+import { useToast } from "../../../components/ui/use-toast";
 
 type ToggleLikeUrlProps = {
   feedId: Feed["id"];
@@ -10,38 +10,44 @@ type ToggleLikeUrlProps = {
   likes: number;
 };
 
+const LikedIcon = () => <Heart fill="#dc2626" color="#dc2626" size={18} strokeWidth={1} />;
+const NotLikedIcon = () => <Heart size={18} strokeWidth={1} />;
+
 export const ToggleLikeUrl: FC<ToggleLikeUrlProps> = ({ feedId, liked, likes }) => {
   const [isLiked, setIsLiked] = useState(liked);
-  const [likesNumber, setLikesNumber] = useState(likes);
+  const [likesCount, setLikesCount] = useState(likes);
+  const { toast } = useToast();
 
   const { mutate: toggle, isLoading: isToggling } = api.feed.toggleLikeUrl.useMutation({
     onSuccess(result) {
       if (result.status === "notFound") {
         // TODO: Remove not found feed entry by its ID, perhaps also notify via toast.
       } else {
-        setLikesNumber(result.likes);
+        setLikesCount(result.likes);
         setIsLiked(result.status === "liked");
       }
+    },
+    onError() {
+      toast({
+        title: `Could not ${isLiked ? "un" : ""}like 😞`,
+        description: "Sorry for the inconvenience. Try again.",
+      });
     },
   });
 
   return (
     <button
       className="flex items-center gap-1.5 rounded-xl p-2 text-sm hover:bg-red-50"
-      onClick={() => toggle({ feedId })}
+      disabled={isToggling}
+      onClick={() => {
+        const newOptimisticUpdateLikesCount = isLiked ? likesCount - 1 : likesCount + 1;
+
+        setLikesCount(newOptimisticUpdateLikesCount);
+        toggle({ feedId });
+      }}
     >
-      {isLiked ? (
-        isToggling ? (
-          <LoadingIndicator label="Unliking..." size={14} />
-        ) : (
-          <Heart fill="#dc2626" color="#dc2626" size={18} strokeWidth={1} />
-        )
-      ) : isToggling ? (
-        <LoadingIndicator label="Liking..." size={14} />
-      ) : (
-        <Heart size={18} strokeWidth={1} />
-      )}
-      {likesNumber}
+      {isLiked ? isToggling ? <NotLikedIcon /> : <LikedIcon /> : isToggling ? <LikedIcon /> : <NotLikedIcon />}
+      {likesCount}
     </button>
   );
 };
