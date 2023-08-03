@@ -192,6 +192,7 @@ model UserProfileData {
   followers          Int       @default(0) @db.UnsignedInt
   likes              Int       @default(0) @db.UnsignedInt
   liked              BigInt    @default(0) @db.UnsignedBigInt
+  urlsCount          Int       @default(0) @db.UnsignedInt
 
   @@index([userId])
   @@index([apiKey])
