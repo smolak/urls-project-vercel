@@ -20,6 +20,7 @@ export const createUserProfileData = (overwrites: Partial<UserProfileData> = {})
     followers: 0,
     likes: 0,
     liked: BigInt(0),
+    urlsCount: 0,
     ...overwrites,
   };
 };
