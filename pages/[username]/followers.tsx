@@ -23,6 +23,7 @@ type FollowersPageProps =
         following: number;
         likes: number;
         createdAt: string;
+        urlsCount: number;
       };
       profiles: FollowersRawEntries;
     }

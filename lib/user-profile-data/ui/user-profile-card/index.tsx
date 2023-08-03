@@ -15,7 +15,7 @@ interface UserProfileCardProps {
 
 export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileData, canFollow = false }) => {
   const { pathname } = useRouter();
-  const { id, username, image, following, followers, likes } = publicUserProfileData;
+  const { id, username, image, following, followers, likes, urlsCount } = publicUserProfileData;
 
   return (
     <Card className="grid grid-cols-2 py-1.5 md:sticky md:top-[138px] md:block lg:top-36">
@@ -34,7 +34,7 @@ export const UserProfileCard: FC<UserProfileCardProps> = ({ publicUserProfileDat
             href={`/${username}`}
             className={cn("rounded-md px-2 py-1", pathname === "/[username]" && "bg-slate-100")}
           >
-            <DataElement name="URLs" value="..." />
+            <DataElement name="URLs" value={urlsCount} />
           </Link>
           <div className={cn("rounded-md px-2 py-1", pathname === "/[username]/likes" && "bg-slate-100")}>
             <DataElement name="Likes" value={likes} />
