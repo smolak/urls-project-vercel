@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { FeedVM } from "../../models/feed.vm";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
@@ -7,9 +7,14 @@ import { Calendar, Image as ImageIcon } from "lucide-react";
 import { isImage, isWebsite } from "../../../metadata/utils";
 import { LogoIcon } from "../../../shared/ui/logo";
 import { UserImage } from "../../../user/ui/user-image";
-import { ToggleLikeUrl } from "./toggle-like-url";
 
-export const UserFeedListItem: FC<FeedVM> = ({ id, user, url, createdAt }) => {
+export const UserFeedListItem: FC<FeedVM & { interactions: ReactNode }> = ({
+  id,
+  user,
+  url,
+  createdAt,
+  interactions,
+}) => {
   const isAnImage = isImage(url.metadata);
   const isAWebsite = isWebsite(url.metadata);
   const isSomethingElse = !isAnImage && !isAWebsite;
@@ -58,9 +63,7 @@ export const UserFeedListItem: FC<FeedVM> = ({ id, user, url, createdAt }) => {
         <CardDescription>{url.metadata.description}</CardDescription>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <div>
-          <ToggleLikeUrl feedId={id} liked={url.liked} likes={url.likes} />
-        </div>
+        <div>{interactions}</div>
         <Link href={`/${user.username}`}>
           <UserImage username={user.username} image={user.image as string} size="small" />
         </Link>

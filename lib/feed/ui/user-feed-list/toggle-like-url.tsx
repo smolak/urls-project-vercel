@@ -11,7 +11,7 @@ type ToggleLikeUrlProps = {
 };
 
 const LikedIcon = () => <Heart fill="#dc2626" color="#dc2626" size={18} strokeWidth={1} />;
-const NotLikedIcon = () => <Heart size={18} strokeWidth={1} />;
+export const NotLikedIcon = () => <Heart size={18} strokeWidth={1} />;
 
 export const ToggleLikeUrl: FC<ToggleLikeUrlProps> = ({ feedId, liked, likes }) => {
   const [isLiked, setIsLiked] = useState(liked);
