@@ -69,9 +69,12 @@ export const compressMapper: Record<keyof Metadata, keyof CompressedMetadata> = 
   contentType: "u",
 };
 
-const decompressMapper = Object.entries(compressMapper).reduce((acc, [key, val]) => {
-  return { ...acc, [val]: key };
-}, {} as Record<keyof CompressedMetadata, keyof Metadata>);
+const decompressMapper = Object.entries(compressMapper).reduce(
+  (acc, [key, val]) => {
+    return { ...acc, [val]: key };
+  },
+  {} as Record<keyof CompressedMetadata, keyof Metadata>
+);
 
 export const compressMetadata = (metadata: Metadata) => {
   return Object.entries(metadata).reduce((acc, [key, val]) => {
