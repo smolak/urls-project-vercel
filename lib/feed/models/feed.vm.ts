@@ -6,7 +6,7 @@ import { Metadata } from "../../metadata/types";
 export const toFeedVM = (entry: RawFeedEntry): FeedVM => {
   return {
     id: entry.feed_id,
-    createdAt: entry.feed_createdAt,
+    createdAt: entry.feed_createdAt.toISOString(),
     user: {
       image: entry.user_image,
       username: entry.user_username,
@@ -21,9 +21,11 @@ export const toFeedVM = (entry: RawFeedEntry): FeedVM => {
   };
 };
 
+type ISODateString = string;
+
 export type FeedVM = {
   id: Feed["id"];
-  createdAt: Feed["createdAt"];
+  createdAt: ISODateString;
   user: {
     image: User["image"];
     username: UserProfileData["username"];

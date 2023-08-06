@@ -14,7 +14,7 @@ import { cn } from "../lib/utils";
 const queryClient = new QueryClient();
 
 const Home: NextPageWithLayout = () => {
-  const { status } = useSession();
+  const { status, data } = useSession();
 
   return (
     <>
@@ -45,7 +45,7 @@ const Home: NextPageWithLayout = () => {
           <aside>
             <AddUrl />
           </aside>
-          <UserFeedList />
+          <UserFeedList userId={data?.user.id} />
         </div>
       )}
     </>
