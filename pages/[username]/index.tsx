@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { PUBLIC_USER_PROFILE_DATA_SELECT_FRAGMENT } from "../../lib/user-profile-data/models/fragments";
 import { getToken } from "next-auth/jwt";
 import { FeedVM, toFeedVM } from "../../lib/feed/models/feed.vm";
-import { UserFeedList } from "../../lib/feed/ui/user-feed-list/user-feed-list";
+import { FeedList } from "../../lib/feed/ui/user-feed-list/feed-list";
 import { getUserFeed } from "../../lib/feed/prisma/get-user-feed";
 import { UserFeedLayout } from "../../lib/core/ui/user-feed.layout";
 import { UserProfileCard } from "../../lib/user-profile-data/ui/user-profile-card";
@@ -61,7 +61,7 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
             {feed.length === 0 && <div>No URLs yet.</div>}
             {feed.length > 0 && (
               <div className="flex flex-col gap-4">
-                <UserFeedList feed={feed} />
+                <FeedList feed={feed} />
                 {feed.length === itemsPerPage && (
                   <InfiniteUserFeedListFrom userId={userData.id} from={feed[feed.length - 1].createdAt} />
                 )}

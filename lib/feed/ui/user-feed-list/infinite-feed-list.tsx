@@ -1,16 +1,16 @@
 import { FC, useEffect, useRef } from "react";
 import { FeedVM } from "../../models/feed.vm";
-import { UserFeedList } from "./user-feed-list";
-import { LoadingUserFeed } from "../loading-user-feed";
+import { FeedList } from "./feed-list";
+import { LoadingFeed } from "../loading-feed";
 
-export interface InfiniteUserFeedListProps {
+export interface InfiniteFeedListProps {
   feed: ReadonlyArray<FeedVM>;
   loadMore: () => void;
   shouldLoadMore?: boolean;
   isFetching?: boolean;
 }
 
-export const InfiniteUserFeedList: FC<InfiniteUserFeedListProps> = ({ feed, loadMore, isFetching, shouldLoadMore }) => {
+export const InfiniteFeedList: FC<InfiniteFeedListProps> = ({ feed, loadMore, isFetching, shouldLoadMore }) => {
   const observerTarget = useRef(null);
 
   useEffect(() => {
@@ -36,8 +36,8 @@ export const InfiniteUserFeedList: FC<InfiniteUserFeedListProps> = ({ feed, load
 
   return (
     <>
-      <UserFeedList feed={feed} />
-      {isFetching && <LoadingUserFeed />}
+      <FeedList feed={feed} />
+      {isFetching && <LoadingFeed />}
       <div ref={observerTarget} />
     </>
   );

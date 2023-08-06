@@ -1,17 +1,17 @@
 import { FC } from "react";
 import { FeedVM } from "../../models/feed.vm";
-import { UserFeedListItem } from "./user-feed-list-item";
+import { FeedListItem } from "./feed-list-item";
 import { useSession } from "next-auth/react";
 import { useToast } from "../../../components/ui/use-toast";
 import { ToastAction } from "../../../components/ui/toast";
 import Link from "next/link";
 import { NotLikedIcon, ToggleLikeUrl } from "./toggle-like-url";
 
-export interface UserFeedListProps {
+export interface FeedListProps {
   feed: ReadonlyArray<FeedVM>;
 }
 
-export const UserFeedList: FC<UserFeedListProps> = ({ feed }) => {
+export const FeedList: FC<FeedListProps> = ({ feed }) => {
   const { status } = useSession();
   const canLikeUrl = status === "authenticated";
   const { toast } = useToast();
@@ -30,21 +30,21 @@ export const UserFeedList: FC<UserFeedListProps> = ({ feed }) => {
   return (
     <section>
       <ol className="flex flex-col gap-4">
-        {feed.map((entry) => (
-          <li key={entry.id}>
-            <UserFeedListItem
-              {...entry}
+        {feed.map((feedItem) => (
+          <li key={feedItem.id}>
+            <FeedListItem
+              feedItem={feedItem}
               interactions={
                 <>
                   {canLikeUrl ? (
-                    <ToggleLikeUrl feedId={entry.id} liked={entry.url.liked} likes={entry.url.likes} />
+                    <ToggleLikeUrl feedId={feedItem.id} liked={feedItem.url.liked} likes={feedItem.url.likes} />
                   ) : (
                     <button
                       className="flex items-center gap-1.5 rounded-xl p-2 text-sm hover:bg-red-50"
                       onClick={showCantLikeWithoutLoginMessage}
                     >
                       <NotLikedIcon />
-                      {entry.url.likes}
+                      {feedItem.url.likes}
                     </button>
                   )}
                 </>
