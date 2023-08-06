@@ -12,7 +12,7 @@ import { UserProfileCard } from "../../lib/user-profile-data/ui/user-profile-car
 import Link from "next/link";
 import { RssIcon } from "lucide-react";
 import getConfig from "next/config";
-import { InfiniteUserFeedListFrom } from "../../lib/feed/ui/user-feed-list/infinite-user-feed-list-from";
+import { InfiniteUserFeed } from "../../lib/feed/ui/user-feed-list/infinite-user-feed";
 
 type Self = {
   id: string;
@@ -63,7 +63,7 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
               <div className="flex flex-col gap-4">
                 <FeedList feed={feed} />
                 {feed.length === itemsPerPage && (
-                  <InfiniteUserFeedListFrom userId={userData.id} from={feed[feed.length - 1].createdAt} />
+                  <InfiniteUserFeed userId={userData.id} from={feed[feed.length - 1].createdAt} />
                 )}
               </div>
             )}

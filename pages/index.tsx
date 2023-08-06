@@ -4,7 +4,7 @@ import { LoggedInUserLayout } from "../lib/core/ui/logged-in-user-layout";
 import { NextPageWithLayout } from "./_app";
 import { SessionProvider, useSession } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { UserFeedList } from "../lib/feed/ui/user-feed-list";
+import { InfiniteUserFeed } from "../lib/feed/ui/user-feed-list/infinite-user-feed";
 import { AddUrl } from "../lib/url/ui/add-url";
 import Link from "next/link";
 import { LoadingIndicator } from "../lib/core/ui/loading-indicator";
@@ -45,7 +45,7 @@ const Home: NextPageWithLayout = () => {
           <aside>
             <AddUrl />
           </aside>
-          <UserFeedList userId={data?.user.id} />
+          <InfiniteUserFeed userId={data?.user.id} />
         </div>
       )}
     </>
