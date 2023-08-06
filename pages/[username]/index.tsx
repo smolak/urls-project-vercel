@@ -11,6 +11,8 @@ import { UserFeedLayout } from "../../lib/core/ui/user-feed.layout";
 import { UserProfileCard } from "../../lib/user-profile-data/ui/user-profile-card";
 import Link from "next/link";
 import { RssIcon } from "lucide-react";
+import getConfig from "next/config";
+import { InfiniteUserFeedListFrom } from "../../lib/feed/ui/user-feed-list/infinite-user-feed-list-from";
 
 type Self = {
   id: string;
@@ -30,6 +32,7 @@ type UserProfilePageProps =
         urlsCount: number;
       };
       feed: ReadonlyArray<FeedVM>;
+      itemsPerPage: number;
     }
   | {
       userData: null;
@@ -40,7 +43,7 @@ type UserProfilePageProps =
 
 const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
   if (props.userData) {
-    const { self, userData, feed } = props;
+    const { self, userData, feed, itemsPerPage } = props;
     const iAmLoggedIn = Boolean(self?.id);
     const myProfile = Boolean(self?.id && self.id === userData.id);
     const canFollow = !myProfile && iAmLoggedIn;
@@ -55,7 +58,15 @@ const UserProfilePage: NextPage<UserProfilePageProps> = (props) => {
                 <RssIcon size={16} />
               </Link>
             </div>
-            <UserFeedList feed={feed} />
+            {feed.length === 0 && <div>No URLs yet.</div>}
+            {feed.length > 0 && (
+              <div className="flex flex-col gap-4">
+                <UserFeedList feed={feed} />
+                {feed.length === itemsPerPage && (
+                  <InfiniteUserFeedListFrom userId={userData.id} from={feed[feed.length - 1].createdAt} />
+                )}
+              </div>
+            )}
           </section>
         }
         rightColumnContent={<UserProfileCard publicUserProfileData={userData} canFollow={canFollow} />}
@@ -114,15 +125,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     };
   }
 
-  const feedRawEntries = await getUserFeed(maybePublicUserData.userId);
+  const itemsPerPage = getConfig().serverRuntimeConfig.userFeedList.itemsPerPage;
+  const feedRawEntries = await getUserFeed(maybePublicUserData.userId, itemsPerPage);
 
-  const feed = feedRawEntries.map((entry) => {
-    return {
-      ...toFeedVM(entry),
-      createdAt: entry.feed_createdAt.toISOString(),
-    };
-  });
-
+  const feed = feedRawEntries.map(toFeedVM);
   const { userId, createdAt, ...userData } = maybePublicUserData;
   const serializedUserData = {
     ...userData,
@@ -130,5 +136,5 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     createdAt: createdAt?.toISOString(),
   };
 
-  return { props: { userData: serializedUserData, feed, self } };
+  return { props: { userData: serializedUserData, feed, self, itemsPerPage } };
 };

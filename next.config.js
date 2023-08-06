@@ -5,7 +5,7 @@ const nextConfig = {
     feedQueueApiKey: process.env.FEED_QUEUE_API_KEY,
     urlQueueApiKey: process.env.URL_QUEUE_API_KEY,
     userFeedList: {
-      itemsPerFetch: 30,
+      itemsPerPage: 30,
     },
     rss: {
       itemsPerUserChannel: 20,
