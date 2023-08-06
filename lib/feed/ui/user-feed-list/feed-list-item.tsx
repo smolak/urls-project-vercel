@@ -8,13 +8,13 @@ import { isImage, isWebsite } from "../../../metadata/utils";
 import { LogoIcon } from "../../../shared/ui/logo";
 import { UserImage } from "../../../user/ui/user-image";
 
-export const UserFeedListItem: FC<FeedVM & { interactions: ReactNode }> = ({
-  id,
-  user,
-  url,
-  createdAt,
-  interactions,
-}) => {
+type FeedListItemProps = {
+  feedItem: FeedVM;
+  interactions: ReactNode;
+};
+
+export const FeedListItem: FC<FeedListItemProps> = ({ feedItem, interactions }) => {
+  const { url, createdAt, user } = feedItem;
   const isAnImage = isImage(url.metadata);
   const isAWebsite = isWebsite(url.metadata);
   const isSomethingElse = !isAnImage && !isAWebsite;

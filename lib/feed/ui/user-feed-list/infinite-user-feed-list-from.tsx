@@ -1,10 +1,10 @@
-import { LoadingUserFeed } from "../loading-user-feed";
-import { ErrorLoadingUserFeed } from "../error-loading-user-feed";
+import { LoadingFeed } from "../loading-feed";
+import { ErrorLoadingFeed } from "../error-loading-feed";
 import { api } from "../../../../utils/api";
 import { InfiniteData } from "@tanstack/react-query";
 import { GetUserFeedResponse } from "../../router/procedures/get-user-feed";
 import { FeedVM } from "../../models/feed.vm";
-import { InfiniteUserFeedList } from "./infinite-user-feed-list";
+import { InfiniteFeedList } from "./infinite-feed-list";
 import { FC } from "react";
 import { User } from "@prisma/client";
 
@@ -35,18 +35,18 @@ export const InfiniteUserFeedListFrom: FC<InfiniteUserFeedListFromProps> = ({ fr
   );
 
   if (isLoading) {
-    return <LoadingUserFeed />;
+    return <LoadingFeed />;
   }
 
   if (isError) {
-    return <ErrorLoadingUserFeed />;
+    return <ErrorLoadingFeed />;
   }
 
   const feed = aggregateFeeds(data);
   const shouldLoadMore = Boolean(getNextCursor(data));
 
   return (
-    <InfiniteUserFeedList
+    <InfiniteFeedList
       feed={feed}
       loadMore={fetchNextPage}
       shouldLoadMore={shouldLoadMore}
