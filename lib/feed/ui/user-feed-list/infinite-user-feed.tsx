@@ -5,8 +5,8 @@ import { InfiniteData } from "@tanstack/react-query";
 import { GetUserFeedResponse } from "../../router/procedures/get-user-feed";
 import { FeedVM } from "../../models/feed.vm";
 import { InfiniteFeedList } from "./infinite-feed-list";
-import { FC } from "react";
 import { User } from "@prisma/client";
+import { FC } from "react";
 
 const aggregateFeeds = (data: InfiniteData<GetUserFeedResponse>) => {
   return data.pages.reduce((acc, page) => {
@@ -18,19 +18,19 @@ const getNextCursor = (data: InfiniteData<GetUserFeedResponse>) => {
   return data?.pages[data?.pages.length - 1].nextCursor;
 };
 
-type InfiniteUserFeedListFromProps = {
-  from: FeedVM["createdAt"];
+type InfiniteUserFeedProps = {
+  from?: FeedVM["createdAt"];
   userId: User["id"];
 };
 
-export const InfiniteUserFeedListFrom: FC<InfiniteUserFeedListFromProps> = ({ from, userId }) => {
+export const InfiniteUserFeed: FC<InfiniteUserFeedProps> = ({ userId, from }) => {
   const { data, isLoading, isError, fetchNextPage, isFetchingNextPage } = api.feed.getUserFeed.useInfiniteQuery(
     {
       userId,
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialCursor: new Date(from),
+      initialCursor: from && new Date(from),
     }
   );
 
